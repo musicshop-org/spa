@@ -1,12 +1,16 @@
-import React, {Component} from 'react';
-
+import React, { Component } from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Test from './test';
+import Test2 from './test2';
 class App extends Component {
   render() {
     return (
-      <div>
-        <h1>Music Shop</h1>
-        <p>Welcome to the Music Shop</p>
-      </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="test" element={<Test />} />
+        <Route path="test2" element={<Test2 />} />
+      </Routes>
+    </BrowserRouter>
     );
   }
 }
