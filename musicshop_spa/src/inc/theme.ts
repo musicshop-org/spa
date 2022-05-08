@@ -1,5 +1,5 @@
-import { createTheme } from '@mui/material/styles';
-import { amber, grey, green, orange, red, blue } from '@mui/material/colors'
+import {createTheme} from '@mui/material/styles';
+import {amber, grey, green, orange, red, blue} from '@mui/material/colors'
 
 const theme = createTheme({
     components: {
@@ -51,13 +51,14 @@ const theme = createTheme({
     },
 
     mixins: {
-        toolbar: {
-            input: {
-                fontFamily: 'Comic Sans, sans-serif',
-                fontSize: '14px',
-            },
-        }
-
+        // toolbar: {
+        //
+        //
+        //     // input: {
+        //     //     fontFamily: 'Comic Sans, sans-serif',
+        //     //     fontSize: '14px',
+        //     // },
+        // }
     },
 });
 

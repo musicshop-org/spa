@@ -17,6 +17,9 @@ declare module '@mui/material/styles' {
                 }, 
            }
         },
+        defaultSearchInput: {
+            width: string,
+        }
     }
 
     interface CustomThemeOptions extends ThemeOptions {
@@ -35,6 +38,9 @@ declare module '@mui/material/styles' {
                 }, 
             }
         },
+        defaultSearchInput?: {
+            width?: string,
+        }
     }
 
     export function createTheme(options?: CustomThemeOptions): CustomTheme;
