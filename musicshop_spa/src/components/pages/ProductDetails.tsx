@@ -49,7 +49,8 @@ class ProductDetails extends Component<{}, { albumReady: boolean }> {
     }
 
     render() {
-        console.log(this.albumDTO);
+
+        const {albumReady} = this.state;
 
         return (
             <div>

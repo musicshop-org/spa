@@ -18,9 +18,7 @@ function Root() {
     const theme = React.useMemo(
         () =>
             createTheme({
-                palette: {
-                    mode: prefersDarkMode ? 'dark' : 'light',
-                },
+                palette: prefersDarkMode ? {mode: "dark"} : Theme.palette,
             }),
         [prefersDarkMode],
     );
