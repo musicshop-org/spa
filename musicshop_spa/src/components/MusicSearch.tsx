@@ -6,12 +6,42 @@ class MusicSearch extends Component {
     render() {
         return (
             <div>
-                <TextField
-                    id={"music-search-input"}
-                    label={"Search..."}
-                    variant={"filled"}
-                    style={{width: "30%"}}
-                />
+                {/*<Container >*/}
+                {this.searchBarContent()}
+
+                <Divider/>
+
+                {/*<Container sx={{mt: 2}}>*/}
+
+                <Grid
+                    sx={{mt: 1}}
+                    container
+                    spacing={2}
+                    alignItems={"flex-start"}
+                    justifyContent={"flex-start"}
+                >
+
+                    {
+                        Array.from(albumDTOs).map((albumDTO, key) => {
+                            return (
+                                <Grid
+                                    item
+                                    key={key}
+                                >
+                                    <ProductCard
+                                        albumDTO={albumDTO}
+                                    />
+
+                                </Grid>
+                            )
+                        })
+                    }
+
+                </Grid>
+
+
+                {/*</Container>*/}
+                {/*</Container>*/}
             </div>
         );
     }
