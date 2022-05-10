@@ -59,7 +59,8 @@ class MusicSearch extends Component<{}, { albumDTOs: Set<AlbumDTO> }> {
                 />
 
                 <Button
-                    sx={{ml: 3}} variant={"contained"}
+
+                    sx={{ml: 3, mt: 1, mb: 1}} variant={"contained"}
                     onClick={() => {
                         this.searchMusic();
                     }}
