@@ -47,6 +47,10 @@ const theme = createTheme({
             light: green[300],
             main: green[500],
             dark: green[700],
+        },
+        background: {
+            default: '#f7f7f7',
+            paper: '#ffffff',
         }
     },
 
