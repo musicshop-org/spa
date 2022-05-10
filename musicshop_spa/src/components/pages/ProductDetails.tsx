@@ -1,6 +1,10 @@
 import React, {Component} from 'react';
 
-import {AlbumDTO, DefaultApi} from "../openAPI";
+import {Container, Divider} from '@mui/material';
+import {AlbumDTO, DefaultApi} from "../../openAPI";
+import ProductDetailHeader from "../ProductDetailHeader";
+import Loader from "../Loader";
+import SongList from "../SongList";
 
 class ProductDetails extends Component<{}, { albumReady: boolean }> {
 
@@ -49,8 +53,26 @@ class ProductDetails extends Component<{}, { albumReady: boolean }> {
 
         return (
             <div>
-                <h1>Hello World</h1>
+                {
+                    !albumReady ? (
+                        <Loader/>
+                    ) : (
+                        <React.Fragment>
+                            <div style={{margin: 20}}>
+                                <ProductDetailHeader
+                                    albumDTO={this.albumDTO}
+                                />
+                            </div>
 
+                            {/*<Divider/>*/}
+                            <div style={{marginTop: 40}}>
+                                <SongList
+                                    songDTOs={this.albumDTO?.songs}
+                                />
+                            </div>
+                        </React.Fragment>
+                    )
+                }
             </div>
         );
     }

@@ -1,6 +1,6 @@
 import IRoute from "../interfaces/IRoute";
-import MusicSearch from "../components/MusicSearch";
-import ProductDetails from "../components/ProductDetails";
+import MusicSearch from "../components/pages/MusicSearch";
+import ProductDetails from "../components/pages/ProductDetails";
 
 const routes: IRoute[] = [
     {
@@ -10,7 +10,7 @@ const routes: IRoute[] = [
         exact: true
     },
     {
-        path: '/product-detail/',
+        path: '/product-detail',
         name: 'Product Details',
         element: ProductDetails,
         exact: true

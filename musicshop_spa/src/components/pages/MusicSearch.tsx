@@ -2,9 +2,9 @@ import React, {Component} from 'react';
 
 import {TextField, Button, Grid, Divider} from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import {DefaultApi} from "../openAPI";
-import ProductCard from "./ProductCard";
-import {AlbumDTO} from "../openAPI";
+import {DefaultApi} from "../../openAPI";
+import ProductCard from "../ProductCard";
+import {AlbumDTO} from "../../openAPI";
 
 class MusicSearch extends Component<{}, { albumDTOs: Set<AlbumDTO> }> {
 

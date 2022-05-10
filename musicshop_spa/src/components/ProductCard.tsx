@@ -24,10 +24,12 @@ export default function ProductCard(albumDTO: any) {
         >
             <Grid container spacing={2}>
                 <Grid item>
-                    <ButtonBase sx={{width: 128, height: 128}}>
-                        <Img alt="complex"
-                             src="https://media.hitparade.ch/cover/big/alexander_marcus-papaya_s.jpg"/>
-                    </ButtonBase>
+                    <Link to={"/product-detail?albumId=" + albumDTO.albumDTO.albumId.albumId}>
+                        <ButtonBase sx={{width: 128, height: 128}}>
+                            <Img alt="complex"
+                                 src="https://media.hitparade.ch/cover/big/alexander_marcus-papaya_s.jpg"/>
+                        </ButtonBase>
+                    </Link>
                 </Grid>
                 <Grid item xs={12} sm container>
                     <Grid item xs container direction="column" spacing={2}>
@@ -58,7 +60,7 @@ export default function ProductCard(albumDTO: any) {
                                 <Button variant={"text"}>
                                     Add to cart
                                 </Button>
-                                <Link to={"/product-detail?albumId=" + albumDTO.albumDTO.albumId.albumId} state={{albumId: albumDTO.albumDTO.albumId.albumId}}>
+                                <Link to={"/product-detail?albumId=" + albumDTO.albumDTO.albumId.albumId}>
                                     <Button
                                         variant={"text"}
                                     >
