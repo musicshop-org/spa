@@ -17,11 +17,9 @@ export default function ProductCard(albumDTO: any) {
             sx={{
                 p: 2,
                 margin: 'auto',
-                 //maxWidth: 600,
                 width: 520,
                 flexGrow: 1,
-                backgroundColor: (theme) =>
-                    theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+                // backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
             }}
         >
             <Grid container spacing={2}>
@@ -49,7 +47,6 @@ export default function ProductCard(albumDTO: any) {
                             <Typography variant="body2" color="text.secondary">
                                 Stock: {albumDTO.albumDTO.stock}
                             </Typography>
-
                         </Grid>
                     </Grid>
                     <Grid item>
@@ -58,15 +55,19 @@ export default function ProductCard(albumDTO: any) {
                         </Typography>
                         <Box sx={{pt: 8}} display="flex" justifyContent="flex-end">
                             <Typography sx={{cursor: 'pointer'}} variant="body2">
-                                <Button sx={{}} variant={"text"}
-                                >Add to cart</Button>
-                                <Button sx={{}} variant={"text"}
-                                >View</Button>
-
+                                <Button variant={"text"}>
+                                    Add to cart
+                                </Button>
+                                <Link to={"/product-detail?albumId=" + albumDTO.albumDTO.albumId.albumId} state={{albumId: albumDTO.albumDTO.albumId.albumId}}>
+                                    <Button
+                                        variant={"text"}
+                                    >
+                                        View
+                                    </Button>
+                                </Link>
                             </Typography>
                         </Box>
                     </Grid>
-
                 </Grid>
             </Grid>
         </Paper>

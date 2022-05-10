@@ -1,6 +1,6 @@
 import IRoute from "../interfaces/IRoute";
 import MusicSearch from "../components/MusicSearch";
-
+import ProductDetails from "../components/ProductDetails";
 
 const routes: IRoute[] = [
     {

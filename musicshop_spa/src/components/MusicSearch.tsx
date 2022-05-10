@@ -11,7 +11,6 @@ class MusicSearch extends Component<{}, { albumDTOs: Set<AlbumDTO> }> {
     private searchString: string;
     private defaultApi: DefaultApi;
 
-
     constructor(props: any) {
         super(props);
 
