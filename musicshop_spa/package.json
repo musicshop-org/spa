@@ -23,6 +23,9 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+
+    "createApiTs": "npx @openapitools/openapi-generator-cli generate -i http://localhost:8080/musicshop-1.0/api/openapi.json -g typescript-axios -o ./src/openAPI --additional-properties=supportsES6=true --skip-validate-spec",
+
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
