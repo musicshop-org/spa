@@ -75,6 +75,12 @@ export interface AlbumDTO {
      * @memberof AlbumDTO
      */
     'songs'?: Set<SongDTO>;
+    /**
+     * 
+     * @type {number}
+     * @memberof AlbumDTO
+     */
+    'quantityToAddToCart'?: number;
 }
 
 export const AlbumDTOMediumTypeEnum = {
@@ -110,6 +116,71 @@ export interface ArtistDTO {
      * @memberof ArtistDTO
      */
     'name'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface CartLineItemDTO
+ */
+export interface CartLineItemDTO {
+    /**
+     * 
+     * @type {string}
+     * @memberof CartLineItemDTO
+     */
+    'mediumType'?: CartLineItemDTOMediumTypeEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof CartLineItemDTO
+     */
+    'name'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof CartLineItemDTO
+     */
+    'quantity'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CartLineItemDTO
+     */
+    'price'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CartLineItemDTO
+     */
+    'stock'?: number;
+}
+
+export const CartLineItemDTOMediumTypeEnum = {
+    Cd: 'CD',
+    Digital: 'DIGITAL',
+    Vinyl: 'VINYL'
+} as const;
+
+export type CartLineItemDTOMediumTypeEnum = typeof CartLineItemDTOMediumTypeEnum[keyof typeof CartLineItemDTOMediumTypeEnum];
+
+/**
+ * 
+ * @export
+ * @interface ShoppingCartDTO
+ */
+export interface ShoppingCartDTO {
+    /**
+     * 
+     * @type {string}
+     * @memberof ShoppingCartDTO
+     */
+    'ownerId'?: string;
+    /**
+     * 
+     * @type {Array<CartLineItemDTO>}
+     * @memberof ShoppingCartDTO
+     */
+    'cartLineItems'?: Array<CartLineItemDTO>;
 }
 /**
  * 
@@ -175,6 +246,25 @@ export const SongDTOMediumTypeEnum = {
 
 export type SongDTOMediumTypeEnum = typeof SongDTOMediumTypeEnum[keyof typeof SongDTOMediumTypeEnum];
 
+/**
+ * 
+ * @export
+ * @interface UserDataDTO
+ */
+export interface UserDataDTO {
+    /**
+     * 
+     * @type {string}
+     * @memberof UserDataDTO
+     */
+    'emailAddress'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserDataDTO
+     */
+    'password'?: string;
+}
 
 /**
  * DefaultApi - axios parameter creator
@@ -184,11 +274,156 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
     return {
         /**
          * 
-         * @param {string} songTitle 
+         * @param {string} [authorization] 
+         * @param {AlbumDTO} [albumDTO] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        findAlbumsBySongTitle: async (songTitle: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        addToCart: async (authorization?: string, albumDTO?: AlbumDTO, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/albums/addToCart`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (authorization !== undefined && authorization !== null) {
+                localVarHeaderParameter['Authorization'] = String(authorization);
+            }
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(albumDTO, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} [authorization] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        clearShoppingCart: async (authorization?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/shoppingCart/clear`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (authorization !== undefined && authorization !== null) {
+                localVarHeaderParameter['Authorization'] = String(authorization);
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} [authorization] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        displayShoppingCart: async (authorization?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/shoppingCart/display`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (authorization !== undefined && authorization !== null) {
+                localVarHeaderParameter['Authorization'] = String(authorization);
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} albumId 
+         * @param {string} [authorization] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        findAlbumsByAlbumId: async (albumId: string, authorization?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'albumId' is not null or undefined
+            assertParamExists('findAlbumsByAlbumId', 'albumId', albumId)
+            const localVarPath = `/api/album/{albumId}`
+                .replace(`{${"albumId"}}`, encodeURIComponent(String(albumId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (authorization !== undefined && authorization !== null) {
+                localVarHeaderParameter['Authorization'] = String(authorization);
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} songTitle 
+         * @param {string} [authorization] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        findAlbumsBySongTitle: async (songTitle: string, authorization?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'songTitle' is not null or undefined
             assertParamExists('findAlbumsBySongTitle', 'songTitle', songTitle)
             const localVarPath = `/api/albums/{songTitle}`
@@ -204,11 +439,81 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            if (authorization !== undefined && authorization !== null) {
+                localVarHeaderParameter['Authorization'] = String(authorization);
+            }
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {UserDataDTO} [userDataDTO] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        login: async (userDataDTO?: UserDataDTO, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/login`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(userDataDTO, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {UserDataDTO} [userDataDTO] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        loginWeb: async (userDataDTO?: UserDataDTO, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/loginWeb`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(userDataDTO, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -256,12 +561,75 @@ export const DefaultApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {string} songTitle 
+         * @param {string} [authorization] 
+         * @param {AlbumDTO} [albumDTO] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async findAlbumsBySongTitle(songTitle: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<AlbumDTO>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.findAlbumsBySongTitle(songTitle, options);
+        async addToCart(authorization?: string, albumDTO?: AlbumDTO, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.addToCart(authorization, albumDTO, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} [authorization] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async clearShoppingCart(authorization?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.clearShoppingCart(authorization, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} [authorization] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async displayShoppingCart(authorization?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShoppingCartDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.displayShoppingCart(authorization, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} albumId 
+         * @param {string} [authorization] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async findAlbumsByAlbumId(albumId: string, authorization?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AlbumDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.findAlbumsByAlbumId(albumId, authorization, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} songTitle 
+         * @param {string} [authorization] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async findAlbumsBySongTitle(songTitle: string, authorization?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<AlbumDTO>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.findAlbumsBySongTitle(songTitle, authorization, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {UserDataDTO} [userDataDTO] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async login(userDataDTO?: UserDataDTO, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.login(userDataDTO, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {UserDataDTO} [userDataDTO] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async loginWeb(userDataDTO?: UserDataDTO, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.loginWeb(userDataDTO, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -285,12 +653,69 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
     return {
         /**
          * 
-         * @param {string} songTitle 
+         * @param {string} [authorization] 
+         * @param {AlbumDTO} [albumDTO] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        findAlbumsBySongTitle(songTitle: string, options?: any): AxiosPromise<Array<AlbumDTO>> {
-            return localVarFp.findAlbumsBySongTitle(songTitle, options).then((request) => request(axios, basePath));
+        addToCart(authorization?: string, albumDTO?: AlbumDTO, options?: any): AxiosPromise<boolean> {
+            return localVarFp.addToCart(authorization, albumDTO, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} [authorization] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        clearShoppingCart(authorization?: string, options?: any): AxiosPromise<boolean> {
+            return localVarFp.clearShoppingCart(authorization, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} [authorization] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        displayShoppingCart(authorization?: string, options?: any): AxiosPromise<ShoppingCartDTO> {
+            return localVarFp.displayShoppingCart(authorization, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} albumId 
+         * @param {string} [authorization] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        findAlbumsByAlbumId(albumId: string, authorization?: string, options?: any): AxiosPromise<AlbumDTO> {
+            return localVarFp.findAlbumsByAlbumId(albumId, authorization, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} songTitle 
+         * @param {string} [authorization] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        findAlbumsBySongTitle(songTitle: string, authorization?: string, options?: any): AxiosPromise<Array<AlbumDTO>> {
+            return localVarFp.findAlbumsBySongTitle(songTitle, authorization, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {UserDataDTO} [userDataDTO] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        login(userDataDTO?: UserDataDTO, options?: any): AxiosPromise<string> {
+            return localVarFp.login(userDataDTO, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {UserDataDTO} [userDataDTO] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        loginWeb(userDataDTO?: UserDataDTO, options?: any): AxiosPromise<string> {
+            return localVarFp.loginWeb(userDataDTO, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -312,13 +737,82 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
 export class DefaultApi extends BaseAPI {
     /**
      * 
-     * @param {string} songTitle 
+     * @param {string} [authorization] 
+     * @param {AlbumDTO} [albumDTO] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public findAlbumsBySongTitle(songTitle: string, options?: AxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).findAlbumsBySongTitle(songTitle, options).then((request) => request(this.axios, this.basePath));
+    public addToCart(authorization?: string, albumDTO?: AlbumDTO, options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).addToCart(authorization, albumDTO, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} [authorization] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public clearShoppingCart(authorization?: string, options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).clearShoppingCart(authorization, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} [authorization] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public displayShoppingCart(authorization?: string, options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).displayShoppingCart(authorization, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} albumId 
+     * @param {string} [authorization] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public findAlbumsByAlbumId(albumId: string, authorization?: string, options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).findAlbumsByAlbumId(albumId, authorization, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} songTitle 
+     * @param {string} [authorization] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public findAlbumsBySongTitle(songTitle: string, authorization?: string, options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).findAlbumsBySongTitle(songTitle, authorization, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {UserDataDTO} [userDataDTO] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public login(userDataDTO?: UserDataDTO, options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).login(userDataDTO, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {UserDataDTO} [userDataDTO] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public loginWeb(userDataDTO?: UserDataDTO, options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).loginWeb(userDataDTO, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

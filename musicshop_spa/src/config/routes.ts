@@ -8,6 +8,12 @@ const routes: IRoute[] = [
         name: 'Music Search',
         element: MusicSearch,
         exact: true
+    },
+    {
+        path: '/product-detail/',
+        name: 'Product Details',
+        element: ProductDetails,
+        exact: true
     }
 ]
 
