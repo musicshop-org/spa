@@ -15,6 +15,7 @@
     "@types/node": "^16.11.33",
     "@types/react": "^18.0.8",
     "@types/react-dom": "^18.0.3",
+    "axios": "^0.27.2",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-router-dom": "^6.3.0",
@@ -23,9 +24,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-
     "createApiTs": "npx @openapitools/openapi-generator-cli generate -i http://localhost:8080/musicshop-1.0/api/openapi.json -g typescript-axios -o ./src/openAPI --additional-properties=supportsES6=true --skip-validate-spec",
-
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

@@ -31,7 +31,7 @@ class ProductDetails extends Component<{}, { albumReady: boolean }> {
     }
 
     private searchAlbumByAlbumId(albumId: string): void {
-        this.defaultApi.findAlbumsByAlbumId(albumId).then(
+        this.defaultApi.findAlbumByAlbumId(albumId).then(
             success => {
                 if (success == null || success.data == null) {
                     console.log("Ohje.. 🐜");
