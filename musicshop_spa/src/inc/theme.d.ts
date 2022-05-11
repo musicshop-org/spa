@@ -1,8 +1,8 @@
-import { Theme, ThemeOptions } from '@mui/material/styles'
+import {Theme, ThemeOptions} from '@mui/material/styles'
 
 declare module '@mui/material/styles' {
     interface CustomTheme extends Theme {
-       components: {
+        components: {
             MuiButtonBase: {
                 defaultProps: {
                     disableRipple: boolean,
@@ -11,12 +11,15 @@ declare module '@mui/material/styles' {
         },
         mixins: {
             toolbar: {
-                input: { 
-                    fontFamily: string, 
-                    fontSize: string, 
-                }, 
-           }
+                input: {
+                    fontFamily: string,
+                    fontSize: string,
+                },
+            }
         },
+        defaultSearchInput: {
+            width: string,
+        }
     }
 
     interface CustomThemeOptions extends ThemeOptions {
@@ -29,12 +32,15 @@ declare module '@mui/material/styles' {
         },
         mixins?: {
             toolbar?: {
-                 input?: { 
-                     fontFamily?: string, 
-                     fontSize?: string, 
-                }, 
+                input?: {
+                    fontFamily?: string,
+                    fontSize?: string,
+                },
             }
         },
+        defaultSearchInput?: {
+            width?: string,
+        }
     }
 
     export function createTheme(options?: CustomThemeOptions): CustomTheme;
