@@ -1,21 +1,36 @@
-import React, {Component} from "react";
+import React from "react";
 import CssBaseline from '@mui/material/CssBaseline';
-import { ThemeProvider, StyledEngineProvider } from '@mui/system';
+import {ThemeProvider, StyledEngineProvider, createTheme} from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import Theme from "../inc/theme";
 
 import App from "./App";
-import theme from "../inc/theme";
 
-class root extends Component {
-  render() {
-    return (
-      <ThemeProvider theme={theme}>
-        <StyledEngineProvider>
-          <CssBaseline />
-          <App />
-        </StyledEngineProvider>
-      </ThemeProvider>
+function Root() {
+    const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+
+    let palette = Theme.palette;
+
+    if (prefersDarkMode) {
+        palette.mode = "dark";
+    }
+
+    const theme = React.useMemo(
+        () =>
+            createTheme({
+                palette: prefersDarkMode ? {mode: "dark"} : Theme.palette,
+            }),
+        [prefersDarkMode],
     );
-  }
+
+    return (
+        <ThemeProvider theme={theme}>
+            <StyledEngineProvider>
+                <CssBaseline/>
+                <App/>
+            </StyledEngineProvider>
+        </ThemeProvider>
+    );
 }
 
-export default root;
+export default Root;

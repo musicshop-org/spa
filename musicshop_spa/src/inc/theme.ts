@@ -1,5 +1,5 @@
-import { createTheme } from '@mui/material/styles';
-import { amber, grey, green, orange, red, blue } from '@mui/material/colors'
+import {createTheme} from '@mui/material/styles';
+import {amber, grey, green, orange, red, blue} from '@mui/material/colors'
 
 const theme = createTheme({
     components: {
@@ -14,9 +14,9 @@ const theme = createTheme({
         mode: "light",
 
         primary: {
-            light: '#6f9eff',
-            main: '#458afc',
-            dark: '#3880f6',
+            light: '#2d3a4d',
+            main: '#28294b',
+            dark: '#42447c',
         },
 
         secondary: {
@@ -47,17 +47,22 @@ const theme = createTheme({
             light: green[300],
             main: green[500],
             dark: green[700],
+        },
+        background: {
+            default: '#f7f7f7',
+            paper: '#ffffff',
         }
     },
 
     mixins: {
-        toolbar: {
-            input: {
-                fontFamily: 'Comic Sans, sans-serif',
-                fontSize: '14px',
-            },
-        }
-
+        // toolbar: {
+        //
+        //
+        //     // input: {
+        //     //     fontFamily: 'Comic Sans, sans-serif',
+        //     //     fontSize: '14px',
+        //     // },
+        // }
     },
 });
 

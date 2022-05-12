@@ -1,18 +1,16 @@
-import React, { Component } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Test from './test';
-import Test2 from './test2';
+import React, {Component} from 'react';
+import {BrowserRouter} from 'react-router-dom';
+
+import SideNavbar from "./SideNavbar";
+
 class App extends Component {
-  render() {
-    return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="test" element={<Test />} />
-        <Route path="test2" element={<Test2 />} />
-      </Routes>
-    </BrowserRouter>
-    );
-  }
+    render() {
+        return (
+            <BrowserRouter>
+                <SideNavbar/>
+            </BrowserRouter>
+        );
+    }
 }
 
 export default App;
