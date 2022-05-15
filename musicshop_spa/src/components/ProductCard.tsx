@@ -4,6 +4,7 @@ import {Grid, Button, Paper, Typography, ButtonBase} from '@mui/material';
 import {Box} from "@mui/system";
 import {Link} from "react-router-dom";
 import {AlbumDTO, DefaultApi} from "../openAPI";
+import CartGenerator from "../CartGenerator";
 
 const Img = styled('img')({
     margin: 'auto',
@@ -11,36 +12,6 @@ const Img = styled('img')({
     maxWidth: '100%',
     maxHeight: '100%',
 });
-
-function addToCart(albumDTO: AlbumDTO){
-    let defaultApi = new DefaultApi();
-    let cartUUID: string|null;
-    if (window.localStorage.getItem("cartUUID") === null) {
-        cartUUID = generateUUID();
-        window.localStorage.setItem('cartUUID', cartUUID);
-    } else{
-        cartUUID = window.localStorage.getItem("cartUUID");
-    }
-
-    defaultApi.addToCart(albumDTO, cartUUID);
-}
-
-function generateUUID() { // Public Domain/MIT
-    var d = new Date().getTime();//Timestamp
-    var d2 = ((typeof performance !== 'undefined') && performance.now && (performance.now()*1000)) || 0;//Time in microseconds since page-load or 0 if unsupported
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = Math.random() * 16;//random number between 0 and 16
-        if(d > 0){//Use timestamp until depleted
-            r = (d + r)%16 | 0;
-            d = Math.floor(d/16);
-        } else {//Use microseconds since page-load if supported
-            r = (d2 + r)%16 | 0;
-            d2 = Math.floor(d2/16);
-        }
-        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
-    });
-}
-
 
 export default function ProductCard(albumDTO: any) {
     return (
@@ -89,7 +60,7 @@ export default function ProductCard(albumDTO: any) {
                         <Box sx={{pt: 8}} display="flex" justifyContent="flex-end">
                             <Typography sx={{cursor: 'pointer'}} variant="body2">
                                 <Button variant={"text"} onClick={() => {
-                                    addToCart(albumDTO.albumDTO);
+                                    CartGenerator.addToCart(albumDTO.albumDTO);
                                 }}>
                                     Add to cart
                                 </Button>

@@ -4,6 +4,7 @@ import {Grid, Button, Paper, Typography, ButtonBase} from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import {Box} from "@mui/system";
 import {Link} from "react-router-dom";
+import CartGenerator from "../CartGenerator";
 
 const Img = styled('img')({
     margin: 'auto',
@@ -67,8 +68,10 @@ function ProductDetailHeader(albumDTO: any) {
                     </span>
                 </Typography>
 
-                <Button variant={"text"} endIcon={<ShoppingCartIcon />}>
-                    Add to cart
+                <Button variant={"text"} endIcon={<ShoppingCartIcon />} onClick={() => {
+                    CartGenerator.addToCart(albumDTO.albumDTO);
+                }}>
+                    Add Album to cart
                 </Button>
 
             </Grid>

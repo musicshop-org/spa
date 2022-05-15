@@ -1,10 +1,13 @@
 import React, {Component} from 'react';
 
-import {Container, Divider} from '@mui/material';
+import {Button, Container, Divider, Grid} from '@mui/material';
 import {AlbumDTO, DefaultApi} from "../../openAPI";
 import ProductDetailHeader from "../ProductDetailHeader";
 import Loader from "../Loader";
 import SongList from "../SongList";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import CartGenerator from "../../CartGenerator";
+import {Box} from "@mui/system";
 
 class ProductDetails extends Component<{}, { albumReady: boolean }> {
 

@@ -21,6 +21,9 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import {visuallyHidden} from '@mui/utils';
 import {SongDTO} from "../openAPI";
+import {Button, Grid} from "@mui/material";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import CartGenerator from "../CartGenerator";
 
 interface Data {
     index: number;
@@ -210,6 +213,14 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
     );
 };
 
+function getSelectedSongDTOS(songDTOs: any, selected: readonly string[]): Array<SongDTO> {
+    let selectedSongs: Array<SongDTO> = new Array<SongDTO>();
+    for (const index in selected) {
+        selectedSongs.push(songDTOs.songDTOs.find((song: SongDTO) => song.title === selected[index]));
+    }
+    return selectedSongs;
+}
+
 function SongList(songDTOs: any) {
     const [order, setOrder] = React.useState<Order>('asc');
     const [orderBy, setOrderBy] = React.useState<keyof Data>('index');
@@ -372,6 +383,17 @@ function SongList(songDTOs: any) {
             {/*    control={<Switch checked={dense} onChange={handleChangeDense}/>}*/}
             {/*    label="Dense padding"*/}
             {/*/>*/}
+            <Grid container alignItems={"flex-end"}
+                  justifyContent={"flex-end"}>
+
+                {(selected.length > 0) ? (
+                <Button variant={"text"} endIcon={<ShoppingCartIcon/>} onClick={() => {
+                    CartGenerator.addSongToCart(getSelectedSongDTOS(songDTOs, selected));
+                }}>
+                    Add {selected.length} Songs to cart
+                </Button>) :( <div></div>)}
+
+            </Grid>
         </Box>
     );
 }
