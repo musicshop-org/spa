@@ -1,9 +1,7 @@
 import * as React from 'react';
 import {styled} from '@mui/material/styles';
-import {Grid, Button, Paper, Typography, ButtonBase} from '@mui/material';
+import {Grid, Button, Typography, ButtonBase} from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import {Box} from "@mui/system";
-import {Link} from "react-router-dom";
 import CartGenerator from "../CartGenerator";
 
 const Img = styled('img')({
@@ -26,7 +24,7 @@ function ProductDetailHeader(albumDTO: any) {
             <Grid item>
                 <ButtonBase sx={{width: 256, height: 256}}>
                     <Img alt="complex"
-                         src="https://media.hitparade.ch/cover/big/alexander_marcus-papaya_s.jpg"/>
+                         src={albumDTO.albumDTO.imageUrl}/>
                 </ButtonBase>
             </Grid>
 
@@ -40,15 +38,6 @@ function ProductDetailHeader(albumDTO: any) {
                             {albumDTO.albumDTO.title}
                         </b>
                     </Typography>
-
-
-                    {/*<Typography variant="body2" color="text.secondary">*/}
-                    {/*    Artist: {albumDTO.albumDTO.songs.values().next().value.artists[0].name}*/}
-                    {/*</Typography>*/}
-                    {/*<Typography variant="body2" color="text.secondary">*/}
-                    {/*    Type: {albumDTO.albumDTO.mediumType}*/}
-                    {/*</Typography>*/}
-
                     <Typography>
                         {albumDTO.albumDTO.songs.values().next().value.artists[0].name} • {albumDTO.albumDTO.mediumType} • {albumDTO.albumDTO.releaseDate} • {albumDTO.albumDTO.songs.length} Songs 🎵
                     </Typography>
