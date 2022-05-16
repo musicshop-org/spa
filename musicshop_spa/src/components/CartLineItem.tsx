@@ -1,4 +1,4 @@
-import {ButtonBase, Divider, Grid, Typography} from "@mui/material";
+import {Button, ButtonBase, Divider, Grid, Typography} from "@mui/material";
 import {Box} from "@mui/system";
 import * as React from "react";
 import {styled} from "@mui/material/styles";
@@ -17,7 +17,7 @@ export default function CartLineItem(cartLineItemDTO: any) {
                 <Grid item>
                     <ButtonBase sx={{width: 84, height: 84}}>
                         <Img alt="complex"
-                             src="https://media.hitparade.ch/cover/big/alexander_marcus-papaya_s.jpg"/>
+                             src={cartLineItemDTO.cartLineItemDTO.imageUrl}/>
                     </ButtonBase>
                 </Grid>
                 <Grid item xs={12} sm container>
@@ -39,19 +39,8 @@ export default function CartLineItem(cartLineItemDTO: any) {
                     </Grid>
                     <Grid item>
                         <Typography variant="subtitle1" component="div" align={"right"}>
-                            12.00 €
+                            {cartLineItemDTO.cartLineItemDTO.price}.00 €
                         </Typography>
-                        <Box sx={{pt: 8}} display="flex" justifyContent="flex-end">
-                            <Typography sx={{cursor: 'pointer'}} variant="body2">
-                                {/*<Link to={"/product-detail?albumId=" + albumDTO.albumDTO.albumId.albumId}>*/}
-                                {/*    <Button*/}
-                                {/*        variant={"text"}*/}
-                                {/*    >*/}
-                                {/*        View*/}
-                                {/*    </Button>*/}
-                                {/*</Link>*/}
-                            </Typography>
-                        </Box>
                     </Grid>
                 </Grid>
             </Grid>
