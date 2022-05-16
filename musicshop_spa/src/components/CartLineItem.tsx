@@ -1,9 +1,8 @@
-import {Button, ButtonBase, Divider, Grid, Paper, Typography} from "@mui/material";
-import {Link} from "react-router-dom";
+import {ButtonBase, Divider, Grid, Typography} from "@mui/material";
 import {Box} from "@mui/system";
-import CartGenerator from "../CartGenerator";
 import * as React from "react";
 import {styled} from "@mui/material/styles";
+import {SongDTO} from "../openAPI";
 
 const Img = styled('img')({
     margin: 'auto',
@@ -12,7 +11,7 @@ const Img = styled('img')({
     maxHeight: '100%',
 });
 
-export default function CartLineItem(songDTO: any) {
+export default function CartLineItem(songDTO: SongDTO) {
     return (
         <div>
             <Grid container spacing={2}>

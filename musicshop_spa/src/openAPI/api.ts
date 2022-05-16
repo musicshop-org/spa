@@ -468,11 +468,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @param {string} [authorization] 
+         * @param {string} [cartUUID] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        displayShoppingCart: async (authorization?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        displayShoppingCart: async (cartUUID?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/shoppingCart/display`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -485,8 +485,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            if (authorization !== undefined && authorization !== null) {
-                localVarHeaderParameter['Authorization'] = String(authorization);
+            if (cartUUID !== undefined && cartUUID !== null) {
+                localVarHeaderParameter['CartUUID'] = String(cartUUID);
             }
 
 
@@ -726,12 +726,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {string} [authorization] 
+         * @param {string} [cartUUID] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async displayShoppingCart(authorization?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShoppingCartDTO>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.displayShoppingCart(authorization, options);
+        async displayShoppingCart(cartUUID?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShoppingCartDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.displayShoppingCart(cartUUID, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -836,12 +836,12 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @param {string} [authorization] 
+         * @param {string} [cartUUID] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        displayShoppingCart(authorization?: string, options?: any): AxiosPromise<ShoppingCartDTO> {
-            return localVarFp.displayShoppingCart(authorization, options).then((request) => request(axios, basePath));
+        displayShoppingCart(cartUUID?: string, options?: any): AxiosPromise<ShoppingCartDTO> {
+            return localVarFp.displayShoppingCart(cartUUID, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -948,8 +948,8 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
-     * @param {string} [authorization] 
-     * @param {*} [options] Override http request option.
+     * @param {string} [cartUUID?]
+     * @param {*} [options?] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */

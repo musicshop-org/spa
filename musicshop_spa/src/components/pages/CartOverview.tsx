@@ -1,19 +1,51 @@
 import React, {Component} from "react";
-import {AlbumDTO, DefaultApi} from "../../openAPI";
-import Loader from "../Loader";
-import ProductDetailHeader from "../ProductDetailHeader";
-import SongList from "../SongList";
+import {CartLineItemDTO, DefaultApi, ShoppingCartDTO} from "../../openAPI";
 import CartLineItem from "../CartLineItem";
 import {Button, Grid, Typography} from "@mui/material";
-import {Box} from "@mui/system";
+import CartGenerator from "../../CartGenerator";
 
 class CartOverview extends Component {
 
+    private defaultApi: DefaultApi;
+    private shoppingCart: ShoppingCartDTO | undefined;
+    private cartLineItemDTOs: Array<CartLineItemDTO> | undefined;
 
-    componentDidMount() {
+    constructor(props: any) {
+        super(props);
 
+        this.defaultApi = new DefaultApi();
     }
 
+    componentDidMount() {
+        let cartUUID: string | null;
+        if (window.localStorage.getItem("cartUUID") == null) {
+            cartUUID = CartGenerator.generateUUID();
+            window.localStorage.setItem('cartUUID', cartUUID);
+        } else {
+            cartUUID = window.localStorage.getItem("cartUUID");
+        }
+
+        if (cartUUID != null) {
+            this.getShoppingCart(cartUUID);
+        }
+    }
+
+    private getShoppingCart(cartUUID: string): void {
+        this.defaultApi.displayShoppingCart(cartUUID).then(
+            success => {
+                if (success == null || success.data == null) {
+                    console.log("Error occurred while displaying shopping cart");
+                    return;
+                }
+
+                this.shoppingCart = success.data;
+                this.cartLineItemDTOs = this.shoppingCart.cartLineItems;
+            },
+            error => {
+                console.log(error);
+            }
+        );
+    }
 
     render() {
 

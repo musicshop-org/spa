@@ -395,7 +395,7 @@ function SongList(songDTOs: any) {
 
                 {(selected.length > 0) ? (
                 <Button variant={"text"} endIcon={<ShoppingCartIcon/>} onClick={() => {
-                    CartGenerator.addSongToCart(getSelectedSongDTOS(songDTOs, selected));
+                    CartGenerator.addSongsToCart(getSelectedSongDTOS(songDTOs, selected));
                 }}>
                     Add {selected.length} Songs to cart
                 </Button>) :( <div></div>)}

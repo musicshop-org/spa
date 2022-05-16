@@ -1,5 +1,4 @@
 import {AlbumDTO, DefaultApi, SongDTO} from "./openAPI";
-import {List} from "@mui/material";
 
 class CartGenerator {
     static addToCart(albumDTO: AlbumDTO){
@@ -17,7 +16,7 @@ class CartGenerator {
         }
     }
 
-    static addSongToCart(songDTOs: Array<SongDTO>){
+    static addSongsToCart(songDTOs: Array<SongDTO>){
         let defaultApi = new DefaultApi();
         let cartUUID: string|null;
         if (window.localStorage.getItem("cartUUID") == null) {
