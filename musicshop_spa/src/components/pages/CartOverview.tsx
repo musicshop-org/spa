@@ -1,19 +1,21 @@
 import React, {Component} from "react";
-import {CartLineItemDTO, DefaultApi, ShoppingCartDTO} from "../../openAPI";
+import {CartLineItemDTO, DefaultApi} from "../../openAPI";
 import CartLineItem from "../CartLineItem";
 import {Button, Grid, Typography} from "@mui/material";
 import CartGenerator from "../../CartGenerator";
 
-class CartOverview extends Component {
+class CartOverview extends Component<{}, { cartLineItemDTOs: Set<CartLineItemDTO> }> {
 
     private defaultApi: DefaultApi;
-    private shoppingCart: ShoppingCartDTO | undefined;
-    private cartLineItemDTOs: Array<CartLineItemDTO> | undefined;
 
     constructor(props: any) {
         super(props);
 
         this.defaultApi = new DefaultApi();
+
+        this.state = {
+            cartLineItemDTOs: new Set(),
+        }
     }
 
     componentDidMount() {
@@ -38,8 +40,15 @@ class CartOverview extends Component {
                     return;
                 }
 
-                this.shoppingCart = success.data;
-                this.cartLineItemDTOs = this.shoppingCart.cartLineItems;
+                let cartLineItemDTOs = new Set<CartLineItemDTO>();
+
+                if (success.data.cartLineItems != undefined) {
+                    for (let i = 0; i < success.data.cartLineItems.length; i++) {
+                        cartLineItemDTOs.add(success.data.cartLineItems[i]);
+                    }
+                }
+
+                this.setState({cartLineItemDTOs: cartLineItemDTOs})
             },
             error => {
                 console.log(error);
@@ -49,23 +58,42 @@ class CartOverview extends Component {
 
     render() {
 
+        const {cartLineItemDTOs} = this.state;
+
         return (
             <div>
-                <CartLineItem></CartLineItem>
-                <CartLineItem></CartLineItem>
-                <CartLineItem></CartLineItem>
-                <CartLineItem></CartLineItem>
-                <Grid container alignItems={"flex-end"}
-                      justifyContent={"flex-end"}>
-                    <Typography variant={"h6"}>Total: 12.00 €</Typography>
+                {
+                    Array.from(cartLineItemDTOs).map((cartLineItemDTO, key) => {
+                        return (
+                            <Grid
+                                item
+                                key={key}
+                            >
+                                <CartLineItem
+                                    cartLineItemDTO={cartLineItemDTO}
+                                />
+                            </Grid>
+                        )
+                    })
+                }
 
-                </Grid>
-                <Grid container alignItems={"flex-end"}
-                      justifyContent={"flex-end"}>
-                    <Button sx={{mt: 2}} variant={"contained"}>
-                        Checkout
-                    </Button>
-                </Grid>
+                {(cartLineItemDTOs.size > 0) ? (
+                    <div>
+                        <Grid container alignItems={"flex-end"}
+                              justifyContent={"flex-end"}>
+                            <Typography variant={"h6"}>
+                                Total: 10.00 €
+                            </Typography>
+                        </Grid>
+
+                        <Grid container alignItems={"flex-end"}
+                              justifyContent={"flex-end"}>
+                            <Button sx={{mt: 2}} variant={"contained"}>
+                                Checkout
+                            </Button>
+                        </Grid>
+                    </div>
+                    ) : (<div></div>)}
             </div>
         );
     }

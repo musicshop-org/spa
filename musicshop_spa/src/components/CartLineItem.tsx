@@ -2,7 +2,6 @@ import {ButtonBase, Divider, Grid, Typography} from "@mui/material";
 import {Box} from "@mui/system";
 import * as React from "react";
 import {styled} from "@mui/material/styles";
-import {SongDTO} from "../openAPI";
 
 const Img = styled('img')({
     margin: 'auto',
@@ -11,7 +10,7 @@ const Img = styled('img')({
     maxHeight: '100%',
 });
 
-export default function CartLineItem(songDTO: SongDTO) {
+export default function CartLineItem(cartLineItemDTO: any) {
     return (
         <div>
             <Grid container spacing={2}>
@@ -25,20 +24,17 @@ export default function CartLineItem(songDTO: SongDTO) {
                     <Grid item xs container direction="column" spacing={2}>
                         <Grid item xs>
                             <Typography variant="subtitle1" component="div">
-                                Man in the mirror
+                                {cartLineItemDTO.cartLineItemDTO.name}
                             </Typography>
                             <Typography variant="subtitle2" component="div" gutterBottom>
 
                             </Typography>
                             <Typography variant="body2" color="text.secondary">
-                                Artist: Michael Jackson
+                                Artist: ?
                             </Typography>
                             <Typography variant="body2" color="text.secondary">
-                                Type: Digital
+                                Type: {cartLineItemDTO.cartLineItemDTO.mediumType}
                             </Typography>
-                            {/*<Typography variant="body2" color="text.secondary">*/}
-                            {/*    Stock: test*/}
-                            {/*</Typography>*/}
                         </Grid>
                     </Grid>
                     <Grid item>
