@@ -35,6 +35,12 @@ export interface AlbumDTO {
     'title'?: string;
     /**
      * 
+     * @type {string}
+     * @memberof AlbumDTO
+     */
+    'imageUrl'?: string;
+    /**
+     * 
      * @type {number}
      * @memberof AlbumDTO
      */
@@ -153,6 +159,12 @@ export interface CartLineItemDTO {
      * @memberof CartLineItemDTO
      */
     'stock'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CartLineItemDTO
+     */
+    'imageUrl'?: string;
 }
 
 export const CartLineItemDTOMediumTypeEnum = {
@@ -321,6 +333,44 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * 
          * @param {string} [cartUUID] 
+         * @param {AlbumDTO} [albumDTO] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        addAlbumToCart: async (cartUUID?: string, albumDTO?: AlbumDTO, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/albums/addSongsFromAlbumToCart`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (cartUUID !== undefined && cartUUID !== null) {
+                localVarHeaderParameter['CartUUID'] = String(cartUUID);
+            }
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(albumDTO, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} [cartUUID] 
          * @param {Array<SongDTO>} [songDTO] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -468,11 +518,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @param {string} [cartUUID] 
+         * @param {string} [authorization] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        displayShoppingCart: async (cartUUID?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        displayShoppingCart: async (authorization?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/shoppingCart/display`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -485,8 +535,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            if (cartUUID !== undefined && cartUUID !== null) {
-                localVarHeaderParameter['CartUUID'] = String(cartUUID);
+            if (authorization !== undefined && authorization !== null) {
+                localVarHeaderParameter['Authorization'] = String(authorization);
             }
 
 
@@ -684,6 +734,17 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {string} [cartUUID] 
+         * @param {AlbumDTO} [albumDTO] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async addAlbumToCart(cartUUID?: string, albumDTO?: AlbumDTO, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.addAlbumToCart(cartUUID, albumDTO, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} [cartUUID] 
          * @param {Array<SongDTO>} [songDTO] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -726,12 +787,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {string} [cartUUID] 
+         * @param {string} [authorization] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async displayShoppingCart(cartUUID?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShoppingCartDTO>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.displayShoppingCart(cartUUID, options);
+        async displayShoppingCart(authorization?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShoppingCartDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.displayShoppingCart(authorization, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -798,6 +859,16 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         /**
          * 
          * @param {string} [cartUUID] 
+         * @param {AlbumDTO} [albumDTO] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        addAlbumToCart(cartUUID?: string, albumDTO?: AlbumDTO, options?: any): AxiosPromise<boolean> {
+            return localVarFp.addAlbumToCart(cartUUID, albumDTO, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} [cartUUID] 
          * @param {Array<SongDTO>} [songDTO] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -836,12 +907,12 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @param {string} [cartUUID] 
+         * @param {string} [authorization] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        displayShoppingCart(cartUUID?: string, options?: any): AxiosPromise<ShoppingCartDTO> {
-            return localVarFp.displayShoppingCart(cartUUID, options).then((request) => request(axios, basePath));
+        displayShoppingCart(authorization?: string, options?: any): AxiosPromise<ShoppingCartDTO> {
+            return localVarFp.displayShoppingCart(authorization, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -902,6 +973,18 @@ export class DefaultApi extends BaseAPI {
     /**
      * 
      * @param {string} [cartUUID] 
+     * @param {AlbumDTO} [albumDTO] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public addAlbumToCart(cartUUID?: string, albumDTO?: AlbumDTO, options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).addAlbumToCart(cartUUID, albumDTO, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} [cartUUID] 
      * @param {Array<SongDTO>} [songDTO] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -948,8 +1031,8 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
-     * @param {string} [cartUUID?]
-     * @param {*} [options?] Override http request option.
+     * @param {string} [authorization] 
+     * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */

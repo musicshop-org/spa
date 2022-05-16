@@ -3,7 +3,6 @@ import {styled} from '@mui/material/styles';
 import {Grid, Button, Paper, Typography, ButtonBase} from '@mui/material';
 import {Box} from "@mui/system";
 import {Link} from "react-router-dom";
-import {AlbumDTO, DefaultApi} from "../openAPI";
 import CartGenerator from "../CartGenerator";
 
 const Img = styled('img')({
@@ -29,7 +28,7 @@ export default function ProductCard(albumDTO: any) {
                     <Link to={"/product-detail?albumId=" + albumDTO.albumDTO.albumId.albumId}>
                         <ButtonBase sx={{width: 128, height: 128}}>
                             <Img alt="complex"
-                                 src="https://media.hitparade.ch/cover/big/alexander_marcus-papaya_s.jpg"/>
+                                 src={albumDTO.albumDTO.imageUrl}/>
                         </ButtonBase>
                     </Link>
                 </Grid>
