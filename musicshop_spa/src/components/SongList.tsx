@@ -15,8 +15,6 @@ import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import {visuallyHidden} from '@mui/utils';
@@ -28,15 +26,18 @@ import CartGenerator from "../CartGenerator";
 interface Data {
     index: number;
     title: string;
+    price: number;
 }
 
 function createData(
     index: number,
     title: string,
+    price: number,
 ): Data {
     return {
         index,
-        title
+        title,
+        price,
     };
 }
 
@@ -97,6 +98,12 @@ const headCells: readonly HeadCell[] = [
         numeric: false,
         disablePadding: false,
         label: 'Title',
+    },
+    {
+        id: 'price',
+        numeric: false,
+        disablePadding: false,
+        label: 'Price',
     },
 ];
 
@@ -232,7 +239,7 @@ function SongList(songDTOs: any) {
     let rows: Data[] = [];
     if (songDTOs != null && songDTOs.songDTOs != null) {
         for (let i = 0; i < songDTOs.songDTOs.length; i++) {
-            rows.push(createData(i + 1, songDTOs.songDTOs[i].title))
+            rows.push(createData(i + 1, songDTOs.songDTOs[i].title, songDTOs.songDTOs[i].price))
         }
     }
 
@@ -351,9 +358,9 @@ function SongList(songDTOs: any) {
                                             <TableCell>
                                                 {row.title}
                                             </TableCell>
-                                            {/*<TableCell align="right">{row.fat}</TableCell>*/}
-                                            {/*<TableCell align="right">{row.carbs}</TableCell>*/}
-                                            {/*<TableCell align="right">{row.protein}</TableCell>*/}
+                                            <TableCell>
+                                                {row.price}.00 €
+                                            </TableCell>
                                         </TableRow>
                                     );
                                 })}
