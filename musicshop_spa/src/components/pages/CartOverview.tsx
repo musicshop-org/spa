@@ -46,13 +46,15 @@ class CartOverview extends Component<{}, { cartLineItemDTOs: Set<CartLineItemDTO
 
                 if (success.data.cartLineItems != undefined) {
                     let price: number | undefined;
+                    let quantity: number | undefined;
 
                     for (let i = 0; i < success.data.cartLineItems.length; i++) {
                         cartLineItemDTOs.add(success.data.cartLineItems[i]);
                         price = success.data.cartLineItems[i].price;
+                        quantity = success.data.cartLineItems[i].quantity;
 
-                        if (price != undefined) {
-                            this.totalPrice += price;
+                        if (price != undefined && quantity != undefined) {
+                            this.totalPrice = this.totalPrice + (price * quantity);
                         }
                     }
                 }
