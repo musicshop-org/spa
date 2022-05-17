@@ -3,6 +3,7 @@ import * as React from "react";
 import {styled} from "@mui/material/styles";
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
+import {DefaultApi} from "../openAPI";
 
 const Img = styled('img')({
     margin: 'auto',
@@ -41,11 +42,25 @@ export default function CartLineItem(cartLineItemDTO: any) {
                     <Grid item>
                         <Grid item>
                             <Typography variant="subtitle1" component="div" align={"right"}>
-                                <IconButton aria-label="decrease quantity" sx={{mr: 1}}>
+                                <IconButton aria-label="decrease quantity" sx={{mr: 1}} onClick={() => {
+                                    let defaultApi = new DefaultApi();
+
+                                    if (cartLineItemDTO.cartLineItemDTO.quantity == 1) {
+                                        // defaultApi.removeLineItemFromCart(cartLineItemDTO.cartLineItemDTO);
+                                    } else {
+                                        // defaultApi.changeLineItemQuantity(cartLineItemDTO.cartLineItemDTO, cartLineItemDTO.cartLineItemDTO.quantity - 1)
+                                    }
+                                }}>
                                     <RemoveIcon />
                                 </IconButton>
                                 {cartLineItemDTO.cartLineItemDTO.quantity}x
-                                <IconButton aria-label="increase quantity" sx={{ml: 1}}>
+                                <IconButton aria-label="increase quantity" sx={{ml: 1}} onClick={() => {
+                                    let defaultApi = new DefaultApi();
+
+                                    if (cartLineItemDTO.cartLineItemDTO.quantity < cartLineItemDTO.cartLineItemDTO.stock) {
+                                        // defaultApi.changeQuantity(cartLineItemDTO.cartLineItemDTO, cartLineItemDTO.cartLineItemDTO.quantity + 1);
+                                    }
+                                }}>
                                     <AddIcon />
                                 </IconButton>
                             </Typography>
