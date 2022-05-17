@@ -20,7 +20,6 @@ export default function ProductCard(albumDTO: any) {
                 margin: 'auto',
                 width: 520,
                 flexGrow: 1,
-                // backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
             }}
         >
             <Grid container spacing={2}>
@@ -59,7 +58,7 @@ export default function ProductCard(albumDTO: any) {
                         <Box sx={{pt: 8}} display="flex" justifyContent="flex-end">
                             <Typography sx={{cursor: 'pointer'}} variant="body2">
                                 <Button variant={"text"} onClick={() => {
-                                    CartGenerator.addToCart(albumDTO.albumDTO);
+                                    CartGenerator.addAlbumsToCart(albumDTO.albumDTO);
                                 }}>
                                     Add to cart
                                 </Button>

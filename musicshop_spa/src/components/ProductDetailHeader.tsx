@@ -58,7 +58,7 @@ function ProductDetailHeader(albumDTO: any) {
                 </Typography>
 
                 <Button variant={"text"} endIcon={<ShoppingCartIcon />} onClick={() => {
-                    CartGenerator.addToCart(albumDTO.albumDTO);
+                    CartGenerator.addAlbumsToCart(albumDTO.albumDTO);
                 }}>
                     Add Album to cart
                 </Button>

@@ -1,5 +1,4 @@
-import {Button, ButtonBase, Divider, Grid, Typography} from "@mui/material";
-import {Box} from "@mui/system";
+import {ButtonBase, Divider, Grid, Typography} from "@mui/material";
 import * as React from "react";
 import {styled} from "@mui/material/styles";
 
@@ -23,17 +22,17 @@ export default function CartLineItem(cartLineItemDTO: any) {
                 <Grid item xs={12} sm container>
                     <Grid item xs container direction="column" spacing={2}>
                         <Grid item xs>
+                            <Typography variant="caption" component="div">
+                                {cartLineItemDTO.cartLineItemDTO.productType}
+                            </Typography>
                             <Typography variant="subtitle1" component="div">
                                 {cartLineItemDTO.cartLineItemDTO.name}
-                            </Typography>
-                            <Typography variant="subtitle2" component="div" gutterBottom>
-
                             </Typography>
                             <Typography variant="body2" color="text.secondary">
                                 Artist: ?
                             </Typography>
                             <Typography variant="body2" color="text.secondary">
-                                Type: {cartLineItemDTO.cartLineItemDTO.mediumType}
+                                Medium Type: {cartLineItemDTO.cartLineItemDTO.mediumType}
                             </Typography>
                         </Grid>
                     </Grid>

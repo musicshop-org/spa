@@ -1,7 +1,7 @@
 import {AlbumDTO, DefaultApi, SongDTO} from "./openAPI";
 
 class CartGenerator {
-    static addToCart(albumDTO: AlbumDTO){
+    static addAlbumsToCart(albumDTO: AlbumDTO){
         let defaultApi = new DefaultApi();
         let cartUUID: string|null;
         if (window.localStorage.getItem("cartUUID") == null) {
@@ -12,7 +12,7 @@ class CartGenerator {
         }
 
         if(cartUUID != null) {
-            defaultApi.addToCart(cartUUID, albumDTO);
+            defaultApi.addAlbumsToCart(cartUUID, albumDTO);
         }
     }
 
