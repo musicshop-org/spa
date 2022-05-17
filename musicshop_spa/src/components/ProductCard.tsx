@@ -53,7 +53,7 @@ export default function ProductCard(albumDTO: any) {
                     </Grid>
                     <Grid item>
                         <Typography variant="subtitle1" component="div" align={"right"}>
-                            {albumDTO.albumDTO.price} €
+                            {albumDTO.albumDTO.price}.00 €
                         </Typography>
                         <Box sx={{pt: 8}} display="flex" justifyContent="flex-end">
                             <Typography sx={{cursor: 'pointer'}} variant="body2">

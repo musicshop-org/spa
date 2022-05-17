@@ -1,6 +1,8 @@
-import {ButtonBase, Divider, Grid, Typography} from "@mui/material";
+import {ButtonBase, Divider, Grid, IconButton, Typography} from "@mui/material";
 import * as React from "react";
 import {styled} from "@mui/material/styles";
+import RemoveIcon from '@mui/icons-material/Remove';
+import AddIcon from '@mui/icons-material/Add';
 
 const Img = styled('img')({
     margin: 'auto',
@@ -37,6 +39,17 @@ export default function CartLineItem(cartLineItemDTO: any) {
                         </Grid>
                     </Grid>
                     <Grid item>
+                        <Grid item>
+                            <Typography variant="subtitle1" component="div" align={"right"}>
+                                <IconButton aria-label="decrease quantity" sx={{mr: 1}}>
+                                    <RemoveIcon />
+                                </IconButton>
+                                {cartLineItemDTO.cartLineItemDTO.quantity}x
+                                <IconButton aria-label="increase quantity" sx={{ml: 1}}>
+                                    <AddIcon />
+                                </IconButton>
+                            </Typography>
+                        </Grid>
                         <Typography variant="subtitle1" component="div" align={"right"}>
                             {cartLineItemDTO.cartLineItemDTO.price}.00 €
                         </Typography>
