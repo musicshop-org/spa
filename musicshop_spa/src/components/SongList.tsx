@@ -101,7 +101,7 @@ const headCells: readonly HeadCell[] = [
     },
     {
         id: 'price',
-        numeric: false,
+        numeric: true,
         disablePadding: false,
         label: 'Price',
     },
@@ -160,6 +160,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                             ) : null}
                         </TableSortLabel>
                     </TableCell>
+
                 ))}
             </TableRow>
         </TableHead>
@@ -226,6 +227,17 @@ function getSelectedSongDTOS(songDTOs: any, selected: readonly string[]): Array<
         selectedSongs.push(songDTOs.songDTOs.find((song: SongDTO) => song.title === selected[index]));
     }
     return selectedSongs;
+}
+
+function getTotalPrice(songDTOs: Array<SongDTO>): number {
+    let totalPrice = 0;
+
+    for (const song of songDTOs) {
+        if (song.price != null) {
+            totalPrice += song.price;
+        }
+    }
+    return totalPrice;
 }
 
 function SongList(songDTOs: any) {
@@ -358,8 +370,11 @@ function SongList(songDTOs: any) {
                                             <TableCell>
                                                 {row.title}
                                             </TableCell>
-                                            <TableCell>
-                                                {row.price}.00 €
+                                            <TableCell
+
+                                                align={'right'}
+                                            >
+                                                {(Math.round(row.price * 100) / 100).toFixed(2)} €
                                             </TableCell>
                                         </TableRow>
                                     );
@@ -394,11 +409,21 @@ function SongList(songDTOs: any) {
                   justifyContent={"flex-end"}>
 
                 {(selected.length > 0) ? (
-                <Button variant={"text"} endIcon={<ShoppingCartIcon/>} onClick={() => {
-                    CartGenerator.addSongsToCart(getSelectedSongDTOS(songDTOs, selected));
-                }}>
-                    Add {selected.length} Songs to cart
-                </Button>) :( <div></div>)}
+                    <>
+                        <Grid item>
+                            <Typography align={"right"} variant={"h6"}>
+
+                                Total: {(Math.round(getTotalPrice(getSelectedSongDTOS(songDTOs, selected)) * 100) / 100).toFixed(2)} €
+
+                            </Typography>
+
+                            <Button variant={"text"} endIcon={<ShoppingCartIcon/>} onClick={() => {
+                                CartGenerator.addSongsToCart(getSelectedSongDTOS(songDTOs, selected));
+                            }}>
+                                Add {selected.length} Songs to cart
+                            </Button>
+                        </Grid>
+                    </>) : (<div></div>)}
 
             </Grid>
         </Box>

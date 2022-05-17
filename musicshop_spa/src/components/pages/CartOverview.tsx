@@ -35,8 +35,11 @@ class CartOverview extends Component<{}, { cartLineItemDTOs: Set<CartLineItemDTO
     }
 
     private getShoppingCart(cartUUID: string): void {
+
+        //TODO: ask marco why promise is resolved twice
         this.defaultApi.displayShoppingCart(cartUUID).then(
             success => {
+                this.totalPrice = 0;
                 if (success == null || success.data == null) {
                     console.log("Error occurred while displaying shopping cart");
                     return;
@@ -46,15 +49,13 @@ class CartOverview extends Component<{}, { cartLineItemDTOs: Set<CartLineItemDTO
 
                 if (success.data.cartLineItems != undefined) {
                     let price: number | undefined;
-                    let quantity: number | undefined;
 
                     for (let i = 0; i < success.data.cartLineItems.length; i++) {
                         cartLineItemDTOs.add(success.data.cartLineItems[i]);
                         price = success.data.cartLineItems[i].price;
-                        quantity = success.data.cartLineItems[i].quantity;
 
-                        if (price != undefined && quantity != undefined) {
-                            this.totalPrice = this.totalPrice + (price * quantity);
+                        if (price != undefined) {
+                            this.totalPrice = this.totalPrice + (price);
                         }
                     }
                 }
@@ -93,7 +94,7 @@ class CartOverview extends Component<{}, { cartLineItemDTOs: Set<CartLineItemDTO
                         <Grid container alignItems={"flex-end"}
                               justifyContent={"flex-end"}>
                             <Typography variant={"h6"}>
-                                Total: {this.totalPrice}.00 €
+                                Total: {(Math.round(this.totalPrice * 100) / 100).toFixed(2)} €
                             </Typography>
                         </Grid>
 

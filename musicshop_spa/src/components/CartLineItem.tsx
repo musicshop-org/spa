@@ -1,8 +1,7 @@
 import {ButtonBase, Divider, Grid, IconButton, Typography} from "@mui/material";
 import * as React from "react";
 import {styled} from "@mui/material/styles";
-import RemoveIcon from '@mui/icons-material/Remove';
-import AddIcon from '@mui/icons-material/Add';
+import ClearIcon from '@mui/icons-material/Clear';
 import {DefaultApi} from "../openAPI";
 
 const Img = styled('img')({
@@ -32,41 +31,26 @@ export default function CartLineItem(cartLineItemDTO: any) {
                                 {cartLineItemDTO.cartLineItemDTO.name}
                             </Typography>
                             <Typography variant="body2" color="text.secondary">
-                                Artist: ?
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary">
-                                Medium Type: {cartLineItemDTO.cartLineItemDTO.mediumType}
+                                Artist: {cartLineItemDTO.cartLineItemDTO.artists[0]}
                             </Typography>
                         </Grid>
                     </Grid>
                     <Grid item>
                         <Grid item>
                             <Typography variant="subtitle1" component="div" align={"right"}>
-                                <IconButton aria-label="decrease quantity" sx={{mr: 1}} onClick={() => {
+
+                                <IconButton aria-label="remove item" sx={{ml: 1}} onClick={() => {
                                     let defaultApi = new DefaultApi();
 
-                                    if (cartLineItemDTO.cartLineItemDTO.quantity == 1) {
-                                        // defaultApi.removeLineItemFromCart(cartLineItemDTO.cartLineItemDTO);
-                                    } else {
-                                        // defaultApi.changeLineItemQuantity(cartLineItemDTO.cartLineItemDTO, cartLineItemDTO.cartLineItemDTO.quantity - 1)
-                                    }
-                                }}>
-                                    <RemoveIcon />
-                                </IconButton>
-                                {cartLineItemDTO.cartLineItemDTO.quantity}x
-                                <IconButton aria-label="increase quantity" sx={{ml: 1}} onClick={() => {
-                                    let defaultApi = new DefaultApi();
+                                    //TODO: implement remove single LineItem from cart in backend
 
-                                    if (cartLineItemDTO.cartLineItemDTO.quantity < cartLineItemDTO.cartLineItemDTO.stock) {
-                                        // defaultApi.changeQuantity(cartLineItemDTO.cartLineItemDTO, cartLineItemDTO.cartLineItemDTO.quantity + 1);
-                                    }
                                 }}>
-                                    <AddIcon />
+                                    <ClearIcon />
                                 </IconButton>
                             </Typography>
                         </Grid>
-                        <Typography variant="subtitle1" component="div" align={"right"}>
-                            {cartLineItemDTO.cartLineItemDTO.price}.00 €
+                        <Typography sx={{mt: 2}} variant="subtitle1" component="div" align={"right"}>
+                            {(Math.round(cartLineItemDTO.cartLineItemDTO.price * 100) / 100).toFixed(2)} €
                         </Typography>
                     </Grid>
                 </Grid>

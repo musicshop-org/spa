@@ -41,9 +41,6 @@ function ProductDetailHeader(albumDTO: any) {
                     <Typography>
                         {albumDTO.albumDTO.songs.values().next().value.artists[0].name} • {albumDTO.albumDTO.mediumType} • {albumDTO.albumDTO.releaseDate} • {albumDTO.albumDTO.songs.length} Songs 🎵
                     </Typography>
-                    <Typography variant="caption" color="text.secondary" align={"right"}>
-                        Stock: {albumDTO.albumDTO.stock}
-                    </Typography>
 
 
                 </Grid>
@@ -53,7 +50,7 @@ function ProductDetailHeader(albumDTO: any) {
 
                 <Typography variant="h5" component="div" align={"right"}>
                     <span style={{marginRight: 10}}>
-                        {albumDTO.albumDTO.price}.00 €
+                        {(Math.round(albumDTO.albumDTO.price * 100) / 100).toFixed(2)} €
                     </span>
                 </Typography>
 

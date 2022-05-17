@@ -46,14 +46,11 @@ export default function ProductCard(albumDTO: any) {
                             <Typography variant="body2" color="text.secondary">
                                 Type: {albumDTO.albumDTO.mediumType}
                             </Typography>
-                            <Typography variant="body2" color="text.secondary">
-                                Stock: {albumDTO.albumDTO.stock}
-                            </Typography>
                         </Grid>
                     </Grid>
                     <Grid item>
                         <Typography variant="subtitle1" component="div" align={"right"}>
-                            {albumDTO.albumDTO.price}.00 €
+                            {(Math.round(albumDTO.albumDTO.price * 100) / 100).toFixed(2)} €
                         </Typography>
                         <Box sx={{pt: 8}} display="flex" justifyContent="flex-end">
                             <Typography sx={{cursor: 'pointer'}} variant="body2">
