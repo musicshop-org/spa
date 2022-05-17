@@ -7,11 +7,13 @@ import CartGenerator from "../../CartGenerator";
 class CartOverview extends Component<{}, { cartLineItemDTOs: Set<CartLineItemDTO> }> {
 
     private defaultApi: DefaultApi;
+    private totalPrice: number;
 
     constructor(props: any) {
         super(props);
 
         this.defaultApi = new DefaultApi();
+        this.totalPrice = 0;
 
         this.state = {
             cartLineItemDTOs: new Set(),
@@ -43,8 +45,15 @@ class CartOverview extends Component<{}, { cartLineItemDTOs: Set<CartLineItemDTO
                 let cartLineItemDTOs = new Set<CartLineItemDTO>();
 
                 if (success.data.cartLineItems != undefined) {
+                    let price: number | undefined;
+
                     for (let i = 0; i < success.data.cartLineItems.length; i++) {
                         cartLineItemDTOs.add(success.data.cartLineItems[i]);
+                        price = success.data.cartLineItems[i].price;
+
+                        if (price != undefined) {
+                            this.totalPrice += price;
+                        }
                     }
                 }
 
@@ -82,7 +91,7 @@ class CartOverview extends Component<{}, { cartLineItemDTOs: Set<CartLineItemDTO
                         <Grid container alignItems={"flex-end"}
                               justifyContent={"flex-end"}>
                             <Typography variant={"h6"}>
-                                Total: 10.00 €
+                                Total: {this.totalPrice}.00 €
                             </Typography>
                         </Grid>
 
