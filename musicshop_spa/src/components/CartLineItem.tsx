@@ -42,8 +42,7 @@ export default function CartLineItem(cartLineItemDTO: any) {
 
                                 <IconButton aria-label="remove item" onClick={() => {
                                     ShoppingCartHelper.removeLineItemFromCart(cartLineItemDTO.cartLineItemDTO);
-
-                                    // TODO: re-render CartOverview after successfully removing cartLineItem
+                                    window.location.reload();
                                 }}>
                                     <ClearIcon />
                                 </IconButton>
