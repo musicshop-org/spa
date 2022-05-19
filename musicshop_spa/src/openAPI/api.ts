@@ -355,6 +355,44 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        addAlbumsToCart: async (cartUUID?: string, albumDTO?: AlbumDTO, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/albums/addAlbumsToCart`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (cartUUID !== undefined && cartUUID !== null) {
+                localVarHeaderParameter['CartUUID'] = String(cartUUID);
+            }
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(albumDTO, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} [cartUUID] 
+         * @param {AlbumDTO} [albumDTO] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         addSongsFromAlbumToCart: async (cartUUID?: string, albumDTO?: AlbumDTO, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/albums/addSongsFromAlbumToCart`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -418,44 +456,6 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(songDTO, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {string} [cartUUID] 
-         * @param {AlbumDTO} [albumDTO] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        addToCart: async (cartUUID?: string, albumDTO?: AlbumDTO, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/albums/addAlbumsToCart`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            if (cartUUID !== undefined && cartUUID !== null) {
-                localVarHeaderParameter['CartUUID'] = String(cartUUID);
-            }
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(albumDTO, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -794,6 +794,17 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        async addAlbumsToCart(cartUUID?: string, albumDTO?: AlbumDTO, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.addAlbumsToCart(cartUUID, albumDTO, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} [cartUUID] 
+         * @param {AlbumDTO} [albumDTO] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         async addSongsFromAlbumToCart(cartUUID?: string, albumDTO?: AlbumDTO, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.addSongsFromAlbumToCart(cartUUID, albumDTO, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
@@ -807,17 +818,6 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          */
         async addSongsToCart(cartUUID?: string, songDTO?: Array<SongDTO>, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.addSongsToCart(cartUUID, songDTO, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
-         * @param {string} [cartUUID] 
-         * @param {AlbumDTO} [albumDTO] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async addToCart(cartUUID?: string, albumDTO?: AlbumDTO, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.addToCart(cartUUID, albumDTO, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -930,6 +930,16 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        addAlbumsToCart(cartUUID?: string, albumDTO?: AlbumDTO, options?: any): AxiosPromise<string> {
+            return localVarFp.addAlbumsToCart(cartUUID, albumDTO, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} [cartUUID] 
+         * @param {AlbumDTO} [albumDTO] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         addSongsFromAlbumToCart(cartUUID?: string, albumDTO?: AlbumDTO, options?: any): AxiosPromise<boolean> {
             return localVarFp.addSongsFromAlbumToCart(cartUUID, albumDTO, options).then((request) => request(axios, basePath));
         },
@@ -942,16 +952,6 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          */
         addSongsToCart(cartUUID?: string, songDTO?: Array<SongDTO>, options?: any): AxiosPromise<boolean> {
             return localVarFp.addSongsToCart(cartUUID, songDTO, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {string} [cartUUID] 
-         * @param {AlbumDTO} [albumDTO] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        addToCart(cartUUID?: string, albumDTO?: AlbumDTO, options?: any): AxiosPromise<string> {
-            return localVarFp.addToCart(cartUUID, albumDTO, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1055,6 +1055,18 @@ export class DefaultApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
+    public addAlbumsToCart(cartUUID?: string, albumDTO?: AlbumDTO, options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).addAlbumsToCart(cartUUID, albumDTO, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} [cartUUID] 
+     * @param {AlbumDTO} [albumDTO] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
     public addSongsFromAlbumToCart(cartUUID?: string, albumDTO?: AlbumDTO, options?: AxiosRequestConfig) {
         return DefaultApiFp(this.configuration).addSongsFromAlbumToCart(cartUUID, albumDTO, options).then((request) => request(this.axios, this.basePath));
     }
@@ -1069,18 +1081,6 @@ export class DefaultApi extends BaseAPI {
      */
     public addSongsToCart(cartUUID?: string, songDTO?: Array<SongDTO>, options?: AxiosRequestConfig) {
         return DefaultApiFp(this.configuration).addSongsToCart(cartUUID, songDTO, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {string} [cartUUID] 
-     * @param {AlbumDTO} [albumDTO] 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DefaultApi
-     */
-    public addToCart(cartUUID?: string, albumDTO?: AlbumDTO, options?: AxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).addToCart(cartUUID, albumDTO, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

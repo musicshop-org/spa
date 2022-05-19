@@ -43,7 +43,7 @@ export default function CartLineItem(cartLineItemDTO: any) {
                                     let defaultApi = new DefaultApi();
 
                                     //TODO: implement remove single LineItem from cart in backend
-
+                                    defaultApi.removeLineItemFromCart(cartLineItemDTO.cartLineItemDTO);
                                 }}>
                                     <ClearIcon />
                                 </IconButton>
