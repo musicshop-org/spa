@@ -21,7 +21,7 @@ import {visuallyHidden} from '@mui/utils';
 import {SongDTO} from "../openAPI";
 import {Button, Grid} from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import CartGenerator from "../CartGenerator";
+import ShoppingCartHelper from "../ShoppingCartHelper";
 
 interface Data {
     index: number;
@@ -418,7 +418,7 @@ function SongList(songDTOs: any) {
                             </Typography>
 
                             <Button variant={"text"} endIcon={<ShoppingCartIcon/>} onClick={() => {
-                                CartGenerator.addSongsToCart(getSelectedSongDTOS(songDTOs, selected));
+                                ShoppingCartHelper.addSongsToCart(getSelectedSongDTOS(songDTOs, selected));
                             }}>
                                 Add {selected.length} Songs to cart
                             </Button>

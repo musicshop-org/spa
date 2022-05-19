@@ -3,6 +3,7 @@ import * as React from "react";
 import {styled} from "@mui/material/styles";
 import ClearIcon from '@mui/icons-material/Clear';
 import {DefaultApi} from "../openAPI";
+import ShoppingCartHelper from "../ShoppingCartHelper";
 
 const Img = styled('img')({
     margin: 'auto',
@@ -39,11 +40,8 @@ export default function CartLineItem(cartLineItemDTO: any) {
                         <Grid item>
                             <Typography variant="subtitle1" component="div" align={"right"}>
 
-                                <IconButton aria-label="remove item" sx={{ml: 1}} onClick={() => {
-                                    let defaultApi = new DefaultApi();
-
-                                    //TODO: implement remove single LineItem from cart in backend
-                                    defaultApi.removeLineItemFromCart(cartLineItemDTO.cartLineItemDTO);
+                                <IconButton aria-label="remove item" onClick={() => {
+                                    ShoppingCartHelper.removeLineItemFromCart(cartLineItemDTO.cartLineItemDTO);
                                 }}>
                                     <ClearIcon />
                                 </IconButton>

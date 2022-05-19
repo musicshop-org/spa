@@ -2,7 +2,7 @@ import * as React from 'react';
 import {styled} from '@mui/material/styles';
 import {Grid, Button, Typography, ButtonBase} from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import CartGenerator from "../CartGenerator";
+import ShoppingCartHelper from "../ShoppingCartHelper";
 
 const Img = styled('img')({
     margin: 'auto',
@@ -55,7 +55,7 @@ function ProductDetailHeader(albumDTO: any) {
                 </Typography>
 
                 <Button variant={"text"} endIcon={<ShoppingCartIcon />} onClick={() => {
-                    CartGenerator.addAlbumsToCart(albumDTO.albumDTO);
+                    ShoppingCartHelper.addAlbumsToCart(albumDTO.albumDTO);
                 }}>
                     Add Album to cart
                 </Button>

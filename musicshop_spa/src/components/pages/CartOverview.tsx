@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {CartLineItemDTO, DefaultApi} from "../../openAPI";
 import CartLineItem from "../CartLineItem";
 import {Button, Grid, Typography} from "@mui/material";
-import CartGenerator from "../../CartGenerator";
+import ShoppingCartHelper from "../../ShoppingCartHelper";
 import Loader from "../Loader";
 
 class CartOverview extends Component<{}, { cartReady: boolean, cartLineItemDTOs: Set<CartLineItemDTO> }> {
@@ -25,7 +25,7 @@ class CartOverview extends Component<{}, { cartReady: boolean, cartLineItemDTOs:
     componentDidMount() {
         let cartUUID: string | null;
         if (window.localStorage.getItem("cartUUID") == null) {
-            cartUUID = CartGenerator.generateUUID();
+            cartUUID = ShoppingCartHelper.generateUUID();
             window.localStorage.setItem('cartUUID', cartUUID);
         } else {
             cartUUID = window.localStorage.getItem("cartUUID");

@@ -3,7 +3,7 @@ import {styled} from '@mui/material/styles';
 import {Grid, Button, Paper, Typography, ButtonBase} from '@mui/material';
 import {Box} from "@mui/system";
 import {Link} from "react-router-dom";
-import CartGenerator from "../CartGenerator";
+import ShoppingCartHelper from "../ShoppingCartHelper";
 
 const Img = styled('img')({
     margin: 'auto',
@@ -55,7 +55,7 @@ export default function ProductCard(albumDTO: any) {
                         <Box sx={{pt: 8}} display="flex" justifyContent="flex-end">
                             <Typography sx={{cursor: 'pointer'}} variant="body2">
                                 <Button variant={"text"} onClick={() => {
-                                    CartGenerator.addAlbumsToCart(albumDTO.albumDTO);
+                                    ShoppingCartHelper.addAlbumsToCart(albumDTO.albumDTO);
                                 }}>
                                     Add to cart
                                 </Button>
