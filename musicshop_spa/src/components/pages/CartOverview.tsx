@@ -3,8 +3,9 @@ import {CartLineItemDTO, DefaultApi} from "../../openAPI";
 import CartLineItem from "../CartLineItem";
 import {Button, Grid, Typography} from "@mui/material";
 import CartGenerator from "../../CartGenerator";
+import Loader from "../Loader";
 
-class CartOverview extends Component<{}, { cartLineItemDTOs: Set<CartLineItemDTO> }> {
+class CartOverview extends Component<{}, { cartReady: boolean, cartLineItemDTOs: Set<CartLineItemDTO> }> {
 
     private defaultApi: DefaultApi;
     private totalPrice: number;
@@ -16,6 +17,7 @@ class CartOverview extends Component<{}, { cartLineItemDTOs: Set<CartLineItemDTO
         this.totalPrice = 0;
 
         this.state = {
+            cartReady: false,
             cartLineItemDTOs: new Set(),
         }
     }
@@ -60,7 +62,8 @@ class CartOverview extends Component<{}, { cartLineItemDTOs: Set<CartLineItemDTO
                     }
                 }
 
-                this.setState({cartLineItemDTOs: cartLineItemDTOs})
+                this.setState({cartReady: true});
+                this.setState({cartLineItemDTOs: cartLineItemDTOs});
             },
             error => {
                 console.log(error);
@@ -70,42 +73,53 @@ class CartOverview extends Component<{}, { cartLineItemDTOs: Set<CartLineItemDTO
 
     render() {
 
+        const {cartReady} = this.state;
         const {cartLineItemDTOs} = this.state;
 
         return (
             <div>
                 {
-                    Array.from(cartLineItemDTOs).map((cartLineItemDTO, key) => {
-                        return (
-                            <Grid
-                                item
-                                key={key}
-                            >
-                                <CartLineItem
-                                    cartLineItemDTO={cartLineItemDTO}
-                                />
-                            </Grid>
-                        )
-                    })
+                    !cartReady ? (
+                        <Loader/>
+                    ) : (
+                        <React.Fragment>
+                            {
+                                Array.from(cartLineItemDTOs).map((cartLineItemDTO, key) => {
+                                    return (
+                                        <Grid
+                                            item
+                                            key={key}
+                                        >
+                                            <CartLineItem
+                                                cartLineItemDTO={cartLineItemDTO}
+                                            />
+                                        </Grid>
+                                    )
+                                })
+                            }
+
+                            {
+                                (cartLineItemDTOs.size > 0) ? (
+                                    <div>
+                                        <Grid container alignItems={"flex-end"}
+                                              justifyContent={"flex-end"}>
+                                            <Typography variant={"h6"}>
+                                                Total: {(Math.round(this.totalPrice * 100) / 100).toFixed(2)} €
+                                            </Typography>
+                                        </Grid>
+
+                                        <Grid container alignItems={"flex-end"}
+                                              justifyContent={"flex-end"}>
+                                            <Button sx={{mt: 2}} variant={"contained"}>
+                                                Checkout
+                                            </Button>
+                                        </Grid>
+                                    </div>
+                                ) : (<div></div>)
+                            }
+                        </React.Fragment>
+                    )
                 }
-
-                {(cartLineItemDTOs.size > 0) ? (
-                    <div>
-                        <Grid container alignItems={"flex-end"}
-                              justifyContent={"flex-end"}>
-                            <Typography variant={"h6"}>
-                                Total: {(Math.round(this.totalPrice * 100) / 100).toFixed(2)} €
-                            </Typography>
-                        </Grid>
-
-                        <Grid container alignItems={"flex-end"}
-                              justifyContent={"flex-end"}>
-                            <Button sx={{mt: 2}} variant={"contained"}>
-                                Checkout
-                            </Button>
-                        </Grid>
-                    </div>
-                    ) : (<div></div>)}
             </div>
         );
     }
