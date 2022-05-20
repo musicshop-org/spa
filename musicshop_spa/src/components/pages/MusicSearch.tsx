@@ -5,8 +5,9 @@ import SearchIcon from '@mui/icons-material/Search';
 import {DefaultApi} from "../../openAPI";
 import ProductCard from "../ProductCard";
 import {AlbumDTO} from "../../openAPI";
+import Loader from "../Loader";
 
-class MusicSearch extends Component<{}, { albumDTOs: Set<AlbumDTO> }> {
+class MusicSearch extends Component<{}, { searchFinished: boolean, albumDTOs: Set<AlbumDTO> }> {
 
     private searchString: string;
     private defaultApi: DefaultApi;
@@ -18,11 +19,14 @@ class MusicSearch extends Component<{}, { albumDTOs: Set<AlbumDTO> }> {
         this.defaultApi = new DefaultApi();
 
         this.state = {
+            searchFinished: true,
             albumDTOs: new Set(),
         }
     }
 
     private searchMusic(): void {
+        this.setState({searchFinished: false});
+
         this.defaultApi.findAlbumsBySongTitle(this.searchString).then(
             success => {
                 if (success == null || success.data == null) {
@@ -36,6 +40,7 @@ class MusicSearch extends Component<{}, { albumDTOs: Set<AlbumDTO> }> {
                     albumDTOs.add(success.data[i]);
                 }
 
+                this.setState({searchFinished: true});
                 this.setState({albumDTOs: albumDTOs});
             },
             error => {
@@ -74,46 +79,46 @@ class MusicSearch extends Component<{}, { albumDTOs: Set<AlbumDTO> }> {
 
     render() {
 
+        const {searchFinished} = this.state;
         const {albumDTOs} = this.state;
 
         return (
             <div>
-                {/*<Container >*/}
                 {this.searchBarContent()}
 
                 <Divider/>
 
-                {/*<Container sx={{mt: 2}}>*/}
+                {
+                    !searchFinished ? (
+                        <div style={{margin: 20}}>
+                            <Loader/>
+                        </div>
+                    ) : (
+                        <Grid
+                            sx={{mt: 1}}
+                            container
+                            spacing={2}
+                            alignItems={"flex-start"}
+                            justifyContent={"flex-start"}
+                        >
+                            {
+                                Array.from(albumDTOs).map((albumDTO, key) => {
+                                    return (
+                                        <Grid
+                                            item
+                                            key={key}
+                                        >
+                                            <ProductCard
+                                                albumDTO={albumDTO}
+                                            />
 
-                <Grid
-                    sx={{mt: 1}}
-                    container
-                    spacing={2}
-                    alignItems={"flex-start"}
-                    justifyContent={"flex-start"}
-                >
-
-                    {
-                        Array.from(albumDTOs).map((albumDTO, key) => {
-                            return (
-                                <Grid
-                                    item
-                                    key={key}
-                                >
-                                    <ProductCard
-                                        albumDTO={albumDTO}
-                                    />
-
-                                </Grid>
-                            )
-                        })
-                    }
-
-                </Grid>
-
-
-                {/*</Container>*/}
-                {/*</Container>*/}
+                                        </Grid>
+                                    )
+                                })
+                            }
+                        </Grid>
+                    )
+                }
             </div>
         );
     }

@@ -15,25 +15,29 @@ import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import {visuallyHidden} from '@mui/utils';
 import {SongDTO} from "../openAPI";
+import {Button, Grid} from "@mui/material";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import ShoppingCartHelper from "../ShoppingCartHelper";
 
 interface Data {
     index: number;
     title: string;
+    price: number;
 }
 
 function createData(
     index: number,
     title: string,
+    price: number,
 ): Data {
     return {
         index,
-        title
+        title,
+        price,
     };
 }
 
@@ -95,6 +99,12 @@ const headCells: readonly HeadCell[] = [
         disablePadding: false,
         label: 'Title',
     },
+    {
+        id: 'price',
+        numeric: true,
+        disablePadding: false,
+        label: 'Price',
+    },
 ];
 
 interface EnhancedTableProps {
@@ -150,6 +160,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                             ) : null}
                         </TableSortLabel>
                     </TableCell>
+
                 ))}
             </TableRow>
         </TableHead>
@@ -210,6 +221,25 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
     );
 };
 
+function getSelectedSongDTOS(songDTOs: any, selected: readonly string[]): Array<SongDTO> {
+    let selectedSongs: Array<SongDTO> = new Array<SongDTO>();
+    for (const index in selected) {
+        selectedSongs.push(songDTOs.songDTOs.find((song: SongDTO) => song.title === selected[index]));
+    }
+    return selectedSongs;
+}
+
+function getTotalPrice(songDTOs: Array<SongDTO>): number {
+    let totalPrice = 0;
+
+    for (const song of songDTOs) {
+        if (song.price != null) {
+            totalPrice += song.price;
+        }
+    }
+    return totalPrice;
+}
+
 function SongList(songDTOs: any) {
     const [order, setOrder] = React.useState<Order>('asc');
     const [orderBy, setOrderBy] = React.useState<keyof Data>('index');
@@ -221,7 +251,7 @@ function SongList(songDTOs: any) {
     let rows: Data[] = [];
     if (songDTOs != null && songDTOs.songDTOs != null) {
         for (let i = 0; i < songDTOs.songDTOs.length; i++) {
-            rows.push(createData(i + 1, songDTOs.songDTOs[i].title))
+            rows.push(createData(i + 1, songDTOs.songDTOs[i].title, songDTOs.songDTOs[i].price))
         }
     }
 
@@ -340,9 +370,12 @@ function SongList(songDTOs: any) {
                                             <TableCell>
                                                 {row.title}
                                             </TableCell>
-                                            {/*<TableCell align="right">{row.fat}</TableCell>*/}
-                                            {/*<TableCell align="right">{row.carbs}</TableCell>*/}
-                                            {/*<TableCell align="right">{row.protein}</TableCell>*/}
+                                            <TableCell
+
+                                                align={'right'}
+                                            >
+                                                {(Math.round(row.price * 100) / 100).toFixed(2)} €
+                                            </TableCell>
                                         </TableRow>
                                     );
                                 })}
@@ -372,6 +405,27 @@ function SongList(songDTOs: any) {
             {/*    control={<Switch checked={dense} onChange={handleChangeDense}/>}*/}
             {/*    label="Dense padding"*/}
             {/*/>*/}
+            <Grid container alignItems={"flex-end"}
+                  justifyContent={"flex-end"}>
+
+                {(selected.length > 0) ? (
+                    <>
+                        <Grid item>
+                            <Typography align={"right"} variant={"h6"}>
+
+                                Total: {(Math.round(getTotalPrice(getSelectedSongDTOS(songDTOs, selected)) * 100) / 100).toFixed(2)} €
+
+                            </Typography>
+
+                            <Button variant={"text"} endIcon={<ShoppingCartIcon/>} onClick={() => {
+                                ShoppingCartHelper.addSongsToCart(getSelectedSongDTOS(songDTOs, selected));
+                            }}>
+                                Add {selected.length} Songs to cart
+                            </Button>
+                        </Grid>
+                    </>) : (<div></div>)}
+
+            </Grid>
         </Box>
     );
 }

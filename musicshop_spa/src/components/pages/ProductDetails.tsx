@@ -1,6 +1,4 @@
 import React, {Component} from 'react';
-
-import {Container, Divider} from '@mui/material';
 import {AlbumDTO, DefaultApi} from "../../openAPI";
 import ProductDetailHeader from "../ProductDetailHeader";
 import Loader from "../Loader";
@@ -34,7 +32,7 @@ class ProductDetails extends Component<{}, { albumReady: boolean }> {
         this.defaultApi.findAlbumByAlbumId(albumId).then(
             success => {
                 if (success == null || success.data == null) {
-                    console.log("Ohje.. 🐜");
+                    console.log("Error occurred while displaying search results");
                     return;
                 }
 
@@ -64,8 +62,6 @@ class ProductDetails extends Component<{}, { albumReady: boolean }> {
                                     albumDTO={this.albumDTO}
                                 />
                             </div>
-
-                            {/*<Divider/>*/}
                             <div style={{marginTop: 40}}>
                                 <SongList
                                     songDTOs={this.albumDTO?.songs}
