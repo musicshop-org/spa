@@ -18,7 +18,9 @@ import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import routes from "../config/routes";
-import {Route, Routes} from "react-router-dom";
+import SearchIcon from '@mui/icons-material/Search';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import {Link, Route, Routes} from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -133,27 +135,68 @@ export default function MiniDrawer() {
                 </DrawerHeader>
                 <Divider/>
                 <List>
-                    {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                        <ListItemButton
-                            key={text}
+
+                    <ListItemButton component={Link} to={"/"}
+                        key={"musicSearch"}
+                        sx={{
+                            minHeight: 48,
+                            justifyContent: open ? 'initial' : 'center',
+                            px: 2.5,
+                        }}
+                    >
+
+                        <ListItemIcon
                             sx={{
-                                minHeight: 48,
-                                justifyContent: open ? 'initial' : 'center',
-                                px: 2.5,
+                                minWidth: 0,
+                                mr: open ? 3 : 'auto',
+                                justifyContent: 'center',
                             }}
                         >
-                            <ListItemIcon
-                                sx={{
-                                    minWidth: 0,
-                                    mr: open ? 3 : 'auto',
-                                    justifyContent: 'center',
-                                }}
-                            >
-                                {index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}
-                            </ListItemIcon>
-                            <ListItemText primary={text} sx={{opacity: open ? 1 : 0}}/>
-                        </ListItemButton>
-                    ))}
+                            <SearchIcon/>
+                        </ListItemIcon>
+                        <ListItemText primary={"Music Search"} sx={{opacity: open ? 1 : 0}}/>
+                    </ListItemButton>
+
+                    <ListItemButton component={Link} to={"/shopping-cart"}
+                        key={"shoppingCart"}
+                        sx={{
+                            minHeight: 48,
+                            justifyContent: open ? 'initial' : 'center',
+                            px: 2.5,
+                        }}
+                    >
+                        <ListItemIcon
+                            sx={{
+                                minWidth: 0,
+                                mr: open ? 3 : 'auto',
+                                justifyContent: 'center',
+                            }}
+                        >
+                            <ShoppingCartIcon/>
+                        </ListItemIcon>
+                        <ListItemText primary={"Shopping Cart"} sx={{opacity: open ? 1 : 0}}/>
+                    </ListItemButton>
+                    {/*{['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (*/}
+                    {/*    <ListItemButton*/}
+                    {/*        key={text}*/}
+                    {/*        sx={{*/}
+                    {/*            minHeight: 48,*/}
+                    {/*            justifyContent: open ? 'initial' : 'center',*/}
+                    {/*            px: 2.5,*/}
+                    {/*        }}*/}
+                    {/*    >*/}
+                    {/*        <ListItemIcon*/}
+                    {/*            sx={{*/}
+                    {/*                minWidth: 0,*/}
+                    {/*                mr: open ? 3 : 'auto',*/}
+                    {/*                justifyContent: 'center',*/}
+                    {/*            }}*/}
+                    {/*        >*/}
+                    {/*            {index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}*/}
+                    {/*        </ListItemIcon>*/}
+                    {/*        <ListItemText primary={text} sx={{opacity: open ? 1 : 0}}/>*/}
+                    {/*    </ListItemButton>*/}
+                    {/*))}*/}
                 </List>
                 <Divider/>
                 <List>
