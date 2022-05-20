@@ -28,23 +28,28 @@ class MusicSearch extends Component<{}, { searchFinished: boolean, albumDTOs: Se
         this.setState({searchFinished: false});
 
         this.defaultApi.findAlbumsBySongTitle(this.searchString).then(
-            success => {
-                if (success == null || success.data == null) {
-                    console.log("Ohje.. 🐜");
+            (response) => {
+                if (response == null || response.data == null) {
+                    console.log("Request Error");
                     return;
                 }
 
                 let albumDTOs = new Set<AlbumDTO>();
 
-                for (let i = 0; i < success.data.length; i++) {
-                    albumDTOs.add(success.data[i]);
+                for (let i = 0; i < response.data.length; i++) {
+                    albumDTOs.add(response.data[i]);
                 }
 
                 this.setState({searchFinished: true});
                 this.setState({albumDTOs: albumDTOs});
             },
-            error => {
-                console.log(error);
+            (error) => {
+                if (error == null || error.response == null) {
+                    console.log("Request Error");
+                    return;
+                }
+
+                console.log(error.response.data);
             }
         );
     }
