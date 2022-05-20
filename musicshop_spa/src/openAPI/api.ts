@@ -266,6 +266,12 @@ export interface ShoppingCartDTO {
 export interface SongDTO {
     /**
      * 
+     * @type {number}
+     * @memberof SongDTO
+     */
+    'songId'?: number;
+    /**
+     * 
      * @type {string}
      * @memberof SongDTO
      */
@@ -607,9 +613,9 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        findAlbumsBySongTitle: async (songTitle: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        findAlbumsBySongTitlePhysical: async (songTitle: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'songTitle' is not null or undefined
-            assertParamExists('findAlbumsBySongTitle', 'songTitle', songTitle)
+            assertParamExists('findAlbumsBySongTitlePhysical', 'songTitle', songTitle)
             const localVarPath = `/api/albums/{songTitle}`
                 .replace(`{${"songTitle"}}`, encodeURIComponent(String(songTitle)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -857,8 +863,8 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async findAlbumsBySongTitle(songTitle: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<AlbumDTO>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.findAlbumsBySongTitle(songTitle, options);
+        async findAlbumsBySongTitlePhysical(songTitle: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<AlbumDTO>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.findAlbumsBySongTitlePhysical(songTitle, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -984,8 +990,8 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        findAlbumsBySongTitle(songTitle: string, options?: any): AxiosPromise<Array<AlbumDTO>> {
-            return localVarFp.findAlbumsBySongTitle(songTitle, options).then((request) => request(axios, basePath));
+        findAlbumsBySongTitlePhysical(songTitle: string, options?: any): AxiosPromise<Array<AlbumDTO>> {
+            return localVarFp.findAlbumsBySongTitlePhysical(songTitle, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1121,8 +1127,8 @@ export class DefaultApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public findAlbumsBySongTitle(songTitle: string, options?: AxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).findAlbumsBySongTitle(songTitle, options).then((request) => request(this.axios, this.basePath));
+    public findAlbumsBySongTitlePhysical(songTitle: string, options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).findAlbumsBySongTitlePhysical(songTitle, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
