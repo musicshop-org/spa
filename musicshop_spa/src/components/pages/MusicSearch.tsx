@@ -34,11 +34,6 @@ class MusicSearch extends Component<{}, { searchFinished: boolean, albumDTOs: Se
                     return;
                 }
 
-                if (response.status !== 200) {
-                    console.log(response.data);
-                    return;
-                }
-
                 let albumDTOs = new Set<AlbumDTO>();
 
                 for (let i = 0; i < response.data.length; i++) {
