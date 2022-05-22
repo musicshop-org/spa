@@ -34,6 +34,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import {DefaultApi, UserDataDTO} from "../openAPI";
 import CustomSnackbar from './CustomSnackbar';
 import {Alert, Snackbar} from "@mui/material";
+import PlaylistIcon from '@mui/icons-material/LibraryMusic';
 
 
 const drawerWidth = 240;
@@ -247,27 +248,26 @@ export default function MiniDrawer() {
                         </ListItemIcon>
                         <ListItemText primary={"Shopping Cart"} sx={{opacity: open ? 1 : 0}}/>
                     </ListItemButton>
-                    {/*{['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (*/}
-                    {/*    <ListItemButton*/}
-                    {/*        key={text}*/}
-                    {/*        sx={{*/}
-                    {/*            minHeight: 48,*/}
-                    {/*            justifyContent: open ? 'initial' : 'center',*/}
-                    {/*            px: 2.5,*/}
-                    {/*        }}*/}
-                    {/*    >*/}
-                    {/*        <ListItemIcon*/}
-                    {/*            sx={{*/}
-                    {/*                minWidth: 0,*/}
-                    {/*                mr: open ? 3 : 'auto',*/}
-                    {/*                justifyContent: 'center',*/}
-                    {/*            }}*/}
-                    {/*        >*/}
-                    {/*            {index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}*/}
-                    {/*        </ListItemIcon>*/}
-                    {/*        <ListItemText primary={text} sx={{opacity: open ? 1 : 0}}/>*/}
-                    {/*    </ListItemButton>*/}
-                    {/*))}*/}
+
+                    <ListItemButton component={Link} to={"/playlist"}
+                                    key={"playlist"}
+                                    sx={{
+                                        minHeight: 48,
+                                        justifyContent: open ? 'initial' : 'center',
+                                        px: 2.5,
+                                    }}
+                    >
+                        <ListItemIcon
+                            sx={{
+                                minWidth: 0,
+                                mr: open ? 3 : 'auto',
+                                justifyContent: 'center',
+                            }}
+                        >
+                            <PlaylistIcon/>
+                        </ListItemIcon>
+                        <ListItemText primary={"Playlist"} sx={{opacity: open ? 1 : 0}}/>
+                    </ListItemButton>
                 </List>
                 <Divider/>
                 <List>
