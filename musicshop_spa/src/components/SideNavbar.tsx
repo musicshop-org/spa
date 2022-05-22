@@ -115,7 +115,6 @@ function logout() {
     localStorage.removeItem('jwt');
     localStorage.removeItem('user');
     window.location.assign('/');
-    // window.location.reload()
 }
 
 export default function MiniDrawer() {
