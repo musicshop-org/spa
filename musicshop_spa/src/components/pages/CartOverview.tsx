@@ -35,6 +35,13 @@ class CartOverview extends Component<{}, { cartReady: boolean, cartLineItemDTOs:
             this.getShoppingCart(cartUUID);
         }
     }
+    buyProducts(cartLineItems: Set<CartLineItemDTO>) {
+        if(localStorage.getItem("jwt") == null) {
+            //show login dialog
+
+        }
+        // this.defaultApi.buyProduct(localStorage?.getItem("jwt")? ,cartLineItems);
+    }
 
     private getShoppingCart(cartUUID: string): void {
 

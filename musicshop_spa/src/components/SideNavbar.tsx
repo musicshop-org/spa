@@ -134,12 +134,12 @@ export default function MiniDrawer() {
             if (response.status === 200) {
                 localStorage.setItem('jwt', response.data);
                 setLoginMessageAndState('Login successful', 'success');
-                console.log(response);
-                window.location.reload();
+
+                //window.location.reload();
                 handleLoginClose();
             }
         }, error => {
-            console.log(error);
+
             setLoginMessageAndState(error.response.data, 'error');
             openSnackbar();
         });
