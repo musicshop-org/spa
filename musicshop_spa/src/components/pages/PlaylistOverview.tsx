@@ -22,13 +22,15 @@ class PlaylistOverview extends Component<{}, { playlistReady: boolean}> {
         }
     }
 
-    private playlist = async (apiUrl: string, action: string) => {
-        fetch(`${apiUrl}${action}`)
+    private getPlaylist = async () => {
+        let user = localStorage.getItem("user")
+        let action = "playlist/" + user
+
+        fetch(`${this.playlistMicroservice_url}${action}`)
             .then(response => response.json())
             .then(response => {
                 this.songs = response.songs;
                 this.setState({playlistReady: true});
-                console.log(this.songs)
             },
             error => {
                 console.log(error);
@@ -37,12 +39,10 @@ class PlaylistOverview extends Component<{}, { playlistReady: boolean}> {
     }
 
     componentDidMount() {
-        let action = "playlist/mayerb";
-        this.playlist(this.playlistMicroservice_url, action);
+        this.getPlaylist();
     }
 
     render() {
-
         const {playlistReady} = this.state;
 
         return (

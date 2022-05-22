@@ -210,7 +210,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
                     id="tableTitle"
                     component="div"
                 >
-                    Playlist of mayerb
+                    Playlist of {localStorage.getItem("user")}
                 </Typography>
             )}
             {numSelected > 0 ? (
