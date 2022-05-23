@@ -7,15 +7,12 @@ import Playlist from '../Playlist';
 
 class PlaylistOverview extends Component<{}, { playlistReady: boolean}> {
 
-    private defaultApi: DefaultApi;
     private playlistMicroservice_url: string = 'http://localhost:9001/'
 
     private songs: SongDTO | undefined;
 
     constructor(props: any) {
         super(props);
-
-        this.defaultApi = new DefaultApi();
 
         this.state = {
             playlistReady: false
