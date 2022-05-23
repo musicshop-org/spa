@@ -27,6 +27,7 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload';
 interface Data {
     index: number;
     title: string;
+    artist: string;
     genre: string;
     releaseDate: string;
 }
@@ -34,14 +35,16 @@ interface Data {
 function createData(
     index: number,
     title: string,
+    artist: string,
     genre: string,
     releaseDate: string,
 ): Data {
     return {
         index,
         title,
+        artist,
         genre,
-        releaseDate
+        releaseDate,
     };
 }
 
@@ -102,6 +105,12 @@ const headCells: readonly HeadCell[] = [
         numeric: false,
         disablePadding: false,
         label: 'Title',
+    },
+    {
+        id: 'artist',
+        numeric: false,
+        disablePadding: false,
+        label: 'Artist',
     },
     {
         id: 'genre',
@@ -218,24 +227,8 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
     );
 };
 
-function getSelectedSongIds(songDTOs: any, selected: readonly string[]): Array<number> {
+function getSelectedSongDTOS(songDTOs: any, selected: readonly string[]): Array<any> {
     let selectedSongs: Array<any> = new Array<any>();
-
-    for (const index in selected) {
-        selectedSongs.push(songDTOs.songDTOs.find((song: any) => song.title === selected[index]));
-    }
-
-    let selectedIds: Array<number> = new Array<number>();
-
-    for (let i = 0; i < selectedSongs.length; i++) {
-        selectedIds.push(selectedSongs[i].id)
-    }
-
-    return selectedIds
-}
-
-function getSelectedSongDTOS(songDTOs: any, selected: readonly string[]): Array<SongDTO> {
-    let selectedSongs: Array<SongDTO> = new Array<SongDTO>();
     for (const index in selected) {
         selectedSongs.push(songDTOs.songDTOs.find((song: SongDTO) => song.title === selected[index]));
     }
@@ -253,10 +246,12 @@ function Playlist(songDTOs: any) {
     let rows: Data[] = [];
     if (songDTOs != null && songDTOs.songDTOs != null) {
         for (let i = 0; i < songDTOs.songDTOs.length; i++) {
-            rows.push(createData(i + 1,
-                                    songDTOs.songDTOs[i].title,
-                                    songDTOs.songDTOs[i].genre,
-                                    songDTOs.songDTOs[i].releaseDate
+            rows.push(createData(
+                          i + 1,
+                                songDTOs.songDTOs[i].title,
+                                songDTOs.songDTOs[i].artists[0].name,
+                                songDTOs.songDTOs[i].genre,
+                                songDTOs.songDTOs[i].releaseDate,
             ))
         }
     }
@@ -377,6 +372,9 @@ function Playlist(songDTOs: any) {
                                                 {row.title}
                                             </TableCell>
                                             <TableCell>
+                                                {row.artist}
+                                            </TableCell>
+                                            <TableCell>
                                                 {row.genre}
                                             </TableCell>
                                             <TableCell>
@@ -424,27 +422,41 @@ function Playlist(songDTOs: any) {
 
                             <Button variant={"text"} endIcon={<FileDownloadIcon/>} onClick={() => {
 
-                                let ids = getSelectedSongIds(songDTOs, selected)
+                                let songs = getSelectedSongDTOS(songDTOs, selected)
+                                let token: string | null = localStorage.getItem('jwt')
 
-
-
-                                // fetch(`${playlistMicroservice_url}${action}`)
                                 let i = 0
-                                while (i < ids.length) {
+
+                                while (i < songs.length) {
+
+                                    let songId = songs[i].id
+                                    let title = songs[i].title
+                                    let ok: boolean = false
 
                                     let playlistMicroservice_url: string = 'http://localhost:9000/'
-                                    let action = "download/" + ids[i]
+                                    let action = "download/" + songs[i].id
 
-                                    fetch(`${playlistMicroservice_url}${action}`)
+                                    fetch(`${playlistMicroservice_url}${action}`, {
+                                        method: 'GET',
+                                        headers: new Headers({
+                                            "Authorization": token != null ? token : ""
+                                        })
+                                    })
+                                        .then(response => {
+                                            response.status === 200 ? ok = true : ok = false
+                                            return response
+                                        })
                                         .then(response => response.blob())
                                         .then(blob => {
-                                            var url = window.URL.createObjectURL(blob);
-                                            var a = document.createElement('a');
-                                            a.href = url;
-                                            a.download = "filename.mp3";
-                                            document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
-                                            a.click();
-                                            a.remove();  //afterwards we remove the element again
+                                            if (ok) {
+                                                var url = window.URL.createObjectURL(blob);
+                                                var a = document.createElement('a');
+                                                a.href = url;
+                                                a.download = title + ".mp3";
+                                                document.body.appendChild(a); // append the element to the dom
+                                                a.click();
+                                                a.remove();  // remove the element again
+                                            }
                                         });
                                     i++
                                 }
