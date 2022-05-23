@@ -24,7 +24,7 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import ShoppingCartHelper from "../ShoppingCartHelper";
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 
-interface Data {
+    interface Data {
     index: number;
     title: string;
     artist: string;
@@ -227,7 +227,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
     );
 };
 
-function getSelectedSongDTOS(songDTOs: any, selected: readonly string[]): Array<any> {
+function getSelectedSongDTOs(songDTOs: any, selected: readonly string[]): Array<any> {
     let selectedSongs: Array<any> = new Array<any>();
     for (const index in selected) {
         selectedSongs.push(songDTOs.songDTOs.find((song: SongDTO) => song.title === selected[index]));
@@ -243,17 +243,35 @@ function Playlist(songDTOs: any) {
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(100);
 
+    const downloadMicroservice_url: string = 'http://localhost:9000/'
+
     let rows: Data[] = [];
     if (songDTOs != null && songDTOs.songDTOs != null) {
         for (let i = 0; i < songDTOs.songDTOs.length; i++) {
+
+            let artistConcat: string = concatArtist(songDTOs, i)
+
             rows.push(createData(
                           i + 1,
                                 songDTOs.songDTOs[i].title,
-                                songDTOs.songDTOs[i].artists[0].name,
+                                artistConcat,
                                 songDTOs.songDTOs[i].genre,
                                 songDTOs.songDTOs[i].releaseDate,
             ))
         }
+    }
+
+    function concatArtist (songDTOs: any, i: number) {
+        let artistConcat: string = ""
+
+        for (let j = 0; j < songDTOs.songDTOs[i].artists.length; j++) {
+            if (artistConcat !== "")
+                artistConcat = artistConcat.concat(", ")
+
+            artistConcat = artistConcat.concat(songDTOs.songDTOs[i].artists[j].name)
+        }
+
+        return artistConcat
     }
 
     const handleRequestSort = (
@@ -405,10 +423,7 @@ function Playlist(songDTOs: any) {
                     onRowsPerPageChange={handleChangeRowsPerPage}
                 />
             </Paper>
-            {/*<FormControlLabel*/}
-            {/*    control={<Switch checked={dense} onChange={handleChangeDense}/>}*/}
-            {/*    label="Dense padding"*/}
-            {/*/>*/}
+
             <Grid container alignItems={"flex-end"}
                   justifyContent={"flex-end"}>
 
@@ -416,52 +431,12 @@ function Playlist(songDTOs: any) {
                     <>
                         <Grid item>
                             <Typography align={"right"} variant={"h6"}>
-
-
                             </Typography>
 
                             <Button variant={"text"} endIcon={<FileDownloadIcon/>} onClick={() => {
-
-                                let songs = getSelectedSongDTOS(songDTOs, selected)
-                                let token: string | null = localStorage.getItem('jwt')
-
-                                let i = 0
-
-                                while (i < songs.length) {
-
-                                    let songId = songs[i].id
-                                    let title = songs[i].title
-                                    let ok: boolean = false
-
-                                    let playlistMicroservice_url: string = 'http://localhost:9000/'
-                                    let action = "download/" + songs[i].id
-
-                                    fetch(`${playlistMicroservice_url}${action}`, {
-                                        method: 'GET',
-                                        headers: new Headers({
-                                            "Authorization": token != null ? token : ""
-                                        })
-                                    })
-                                        .then(response => {
-                                            response.status === 200 ? ok = true : ok = false
-                                            return response
-                                        })
-                                        .then(response => response.blob())
-                                        .then(blob => {
-                                            if (ok) {
-                                                var url = window.URL.createObjectURL(blob);
-                                                var a = document.createElement('a');
-                                                a.href = url;
-                                                a.download = title + ".mp3";
-                                                document.body.appendChild(a); // append the element to the dom
-                                                a.click();
-                                                a.remove();  // remove the element again
-                                            }
-                                        });
-                                    i++
-                                }
+                                downloadSongs(getSelectedSongDTOs(songDTOs, selected))
                             }}>
-                                Download {selected.length} Songs
+                                Download {selected.length} {(selected.length === 1) ? 'Song' : 'Songs'}
                             </Button>
                         </Grid>
                     </>) : (<div></div>)}
@@ -469,6 +444,45 @@ function Playlist(songDTOs: any) {
             </Grid>
         </Box>
     );
+
+    function downloadSongs(songs: any) {
+        let token: string | null = localStorage.getItem('jwt')
+        let i = 0
+
+        while (i < songs.length) {
+
+            let songId: number = songs[i].id
+            let songTitle: string = songs[i].title
+            let ok: boolean = false
+
+            let action = "download/" + songs[i].id
+
+            fetch(`${downloadMicroservice_url}${action}`, {
+                method: 'GET',
+                headers: new Headers({
+                    "Authorization": token != null ? token : ""
+                })
+            })
+                .then(response => {
+                    response.status === 200 ? ok = true : ok = false
+                    return response
+                })
+                .then(response => response.blob())
+                .then(blob => {
+
+                    if (ok) {
+                        var url = window.URL.createObjectURL(blob);
+                        var a = document.createElement('a');
+                        a.href = url;
+                        a.download = songTitle + ".mp3";
+                        document.body.appendChild(a); // append the element to the dom
+                        a.click();
+                        a.remove();  // remove the element again
+                    }
+                });
+            i++
+        }
+    }
 }
 
 export default Playlist;
