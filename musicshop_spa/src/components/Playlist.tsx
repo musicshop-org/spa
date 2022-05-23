@@ -22,6 +22,7 @@ import {SongDTO} from "../openAPI";
 import {Button, Grid} from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import ShoppingCartHelper from "../ShoppingCartHelper";
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
 
 interface Data {
     index: number;
@@ -217,6 +218,22 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
     );
 };
 
+function getSelectedSongIds(songDTOs: any, selected: readonly string[]): Array<number> {
+    let selectedSongs: Array<any> = new Array<any>();
+
+    for (const index in selected) {
+        selectedSongs.push(songDTOs.songDTOs.find((song: any) => song.title === selected[index]));
+    }
+
+    let selectedIds: Array<number> = new Array<number>();
+
+    for (let i = 0; i < selectedSongs.length; i++) {
+        selectedIds.push(selectedSongs[i].id)
+    }
+
+    return selectedIds
+}
+
 function getSelectedSongDTOS(songDTOs: any, selected: readonly string[]): Array<SongDTO> {
     let selectedSongs: Array<SongDTO> = new Array<SongDTO>();
     for (const index in selected) {
@@ -394,6 +411,50 @@ function Playlist(songDTOs: any) {
             {/*    control={<Switch checked={dense} onChange={handleChangeDense}/>}*/}
             {/*    label="Dense padding"*/}
             {/*/>*/}
+            <Grid container alignItems={"flex-end"}
+                  justifyContent={"flex-end"}>
+
+                {(selected.length > 0) ? (
+                    <>
+                        <Grid item>
+                            <Typography align={"right"} variant={"h6"}>
+
+
+                            </Typography>
+
+                            <Button variant={"text"} endIcon={<FileDownloadIcon/>} onClick={() => {
+
+                                let ids = getSelectedSongIds(songDTOs, selected)
+
+
+
+                                // fetch(`${playlistMicroservice_url}${action}`)
+                                let i = 0
+                                while (i < ids.length) {
+
+                                    let playlistMicroservice_url: string = 'http://localhost:9000/'
+                                    let action = "download/" + ids[i]
+
+                                    fetch(`${playlistMicroservice_url}${action}`)
+                                        .then(response => response.blob())
+                                        .then(blob => {
+                                            var url = window.URL.createObjectURL(blob);
+                                            var a = document.createElement('a');
+                                            a.href = url;
+                                            a.download = "filename.mp3";
+                                            document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
+                                            a.click();
+                                            a.remove();  //afterwards we remove the element again
+                                        });
+                                    i++
+                                }
+                            }}>
+                                Download {selected.length} Songs
+                            </Button>
+                        </Grid>
+                    </>) : (<div></div>)}
+
+            </Grid>
         </Box>
     );
 }
