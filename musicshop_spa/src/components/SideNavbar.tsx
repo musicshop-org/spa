@@ -34,6 +34,8 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import {DefaultApi, UserDataDTO} from "../openAPI";
 import CustomSnackbar from './CustomSnackbar';
 import {Alert, Snackbar} from "@mui/material";
+import PlaylistIcon from '@mui/icons-material/LibraryMusic';
+import { Navigate } from 'react-router-dom';
 
 
 const drawerWidth = 240;
@@ -111,7 +113,8 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
 
 function logout() {
     localStorage.removeItem('jwt');
-    window.location.reload();
+    localStorage.removeItem('user');
+    window.location.assign('/');
 }
 
 export default function MiniDrawer() {
@@ -133,6 +136,7 @@ export default function MiniDrawer() {
         defaultApi.loginWeb(userDataDTO).then(response => {
             if (response.status === 200) {
                 localStorage.setItem('jwt', response.data);
+                localStorage.setItem('user', emailAddress);
                 setLoginMessageAndState('Login successful', 'success');
 
                 //window.location.reload();
@@ -247,27 +251,26 @@ export default function MiniDrawer() {
                         </ListItemIcon>
                         <ListItemText primary={"Shopping Cart"} sx={{opacity: open ? 1 : 0}}/>
                     </ListItemButton>
-                    {/*{['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (*/}
-                    {/*    <ListItemButton*/}
-                    {/*        key={text}*/}
-                    {/*        sx={{*/}
-                    {/*            minHeight: 48,*/}
-                    {/*            justifyContent: open ? 'initial' : 'center',*/}
-                    {/*            px: 2.5,*/}
-                    {/*        }}*/}
-                    {/*    >*/}
-                    {/*        <ListItemIcon*/}
-                    {/*            sx={{*/}
-                    {/*                minWidth: 0,*/}
-                    {/*                mr: open ? 3 : 'auto',*/}
-                    {/*                justifyContent: 'center',*/}
-                    {/*            }}*/}
-                    {/*        >*/}
-                    {/*            {index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}*/}
-                    {/*        </ListItemIcon>*/}
-                    {/*        <ListItemText primary={text} sx={{opacity: open ? 1 : 0}}/>*/}
-                    {/*    </ListItemButton>*/}
-                    {/*))}*/}
+
+                    {loginState ? <ListItemButton component={Link} to={"/playlist"}
+                                    key={"playlist"}
+                                    sx={{
+                                        minHeight: 48,
+                                        justifyContent: open ? 'initial' : 'center',
+                                        px: 2.5,
+                                    }}
+                    >
+                        <ListItemIcon
+                            sx={{
+                                minWidth: 0,
+                                mr: open ? 3 : 'auto',
+                                justifyContent: 'center',
+                            }}
+                        >
+                            <PlaylistIcon/>
+                        </ListItemIcon>
+                        <ListItemText primary={"Playlist"} sx={{opacity: open ? 1 : 0}}/>
+                    </ListItemButton> : null}
                 </List>
                 <Divider/>
                 <List>
