@@ -4,19 +4,29 @@ import CartLineItem from "../CartLineItem";
 import {Button, Grid, Typography} from "@mui/material";
 import ShoppingCartHelper from "../../ShoppingCartHelper";
 import Loader from "../Loader";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import TextField from "@mui/material/TextField";
+import DialogActions from "@mui/material/DialogActions";
 
-class CartOverview extends Component<{}, { cartReady: boolean, cartLineItemDTOs: Set<CartLineItemDTO> }> {
+class CartOverview extends Component<{}, {openLogin: boolean, cartReady: boolean, cartLineItemDTOs: Set<CartLineItemDTO> }> {
 
     private defaultApi: DefaultApi;
     private totalPrice: number;
 
-    constructor(props: any) {
+
+    constructor(props: any, handleLoginOpen: Function) {
         super(props);
+
+
 
         this.defaultApi = new DefaultApi();
         this.totalPrice = 0;
 
         this.state = {
+            openLogin: false,
             cartReady: false,
             cartLineItemDTOs: new Set(),
         }
@@ -45,10 +55,13 @@ class CartOverview extends Component<{}, { cartReady: boolean, cartLineItemDTOs:
             this.defaultApi.buyProductsWeb(jwt , cartUUID ,cartLineItemsArray).then((success) => {
                 if(success.status === 200) {
                     console.log(success.data)
+                    window.location.assign("/playlist");
                 }
             }, (error) => {
                 console.log(error.response.data);
             });
+        } else {
+            alert("Please login first");
         }
     }
 
@@ -130,7 +143,10 @@ class CartOverview extends Component<{}, { cartReady: boolean, cartLineItemDTOs:
                                                 Checkout
                                             </Button>
                                         </Grid>
+
+
                                     </div>
+
                                 ) : (<div></div>)
                             }
                         </React.Fragment>
