@@ -35,12 +35,21 @@ class CartOverview extends Component<{}, { cartReady: boolean, cartLineItemDTOs:
             this.getShoppingCart(cartUUID);
         }
     }
-    buyProducts(cartLineItems: Set<CartLineItemDTO>) {
-        if(localStorage.getItem("jwt") == null) {
-            //show login dialog
+    buyProducts(cartLineItems: Set<CartLineItemDTO>){
+        let jwt = window.localStorage.getItem("jwt");
+        let cartUUID = window.localStorage.getItem("cartUUID");
+        let cartLineItemsArray = Array.from(cartLineItems);
 
+        if(jwt != null && cartUUID != null) {
+            //show login dialog
+            this.defaultApi.buyProductsWeb(jwt , cartUUID ,cartLineItemsArray).then((success) => {
+                if(success.status === 200) {
+                    console.log(success.data)
+                }
+            }, (error) => {
+                console.log(error.response.data);
+            });
         }
-        // this.defaultApi.buyProduct(localStorage?.getItem("jwt")? ,cartLineItems);
     }
 
     private getShoppingCart(cartUUID: string): void {
@@ -117,7 +126,7 @@ class CartOverview extends Component<{}, { cartReady: boolean, cartLineItemDTOs:
 
                                         <Grid container alignItems={"flex-end"}
                                               justifyContent={"flex-end"}>
-                                            <Button sx={{mt: 2}} variant={"contained"}>
+                                            <Button onClick={() => {this.buyProducts(cartLineItemDTOs)}} sx={{mt: 2}} variant={"contained"}>
                                                 Checkout
                                             </Button>
                                         </Grid>
