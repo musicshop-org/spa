@@ -4,19 +4,29 @@ import CartLineItem from "../CartLineItem";
 import {Button, Grid, Typography} from "@mui/material";
 import ShoppingCartHelper from "../../ShoppingCartHelper";
 import Loader from "../Loader";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import TextField from "@mui/material/TextField";
+import DialogActions from "@mui/material/DialogActions";
 
-class CartOverview extends Component<{}, { cartReady: boolean, cartLineItemDTOs: Set<CartLineItemDTO> }> {
+class CartOverview extends Component<{}, {openLogin: boolean, cartReady: boolean, cartLineItemDTOs: Set<CartLineItemDTO> }> {
 
     private defaultApi: DefaultApi;
     private totalPrice: number;
 
-    constructor(props: any) {
+
+    constructor(props: any, handleLoginOpen: Function) {
         super(props);
+
+
 
         this.defaultApi = new DefaultApi();
         this.totalPrice = 0;
 
         this.state = {
+            openLogin: false,
             cartReady: false,
             cartLineItemDTOs: new Set(),
         }
@@ -35,12 +45,24 @@ class CartOverview extends Component<{}, { cartReady: boolean, cartLineItemDTOs:
             this.getShoppingCart(cartUUID);
         }
     }
-    buyProducts(cartLineItems: Set<CartLineItemDTO>) {
-        if(localStorage.getItem("jwt") == null) {
-            //show login dialog
+    buyProducts(cartLineItems: Set<CartLineItemDTO>){
+        let jwt = window.localStorage.getItem("jwt");
+        let cartUUID = window.localStorage.getItem("cartUUID");
+        let cartLineItemsArray = Array.from(cartLineItems);
 
+        if(jwt != null && cartUUID != null) {
+            //show login dialog
+            this.defaultApi.buyProductsWeb(jwt , cartUUID ,cartLineItemsArray).then((success) => {
+                if(success.status === 200) {
+                    console.log(success.data)
+                    window.location.assign("/playlist");
+                }
+            }, (error) => {
+                console.log(error.response.data);
+            });
+        } else {
+            alert("Please login first");
         }
-        // this.defaultApi.buyProduct(localStorage?.getItem("jwt")? ,cartLineItems);
     }
 
     private getShoppingCart(cartUUID: string): void {
@@ -117,11 +139,14 @@ class CartOverview extends Component<{}, { cartReady: boolean, cartLineItemDTOs:
 
                                         <Grid container alignItems={"flex-end"}
                                               justifyContent={"flex-end"}>
-                                            <Button sx={{mt: 2}} variant={"contained"}>
+                                            <Button onClick={() => {this.buyProducts(cartLineItemDTOs)}} sx={{mt: 2}} variant={"contained"}>
                                                 Checkout
                                             </Button>
                                         </Grid>
+
+
                                     </div>
+
                                 ) : (<div></div>)
                             }
                         </React.Fragment>

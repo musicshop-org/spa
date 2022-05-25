@@ -36,6 +36,7 @@ import CustomSnackbar from './CustomSnackbar';
 import {Alert, Snackbar} from "@mui/material";
 import PlaylistIcon from '@mui/icons-material/LibraryMusic';
 import { Navigate } from 'react-router-dom';
+import CartOverview from './pages/CartOverview';
 
 
 const drawerWidth = 240;
@@ -168,6 +169,7 @@ export default function MiniDrawer() {
     const handleLoginOpen = () => {
         setOpenLogin(true);
     }
+
     const handleLoginClose = () => {
         setOpenLogin(false);
     }
@@ -252,7 +254,7 @@ export default function MiniDrawer() {
                         <ListItemText primary={"Shopping Cart"} sx={{opacity: open ? 1 : 0}}/>
                     </ListItemButton>
 
-                    {loginState ? <ListItemButton component={Link} to={"/playlist"}
+                    {localStorage.getItem("jwt") ? <ListItemButton component={Link} to={"/playlist"}
                                     key={"playlist"}
                                     sx={{
                                         minHeight: 48,
@@ -384,7 +386,10 @@ export default function MiniDrawer() {
                                 />
                             )
                         })
+
+
                     }
+
                 </Routes>
             </Box>
 

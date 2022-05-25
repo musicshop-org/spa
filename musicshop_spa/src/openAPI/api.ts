@@ -29,6 +29,12 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
 export interface AlbumDTO {
     /**
      * 
+     * @type {number}
+     * @memberof AlbumDTO
+     */
+    'longId'?: number;
+    /**
+     * 
      * @type {string}
      * @memberof AlbumDTO
      */
@@ -129,6 +135,12 @@ export interface ArtistDTO {
  * @interface CartLineItemDTO
  */
 export interface CartLineItemDTO {
+    /**
+     * 
+     * @type {number}
+     * @memberof CartLineItemDTO
+     */
+    'productId'?: number;
     /**
      * 
      * @type {string}
@@ -269,7 +281,7 @@ export interface SongDTO {
      * @type {number}
      * @memberof SongDTO
      */
-    'songId'?: number;
+    'longId'?: number;
     /**
      * 
      * @type {string}
@@ -500,6 +512,49 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(invoiceLineItemDTO, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} [authorization] 
+         * @param {string} [cartUUID] 
+         * @param {Array<CartLineItemDTO>} [cartLineItemDTO] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        buyProductsWeb: async (authorization?: string, cartUUID?: string, cartLineItemDTO?: Array<CartLineItemDTO>, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/shoppingCart/buyProductsWeb`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (authorization !== undefined && authorization !== null) {
+                localVarHeaderParameter['Authorization'] = String(authorization);
+            }
+
+            if (cartUUID !== undefined && cartUUID !== null) {
+                localVarHeaderParameter['CartUUID'] = String(cartUUID);
+            }
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(cartLineItemDTO, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -862,6 +917,18 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {string} [authorization] 
+         * @param {string} [cartUUID] 
+         * @param {Array<CartLineItemDTO>} [cartLineItemDTO] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async buyProductsWeb(authorization?: string, cartUUID?: string, cartLineItemDTO?: Array<CartLineItemDTO>, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.buyProductsWeb(authorization, cartUUID, cartLineItemDTO, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {string} [cartUUID] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1002,6 +1069,17 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @param {string} [authorization] 
+         * @param {string} [cartUUID] 
+         * @param {Array<CartLineItemDTO>} [cartLineItemDTO] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        buyProductsWeb(authorization?: string, cartUUID?: string, cartLineItemDTO?: Array<CartLineItemDTO>, options?: any): AxiosPromise<string> {
+            return localVarFp.buyProductsWeb(authorization, cartUUID, cartLineItemDTO, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {string} [cartUUID] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1137,6 +1215,19 @@ export class DefaultApi extends BaseAPI {
      */
     public buyProduct(authorization?: string, invoiceLineItemDTO?: Array<InvoiceLineItemDTO>, options?: AxiosRequestConfig) {
         return DefaultApiFp(this.configuration).buyProduct(authorization, invoiceLineItemDTO, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} [authorization] 
+     * @param {string} [cartUUID] 
+     * @param {Array<CartLineItemDTO>} [cartLineItemDTO] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public buyProductsWeb(authorization?: string, cartUUID?: string, cartLineItemDTO?: Array<CartLineItemDTO>, options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).buyProductsWeb(authorization, cartUUID, cartLineItemDTO, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
