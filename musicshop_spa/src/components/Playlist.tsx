@@ -455,7 +455,7 @@ function Playlist(songDTOs: any) {
             let songTitle: string = songs[i].title
             let ok: boolean = false
 
-            let action = "download/" + songs[i].id
+            let action = "download/" + songs[i].longId
 
             fetch(`${downloadMicroservice_url}${action}`, {
                 method: 'GET',

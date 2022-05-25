@@ -254,7 +254,7 @@ export default function MiniDrawer() {
                         <ListItemText primary={"Shopping Cart"} sx={{opacity: open ? 1 : 0}}/>
                     </ListItemButton>
 
-                    {loginState ? <ListItemButton component={Link} to={"/playlist"}
+                    {localStorage.getItem("jwt") ? <ListItemButton component={Link} to={"/playlist"}
                                     key={"playlist"}
                                     sx={{
                                         minHeight: 48,

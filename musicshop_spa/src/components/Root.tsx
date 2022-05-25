@@ -7,7 +7,7 @@ import Theme from "../inc/theme";
 import App from "./App";
 
 function Root() {
-    const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+    const prefersDarkMode = useMediaQuery('(prefers-color-scheme: light)');
 
     let palette = Theme.palette;
 
