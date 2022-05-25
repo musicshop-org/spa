@@ -22,22 +22,29 @@ import {SongDTO} from "../openAPI";
 import {Button, Grid} from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import ShoppingCartHelper from "../ShoppingCartHelper";
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
 
-interface Data {
+    interface Data {
     index: number;
     title: string;
-    price: number;
+    artist: string;
+    genre: string;
+    releaseDate: string;
 }
 
 function createData(
     index: number,
     title: string,
-    price: number,
+    artist: string,
+    genre: string,
+    releaseDate: string,
 ): Data {
     return {
         index,
         title,
-        price,
+        artist,
+        genre,
+        releaseDate,
     };
 }
 
@@ -100,10 +107,22 @@ const headCells: readonly HeadCell[] = [
         label: 'Title',
     },
     {
-        id: 'price',
-        numeric: true,
+        id: 'artist',
+        numeric: false,
         disablePadding: false,
-        label: 'Price',
+        label: 'Artist',
+    },
+    {
+        id: 'genre',
+        numeric: false,
+        disablePadding: false,
+        label: 'Genre',
+    },
+    {
+        id: 'releaseDate',
+        numeric: false,
+        disablePadding: false,
+        label: 'Release Date',
     },
 ];
 
@@ -201,46 +220,22 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
                     id="tableTitle"
                     component="div"
                 >
-                    Songs
+                    Playlist of {localStorage.getItem("user")}
                 </Typography>
-            )}
-            {numSelected > 0 ? (
-                <Tooltip title="Delete">
-                    <IconButton>
-                        <DeleteIcon/>
-                    </IconButton>
-                </Tooltip>
-            ) : (
-                <Tooltip title="Filter list">
-                    <IconButton>
-                        <FilterListIcon/>
-                    </IconButton>
-                </Tooltip>
             )}
         </Toolbar>
     );
 };
 
-function getSelectedSongDTOS(songDTOs: any, selected: readonly string[]): Array<SongDTO> {
-    let selectedSongs: Array<SongDTO> = new Array<SongDTO>();
+function getSelectedSongDTOs(songDTOs: any, selected: readonly string[]): Array<any> {
+    let selectedSongs: Array<any> = new Array<any>();
     for (const index in selected) {
         selectedSongs.push(songDTOs.songDTOs.find((song: SongDTO) => song.title === selected[index]));
     }
     return selectedSongs;
 }
 
-function getTotalPrice(songDTOs: Array<SongDTO>): number {
-    let totalPrice = 0;
-
-    for (const song of songDTOs) {
-        if (song.price != null) {
-            totalPrice += song.price;
-        }
-    }
-    return totalPrice;
-}
-
-function SongList(songDTOs: any) {
+function Playlist(songDTOs: any) {
     const [order, setOrder] = React.useState<Order>('asc');
     const [orderBy, setOrderBy] = React.useState<keyof Data>('index');
     const [selected, setSelected] = React.useState<readonly string[]>([]);
@@ -248,11 +243,35 @@ function SongList(songDTOs: any) {
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(100);
 
+    const downloadMicroservice_url: string = 'http://localhost:9000/'
+
     let rows: Data[] = [];
     if (songDTOs != null && songDTOs.songDTOs != null) {
         for (let i = 0; i < songDTOs.songDTOs.length; i++) {
-            rows.push(createData(i + 1, songDTOs.songDTOs[i].title, songDTOs.songDTOs[i].price))
+
+            let artistConcat: string = concatArtist(songDTOs, i)
+
+            rows.push(createData(
+                          i + 1,
+                                songDTOs.songDTOs[i].title,
+                                artistConcat,
+                                songDTOs.songDTOs[i].genre,
+                                songDTOs.songDTOs[i].releaseDate,
+            ))
         }
+    }
+
+    function concatArtist (songDTOs: any, i: number) {
+        let artistConcat: string = ""
+
+        for (let j = 0; j < songDTOs.songDTOs[i].artists.length; j++) {
+            if (artistConcat !== "")
+                artistConcat = artistConcat.concat(", ")
+
+            artistConcat = artistConcat.concat(songDTOs.songDTOs[i].artists[j].name)
+        }
+
+        return artistConcat
     }
 
     const handleRequestSort = (
@@ -370,11 +389,14 @@ function SongList(songDTOs: any) {
                                             <TableCell>
                                                 {row.title}
                                             </TableCell>
-                                            <TableCell
-
-                                                align={'right'}
-                                            >
-                                                {(Math.round(row.price * 100) / 100).toFixed(2)} €
+                                            <TableCell>
+                                                {row.artist}
+                                            </TableCell>
+                                            <TableCell>
+                                                {row.genre}
+                                            </TableCell>
+                                            <TableCell>
+                                                {row.releaseDate}
                                             </TableCell>
                                         </TableRow>
                                     );
@@ -401,10 +423,7 @@ function SongList(songDTOs: any) {
                     onRowsPerPageChange={handleChangeRowsPerPage}
                 />
             </Paper>
-            {/*<FormControlLabel*/}
-            {/*    control={<Switch checked={dense} onChange={handleChangeDense}/>}*/}
-            {/*    label="Dense padding"*/}
-            {/*/>*/}
+
             <Grid container alignItems={"flex-end"}
                   justifyContent={"flex-end"}>
 
@@ -412,15 +431,12 @@ function SongList(songDTOs: any) {
                     <>
                         <Grid item>
                             <Typography align={"right"} variant={"h6"}>
-
-                                Total: {(Math.round(getTotalPrice(getSelectedSongDTOS(songDTOs, selected)) * 100) / 100).toFixed(2)} €
-
                             </Typography>
 
-                            <Button variant={"text"} endIcon={<ShoppingCartIcon/>} onClick={() => {
-                                ShoppingCartHelper.addSongsToCart(getSelectedSongDTOS(songDTOs, selected));
+                            <Button variant={"text"} endIcon={<FileDownloadIcon/>} onClick={() => {
+                                downloadSongs(getSelectedSongDTOs(songDTOs, selected))
                             }}>
-                                Add {selected.length} Songs to cart
+                                Download {selected.length} {(selected.length === 1) ? 'Song' : 'Songs'}
                             </Button>
                         </Grid>
                     </>) : (<div></div>)}
@@ -428,6 +444,45 @@ function SongList(songDTOs: any) {
             </Grid>
         </Box>
     );
+
+    function downloadSongs(songs: any) {
+        let token: string | null = localStorage.getItem('jwt')
+        let i = 0
+
+        while (i < songs.length) {
+
+            let songId: number = songs[i].id
+            let songTitle: string = songs[i].title
+            let ok: boolean = false
+
+            let action = "download/" + songs[i].longId
+
+            fetch(`${downloadMicroservice_url}${action}`, {
+                method: 'GET',
+                headers: new Headers({
+                    "Authorization": token != null ? token : ""
+                })
+            })
+                .then(response => {
+                    response.status === 200 ? ok = true : ok = false
+                    return response
+                })
+                .then(response => response.blob())
+                .then(blob => {
+
+                    if (ok) {
+                        var url = window.URL.createObjectURL(blob);
+                        var a = document.createElement('a');
+                        a.href = url;
+                        a.download = songTitle + ".mp3";
+                        document.body.appendChild(a); // append the element to the dom
+                        a.click();
+                        a.remove();  // remove the element again
+                    }
+                });
+            i++
+        }
+    }
 }
 
-export default SongList;
+export default Playlist;

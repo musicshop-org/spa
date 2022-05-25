@@ -18,7 +18,26 @@ import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import routes from "../config/routes";
-import {Route, Routes} from "react-router-dom";
+import SearchIcon from '@mui/icons-material/Search';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import {Link, Route, Routes} from "react-router-dom";
+import LoginIcon from '@mui/icons-material/Login';
+import Login from './Login';
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import TextField from "@mui/material/TextField";
+import DialogActions from "@mui/material/DialogActions";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import LogoutIcon from '@mui/icons-material/Logout';
+import {DefaultApi, UserDataDTO} from "../openAPI";
+import CustomSnackbar from './CustomSnackbar';
+import {Alert, Snackbar} from "@mui/material";
+import PlaylistIcon from '@mui/icons-material/LibraryMusic';
+import { Navigate } from 'react-router-dom';
+import CartOverview from './pages/CartOverview';
+
 
 const drawerWidth = 240;
 
@@ -91,9 +110,69 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
     }),
 );
 
+
+
+function logout() {
+    localStorage.removeItem('jwt');
+    localStorage.removeItem('user');
+    window.location.assign('/');
+}
+
 export default function MiniDrawer() {
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
+    const [openLogin, setOpenLogin] = React.useState(false);
+    const [emailAddress, setEmailAddress] = React.useState("");
+    const [password, setPassword] = React.useState("");
+    const [loginState, setLoginState] = React.useState("");
+    const [loginMessage, setLoginMessage] = React.useState("");
+    const [snackbarOpen, setSnackbarOpen] = React.useState(true);
+
+    const login = () => {
+        let defaultApi = new DefaultApi();
+        let userDataDTO: UserDataDTO = {
+            emailAddress: emailAddress,
+            password: password,
+        }
+        defaultApi.loginWeb(userDataDTO).then(response => {
+            if (response.status === 200) {
+                localStorage.setItem('jwt', response.data);
+                localStorage.setItem('user', emailAddress);
+                setLoginMessageAndState('Login successful', 'success');
+
+                //window.location.reload();
+                handleLoginClose();
+            }
+        }, error => {
+
+            setLoginMessageAndState(error.response.data, 'error');
+            openSnackbar();
+        });
+
+    }
+
+    const openSnackbar = () => {
+        setSnackbarOpen(true);
+    }
+    const closeSnackbar = (event?: React.SyntheticEvent | Event, reason?: string) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setSnackbarOpen(false);
+    }
+
+    const setLoginMessageAndState = (message: string, state: string) => {
+        setLoginMessage(message);
+        setLoginState(state);
+    }
+
+    const handleLoginOpen = () => {
+        setOpenLogin(true);
+    }
+
+    const handleLoginClose = () => {
+        setOpenLogin(false);
+    }
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -133,38 +212,78 @@ export default function MiniDrawer() {
                 </DrawerHeader>
                 <Divider/>
                 <List>
-                    {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                        <ListItemButton
-                            key={text}
+
+                    <ListItemButton component={Link} to={"/"}
+                                    key={"musicSearch"}
+                                    sx={{
+                                        minHeight: 48,
+                                        justifyContent: open ? 'initial' : 'center',
+                                        px: 2.5,
+                                    }}
+                    >
+
+                        <ListItemIcon
                             sx={{
-                                minHeight: 48,
-                                justifyContent: open ? 'initial' : 'center',
-                                px: 2.5,
+                                minWidth: 0,
+                                mr: open ? 3 : 'auto',
+                                justifyContent: 'center',
                             }}
                         >
-                            <ListItemIcon
-                                sx={{
-                                    minWidth: 0,
-                                    mr: open ? 3 : 'auto',
-                                    justifyContent: 'center',
-                                }}
-                            >
-                                {index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}
-                            </ListItemIcon>
-                            <ListItemText primary={text} sx={{opacity: open ? 1 : 0}}/>
-                        </ListItemButton>
-                    ))}
+                            <SearchIcon/>
+                        </ListItemIcon>
+                        <ListItemText primary={"Music Search"} sx={{opacity: open ? 1 : 0}}/>
+                    </ListItemButton>
+
+                    <ListItemButton component={Link} to={"/shopping-cart"}
+                                    key={"shoppingCart"}
+                                    sx={{
+                                        minHeight: 48,
+                                        justifyContent: open ? 'initial' : 'center',
+                                        px: 2.5,
+                                    }}
+                    >
+                        <ListItemIcon
+                            sx={{
+                                minWidth: 0,
+                                mr: open ? 3 : 'auto',
+                                justifyContent: 'center',
+                            }}
+                        >
+                            <ShoppingCartIcon/>
+                        </ListItemIcon>
+                        <ListItemText primary={"Shopping Cart"} sx={{opacity: open ? 1 : 0}}/>
+                    </ListItemButton>
+
+                    {localStorage.getItem("jwt") ? <ListItemButton component={Link} to={"/playlist"}
+                                    key={"playlist"}
+                                    sx={{
+                                        minHeight: 48,
+                                        justifyContent: open ? 'initial' : 'center',
+                                        px: 2.5,
+                                    }}
+                    >
+                        <ListItemIcon
+                            sx={{
+                                minWidth: 0,
+                                mr: open ? 3 : 'auto',
+                                justifyContent: 'center',
+                            }}
+                        >
+                            <PlaylistIcon/>
+                        </ListItemIcon>
+                        <ListItemText primary={"Playlist"} sx={{opacity: open ? 1 : 0}}/>
+                    </ListItemButton> : null}
                 </List>
                 <Divider/>
                 <List>
-                    {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                        <ListItemButton
-                            key={text}
-                            sx={{
-                                minHeight: 48,
-                                justifyContent: open ? 'initial' : 'center',
-                                px: 2.5,
-                            }}
+                    {localStorage.getItem("jwt") == null ?
+                        <ListItemButton onClick={handleLoginOpen}
+                                        key={"Login"}
+                                        sx={{
+                                            minHeight: 48,
+                                            justifyContent: open ? 'initial' : 'center',
+                                            px: 2.5,
+                                        }}
                         >
                             <ListItemIcon
                                 sx={{
@@ -173,11 +292,29 @@ export default function MiniDrawer() {
                                     justifyContent: 'center',
                                 }}
                             >
-                                {index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}
+                                <LoginIcon/>
                             </ListItemIcon>
-                            <ListItemText primary={text} sx={{opacity: open ? 1 : 0}}/>
-                        </ListItemButton>
-                    ))}
+                            <ListItemText primary={"Login"} sx={{opacity: open ? 1 : 0}}/>
+                        </ListItemButton> :
+                        <ListItemButton onClick={logout}
+                                        key={"Logout"}
+                                        sx={{
+                                            minHeight: 48,
+                                            justifyContent: open ? 'initial' : 'center',
+                                            px: 2.5,
+                                        }}
+                        >
+                            <ListItemIcon
+                                sx={{
+                                    minWidth: 0,
+                                    mr: open ? 3 : 'auto',
+                                    justifyContent: 'center',
+                                }}
+                            >
+                                <LogoutIcon/>
+                            </ListItemIcon>
+                            <ListItemText primary={"Logout"} sx={{opacity: open ? 1 : 0}}/>
+                        </ListItemButton>}
                 </List>
             </Drawer>
 
@@ -185,6 +322,59 @@ export default function MiniDrawer() {
             <Box component="main" sx={{flexGrow: 1, p: 3}}>
                 <DrawerHeader/>
 
+                <Dialog open={openLogin}>
+                    <DialogTitle>Login</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            Please enter your credentials.
+                        </DialogContentText>
+                        <TextField
+                            value={emailAddress}
+                            onChange={(event: any) => setEmailAddress(event.target.value)}
+                            autoFocus
+                            margin="dense"
+                            id="emailAddress"
+                            label="Email Address"
+                            type="email"
+                            fullWidth
+                            variant="standard"
+                        />
+                        <TextField
+                            value={password}
+                            onChange={(event: any) => setPassword(event.target.value)}
+                            autoFocus
+                            margin="dense"
+                            id="password"
+                            label="Password"
+                            type="password"
+                            fullWidth
+                            variant="standard"
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleLoginClose}>Cancel</Button>
+                        <Button onClick={() => {
+                            login();
+                        }}>Login</Button>
+                    </DialogActions>
+
+                </Dialog>
+                {/*TODO: move snackbar to App.tsx and open with callback*/}
+                {loginState ? <Snackbar
+                    open={snackbarOpen}
+                    autoHideDuration={6000}
+                    onClose={closeSnackbar}
+                    message={loginMessage}
+
+                    // action={action}
+                >
+                    <Alert
+                        severity={loginMessage.includes("success") ? "success" : "error"}
+                        sx={{width: '100%'}}
+                        onClose={closeSnackbar}>
+                        {loginMessage}
+                    </Alert>
+                </Snackbar> : null}
                 <Routes>
                     {
                         routes.map((route, index) => {
@@ -196,9 +386,13 @@ export default function MiniDrawer() {
                                 />
                             )
                         })
+
+
                     }
+
                 </Routes>
             </Box>
+
         </Box>
     );
 }

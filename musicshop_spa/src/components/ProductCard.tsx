@@ -3,6 +3,7 @@ import {styled} from '@mui/material/styles';
 import {Grid, Button, Paper, Typography, ButtonBase} from '@mui/material';
 import {Box} from "@mui/system";
 import {Link} from "react-router-dom";
+import ShoppingCartHelper from "../ShoppingCartHelper";
 
 const Img = styled('img')({
     margin: 'auto',
@@ -19,7 +20,6 @@ export default function ProductCard(albumDTO: any) {
                 margin: 'auto',
                 width: 520,
                 flexGrow: 1,
-                // backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
             }}
         >
             <Grid container spacing={2}>
@@ -27,7 +27,7 @@ export default function ProductCard(albumDTO: any) {
                     <Link to={"/product-detail?albumId=" + albumDTO.albumDTO.albumId.albumId}>
                         <ButtonBase sx={{width: 128, height: 128}}>
                             <Img alt="complex"
-                                 src="https://media.hitparade.ch/cover/big/alexander_marcus-papaya_s.jpg"/>
+                                 src={albumDTO.albumDTO.imageUrl}/>
                         </ButtonBase>
                     </Link>
                 </Grid>
@@ -46,18 +46,17 @@ export default function ProductCard(albumDTO: any) {
                             <Typography variant="body2" color="text.secondary">
                                 Type: {albumDTO.albumDTO.mediumType}
                             </Typography>
-                            <Typography variant="body2" color="text.secondary">
-                                Stock: {albumDTO.albumDTO.stock}
-                            </Typography>
                         </Grid>
                     </Grid>
                     <Grid item>
                         <Typography variant="subtitle1" component="div" align={"right"}>
-                            {albumDTO.albumDTO.price} €
+                            {(Math.round(albumDTO.albumDTO.price * 100) / 100).toFixed(2)} €
                         </Typography>
                         <Box sx={{pt: 8}} display="flex" justifyContent="flex-end">
                             <Typography sx={{cursor: 'pointer'}} variant="body2">
-                                <Button variant={"text"}>
+                                <Button variant={"text"} onClick={() => {
+                                    ShoppingCartHelper.addAlbumsToCart(albumDTO.albumDTO);
+                                }}>
                                     Add to cart
                                 </Button>
                                 <Link to={"/product-detail?albumId=" + albumDTO.albumDTO.albumId.albumId}>
