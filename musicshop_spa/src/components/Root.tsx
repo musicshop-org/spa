@@ -7,7 +7,7 @@ import App from "./App";
 
 function Root() {
 
-    const [mode, setMode] = React.useState("dark");
+    const [mode, setMode] = React.useState(window.localStorage.getItem('mode') || 'dark');
 
     const theme = React.useMemo(
         () =>
@@ -18,6 +18,7 @@ function Root() {
     );
 
     const toggleColorMode = () => {
+        window.localStorage.setItem("mode", mode === "light" ? "dark" : "light");
         setMode(mode === "light" ? "dark" : "light")
     }
 
