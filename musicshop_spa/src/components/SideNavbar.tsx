@@ -15,9 +15,6 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
-import routes from "../config/routes";
 import SearchIcon from '@mui/icons-material/Search';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import {Link, Route, Routes} from "react-router-dom";
@@ -32,11 +29,17 @@ import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import LogoutIcon from '@mui/icons-material/Logout';
 import {DefaultApi, UserDataDTO} from "../openAPI";
-import CustomSnackbar from './CustomSnackbar';
 import {Alert, Snackbar} from "@mui/material";
 import PlaylistIcon from '@mui/icons-material/LibraryMusic';
-import { Navigate } from 'react-router-dom';
-import CartOverview from './pages/CartOverview';
+import MusicSearch from "./pages/MusicSearch";
+import ProductDetails from "./pages/ProductDetails";
+import CartOverview from "./pages/CartOverview";
+import PlaylistOverview from "./pages/PlaylistOverview";
+import IAppProbs from "./apis/IAppProbs";
+import Brightness7Icon from "@mui/icons-material/Brightness7";
+import Brightness4Icon from "@mui/icons-material/Brightness4";
+import {useContext} from "react";
+import Root from "./Root";
 
 
 const drawerWidth = 240;
@@ -118,7 +121,7 @@ function logout() {
     window.location.assign('/');
 }
 
-export default function MiniDrawer() {
+export default function MiniDrawer(props: IAppProbs) {
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
     const [openLogin, setOpenLogin] = React.useState(false);
@@ -127,6 +130,10 @@ export default function MiniDrawer() {
     const [loginState, setLoginState] = React.useState("");
     const [loginMessage, setLoginMessage] = React.useState("");
     const [snackbarOpen, setSnackbarOpen] = React.useState(true);
+
+    const handleColorChange = () => {
+        props.toggleColorMode();
+    }
 
     const login = () => {
         let defaultApi = new DefaultApi();
@@ -181,6 +188,11 @@ export default function MiniDrawer() {
     const handleDrawerClose = () => {
         setOpen(false);
     };
+
+    // let cartOverviewProbs : ICartOverviewProbs = {
+    //     openLogin: handleLoginOpen,
+    //     closeLogin: handleLoginClose,
+    // }
 
     return (
         <Box sx={{display: 'flex'}}>
@@ -253,7 +265,6 @@ export default function MiniDrawer() {
                         </ListItemIcon>
                         <ListItemText primary={"Shopping Cart"} sx={{opacity: open ? 1 : 0}}/>
                     </ListItemButton>
-
                     {localStorage.getItem("jwt") ? <ListItemButton component={Link} to={"/playlist"}
                                     key={"playlist"}
                                     sx={{
@@ -273,6 +284,25 @@ export default function MiniDrawer() {
                         </ListItemIcon>
                         <ListItemText primary={"Playlist"} sx={{opacity: open ? 1 : 0}}/>
                     </ListItemButton> : null}
+                    <ListItemButton onClick={handleColorChange}
+                                    key={"toggleColorMode"}
+                                    sx={{
+                                        minHeight: 48,
+                                        justifyContent: open ? 'initial' : 'center',
+                                        px: 2.5,
+                                    }}
+                    >
+                        <ListItemIcon
+                            sx={{
+                                minWidth: 0,
+                                mr: open ? 3 : 'auto',
+                                justifyContent: 'center',
+                            }}
+                        >
+                            {theme.palette.mode === 'dark' ? <Brightness7Icon/> : <Brightness4Icon/>}
+                        </ListItemIcon>
+                        <ListItemText primary={"Switch Color Mode"} sx={{opacity: open ? 1 : 0}}/>
+                    </ListItemButton>
                 </List>
                 <Divider/>
                 <List>
@@ -376,19 +406,11 @@ export default function MiniDrawer() {
                     </Alert>
                 </Snackbar> : null}
                 <Routes>
-                    {
-                        routes.map((route, index) => {
-                            return (
-                                <Route
-                                    key={index}
-                                    path={route.path}
-                                    element={<route.element/>}
-                                />
-                            )
-                        })
 
-
-                    }
+                    <Route path={"/"} element={<MusicSearch/>}></Route>
+                    <Route path={"/product-detail"} element={<ProductDetails/>}></Route>
+                    <Route path={"/shopping-cart"} element={<CartOverview openLogin={handleLoginOpen} closeLogin={handleLoginClose} />}></Route>
+                    <Route path={"/playlist"} element={<PlaylistOverview/>}></Route>
 
                 </Routes>
             </Box>
