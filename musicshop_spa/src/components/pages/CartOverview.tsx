@@ -4,12 +4,6 @@ import CartLineItem from "../CartLineItem";
 import {Button, Grid, Typography} from "@mui/material";
 import ShoppingCartHelper from "../../ShoppingCartHelper";
 import Loader from "../Loader";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import TextField from "@mui/material/TextField";
-import DialogActions from "@mui/material/DialogActions";
 
 class CartOverview extends Component<{}, {openLogin: boolean, cartReady: boolean, cartLineItemDTOs: Set<CartLineItemDTO> }> {
 
@@ -45,6 +39,12 @@ class CartOverview extends Component<{}, {openLogin: boolean, cartReady: boolean
             this.getShoppingCart(cartUUID);
         }
     }
+
+    rerenderParentCallback() {
+        this.forceUpdate();
+        console.log("testing render");
+    }
+
     buyProducts(cartLineItems: Set<CartLineItemDTO>){
         let jwt = window.localStorage.getItem("jwt");
         let cartUUID = window.localStorage.getItem("cartUUID");
@@ -121,6 +121,7 @@ class CartOverview extends Component<{}, {openLogin: boolean, cartReady: boolean
                                         >
                                             <CartLineItem
                                                 cartLineItemDTO={cartLineItemDTO}
+                                                rerenderParentCallback={this.rerenderParentCallback}
                                             />
                                         </Grid>
                                     )
@@ -143,8 +144,6 @@ class CartOverview extends Component<{}, {openLogin: boolean, cartReady: boolean
                                                 Checkout
                                             </Button>
                                         </Grid>
-
-
                                     </div>
 
                                 ) : (<div></div>)

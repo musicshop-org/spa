@@ -2,7 +2,6 @@ import {ButtonBase, Divider, Grid, IconButton, Typography} from "@mui/material";
 import * as React from "react";
 import {styled} from "@mui/material/styles";
 import ClearIcon from '@mui/icons-material/Clear';
-import {DefaultApi} from "../openAPI";
 import ShoppingCartHelper from "../ShoppingCartHelper";
 
 const Img = styled('img')({
@@ -12,7 +11,8 @@ const Img = styled('img')({
     maxHeight: '100%',
 });
 
-export default function CartLineItem(cartLineItemDTO: any) {
+export default function CartLineItem(cartLineItemDTO: any, rerenderParentCallback: any) {
+
     return (
         <div>
             <Grid container spacing={2}>
@@ -39,10 +39,11 @@ export default function CartLineItem(cartLineItemDTO: any) {
                     <Grid item>
                         <Grid item>
                             <Typography variant="subtitle1" component="div" align={"right"}>
-
                                 <IconButton aria-label="remove item" onClick={() => {
                                     ShoppingCartHelper.removeLineItemFromCart(cartLineItemDTO.cartLineItemDTO);
-                                    window.location.reload();
+
+                                    // TODO: update CartOverview
+                                    rerenderParentCallback();
                                 }}>
                                     <ClearIcon />
                                 </IconButton>
