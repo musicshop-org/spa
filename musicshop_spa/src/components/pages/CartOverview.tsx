@@ -4,48 +4,48 @@ import CartLineItem from "../CartLineItem";
 import {Button, Grid, Typography} from "@mui/material";
 import ShoppingCartHelper from "../../ShoppingCartHelper";
 import Loader from "../Loader";
+import ICartOverviewProbs from "../apis/ICartOverviewProbs";
 
-class CartOverview extends Component<{}, { openLogin: boolean, cartReady: boolean, cartLineItemDTOs: Set<CartLineItemDTO> }> {
+class CartOverview extends Component<ICartOverviewProbs, { cartReady: boolean, cartLineItemDTOs: Set<CartLineItemDTO> }> {
 
     private defaultApi: DefaultApi;
-    private cartUUID: string | null | undefined;
     private totalPrice: number;
 
-    constructor(props: any, handleLoginOpen: Function) {
+    constructor(props: any) {
         super(props);
 
         this.defaultApi = new DefaultApi();
         this.totalPrice = 0;
 
         this.state = {
-            openLogin: false,
             cartReady: false,
             cartLineItemDTOs: new Set(),
         }
     }
 
     componentDidMount() {
+        let cartUUID: string | null;
         if (window.localStorage.getItem("cartUUID") == null) {
-            this.cartUUID = ShoppingCartHelper.generateUUID();
-            window.localStorage.setItem('cartUUID', this.cartUUID);
+            cartUUID = ShoppingCartHelper.generateUUID();
+            window.localStorage.setItem('cartUUID', cartUUID);
         } else {
-            this.cartUUID = window.localStorage.getItem("cartUUID");
+            cartUUID = window.localStorage.getItem("cartUUID");
         }
 
-        if (this.cartUUID != null) {
-            this.getShoppingCart(this.cartUUID);
+        if (cartUUID != null) {
+            this.getShoppingCart(cartUUID);
         }
     }
 
-    buyProducts(cartLineItems: Set<CartLineItemDTO>){
+    buyProducts(cartLineItems: Set<CartLineItemDTO>) {
         let jwt = window.localStorage.getItem("jwt");
         let cartUUID = window.localStorage.getItem("cartUUID");
         let cartLineItemsArray = Array.from(cartLineItems);
 
-        if(jwt != null && cartUUID != null) {
+        if (jwt != null && cartUUID != null) {
             //show login dialog
-            this.defaultApi.buyProductsWeb(jwt , cartUUID ,cartLineItemsArray).then((success) => {
-                if(success.status === 200) {
+            this.defaultApi.buyProductsWeb(jwt, cartUUID, cartLineItemsArray).then((success) => {
+                if (success.status === 200) {
                     console.log(success.data)
                     window.location.assign("/playlist");
                 }
@@ -53,11 +53,11 @@ class CartOverview extends Component<{}, { openLogin: boolean, cartReady: boolea
                 console.log(error.response.data);
             });
         } else {
-            alert("Please login first");
+            this.props.openLogin()
         }
     }
 
-    getShoppingCart(cartUUID: string): void {
+    private getShoppingCart(cartUUID: string): void {
 
         //TODO: ask marco why promise is resolved twice
         this.defaultApi.displayShoppingCart(cartUUID).then(
@@ -92,10 +92,6 @@ class CartOverview extends Component<{}, { openLogin: boolean, cartReady: boolea
         );
     }
 
-    removeCartLineItem(cartLineItemDTO: CartLineItemDTO): void {
-
-    }
-
     render() {
 
         const {cartReady} = this.state;
@@ -117,8 +113,6 @@ class CartOverview extends Component<{}, { openLogin: boolean, cartReady: boolea
                                         >
                                             <CartLineItem
                                                 cartLineItemDTO={cartLineItemDTO}
-                                                cartUUID={this.cartUUID}
-                                                updateCart={this.getShoppingCart}
                                             />
                                         </Grid>
                                     )
@@ -137,13 +131,25 @@ class CartOverview extends Component<{}, { openLogin: boolean, cartReady: boolea
 
                                         <Grid container alignItems={"flex-end"}
                                               justifyContent={"flex-end"}>
-                                            <Button onClick={() => {this.buyProducts(cartLineItemDTOs)}} sx={{mt: 2}} variant={"contained"}>
+                                            <Button onClick={() => {
+                                                this.buyProducts(cartLineItemDTOs)
+                                            }} sx={{mt: 2}} variant={"contained"}>
                                                 Checkout
                                             </Button>
                                         </Grid>
+
+
                                     </div>
 
-                                ) : (<div></div>)
+                                ) : (
+                                    <div>
+                                        <Typography variant={"h6"}>
+                                        Your Shopping Cart is Empty...
+                                        </Typography>
+                                        <Typography variant={"body2"}>
+                                            Add some products to your cart by visiting the <a href={"/"}>Music Search page</a>.
+                                            </Typography>
+                                    </div>)
                             }
                         </React.Fragment>
                     )
