@@ -11,8 +11,7 @@ const Img = styled('img')({
     maxHeight: '100%',
 });
 
-export default function CartLineItem(cartLineItemDTO: any, rerenderParentCallback: any) {
-
+export default function CartLineItem(cartLineItemDTO: any, cartUUID: string, updateCart: any) {
     return (
         <div>
             <Grid container spacing={2}>
@@ -42,8 +41,12 @@ export default function CartLineItem(cartLineItemDTO: any, rerenderParentCallbac
                                 <IconButton aria-label="remove item" onClick={() => {
                                     ShoppingCartHelper.removeLineItemFromCart(cartLineItemDTO.cartLineItemDTO);
 
+
+
                                     // TODO: update CartOverview
-                                    rerenderParentCallback();
+                                    if (typeof updateCart === 'function') {
+                                        updateCart(cartUUID);
+                                    }
                                 }}>
                                     <ClearIcon />
                                 </IconButton>

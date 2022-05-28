@@ -5,16 +5,14 @@ import {Button, Grid, Typography} from "@mui/material";
 import ShoppingCartHelper from "../../ShoppingCartHelper";
 import Loader from "../Loader";
 
-class CartOverview extends Component<{}, {openLogin: boolean, cartReady: boolean, cartLineItemDTOs: Set<CartLineItemDTO> }> {
+class CartOverview extends Component<{}, { openLogin: boolean, cartReady: boolean, cartLineItemDTOs: Set<CartLineItemDTO> }> {
 
     private defaultApi: DefaultApi;
+    private cartUUID: string | null | undefined;
     private totalPrice: number;
-
 
     constructor(props: any, handleLoginOpen: Function) {
         super(props);
-
-
 
         this.defaultApi = new DefaultApi();
         this.totalPrice = 0;
@@ -27,22 +25,16 @@ class CartOverview extends Component<{}, {openLogin: boolean, cartReady: boolean
     }
 
     componentDidMount() {
-        let cartUUID: string | null;
         if (window.localStorage.getItem("cartUUID") == null) {
-            cartUUID = ShoppingCartHelper.generateUUID();
-            window.localStorage.setItem('cartUUID', cartUUID);
+            this.cartUUID = ShoppingCartHelper.generateUUID();
+            window.localStorage.setItem('cartUUID', this.cartUUID);
         } else {
-            cartUUID = window.localStorage.getItem("cartUUID");
+            this.cartUUID = window.localStorage.getItem("cartUUID");
         }
 
-        if (cartUUID != null) {
-            this.getShoppingCart(cartUUID);
+        if (this.cartUUID != null) {
+            this.getShoppingCart(this.cartUUID);
         }
-    }
-
-    rerenderParentCallback() {
-        this.forceUpdate();
-        console.log("testing render");
     }
 
     buyProducts(cartLineItems: Set<CartLineItemDTO>){
@@ -65,7 +57,7 @@ class CartOverview extends Component<{}, {openLogin: boolean, cartReady: boolean
         }
     }
 
-    private getShoppingCart(cartUUID: string): void {
+    getShoppingCart(cartUUID: string): void {
 
         //TODO: ask marco why promise is resolved twice
         this.defaultApi.displayShoppingCart(cartUUID).then(
@@ -100,6 +92,10 @@ class CartOverview extends Component<{}, {openLogin: boolean, cartReady: boolean
         );
     }
 
+    removeCartLineItem(cartLineItemDTO: CartLineItemDTO): void {
+
+    }
+
     render() {
 
         const {cartReady} = this.state;
@@ -121,7 +117,8 @@ class CartOverview extends Component<{}, {openLogin: boolean, cartReady: boolean
                                         >
                                             <CartLineItem
                                                 cartLineItemDTO={cartLineItemDTO}
-                                                rerenderParentCallback={this.rerenderParentCallback}
+                                                cartUUID={this.cartUUID}
+                                                updateCart={this.getShoppingCart}
                                             />
                                         </Grid>
                                     )
