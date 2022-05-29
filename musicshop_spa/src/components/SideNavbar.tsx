@@ -127,8 +127,8 @@ export default function MiniDrawer(props: IAppProbs) {
     const [openLogin, setOpenLogin] = React.useState(false);
     const [emailAddress, setEmailAddress] = React.useState("");
     const [password, setPassword] = React.useState("");
-    const [loginState, setLoginState] = React.useState("");
-    const [loginMessage, setLoginMessage] = React.useState("");
+    const [snackbarState, setSnackbarState] = React.useState("");
+    const [snackbarMessage, setSnackbarMessage] = React.useState("");
     const [snackbarOpen, setSnackbarOpen] = React.useState(true);
 
     const handleColorChange = () => {
@@ -145,14 +145,14 @@ export default function MiniDrawer(props: IAppProbs) {
             if (response.status === 200) {
                 localStorage.setItem('jwt', response.data);
                 localStorage.setItem('user', emailAddress);
-                setLoginMessageAndState('Login successful', 'success');
+                changeSnackbarMessageAndState('Login successful', 'success');
 
                 //window.location.reload();
                 handleLoginClose();
             }
         }, error => {
 
-            setLoginMessageAndState(error.response.data, 'error');
+            changeSnackbarMessageAndState(error.response.data, 'error');
             openSnackbar();
         });
 
@@ -168,9 +168,9 @@ export default function MiniDrawer(props: IAppProbs) {
         setSnackbarOpen(false);
     }
 
-    const setLoginMessageAndState = (message: string, state: string) => {
-        setLoginMessage(message);
-        setLoginState(state);
+    const changeSnackbarMessageAndState = (message: string, state: string) => {
+        setSnackbarMessage(message);
+        setSnackbarState(state);
     }
 
     const handleLoginOpen = () => {
@@ -390,26 +390,26 @@ export default function MiniDrawer(props: IAppProbs) {
 
                 </Dialog>
                 {/*TODO: move snackbar to App.tsx and open with callback*/}
-                {loginState ? <Snackbar
+                {snackbarOpen ? <Snackbar
                     open={snackbarOpen}
                     autoHideDuration={6000}
                     onClose={closeSnackbar}
-                    message={loginMessage}
+                    message={snackbarMessage}
 
                     // action={action}
                 >
                     <Alert
-                        severity={loginMessage.includes("success") ? "success" : "error"}
+                        severity={snackbarState.includes("success") ? "success" : "error"}
                         sx={{width: '100%'}}
                         onClose={closeSnackbar}>
-                        {loginMessage}
+                        {snackbarMessage}
                     </Alert>
                 </Snackbar> : null}
                 <Routes>
 
                     <Route path={"/"} element={<MusicSearch/>}></Route>
                     <Route path={"/product-detail"} element={<ProductDetails/>}></Route>
-                    <Route path={"/shopping-cart"} element={<CartOverview openLogin={handleLoginOpen} closeLogin={handleLoginClose} />}></Route>
+                    <Route path={"/shopping-cart"} element={<CartOverview openLogin={handleLoginOpen} closeLogin={handleLoginClose} openSnackbar={openSnackbar} changeSnackbarMessageAndState={changeSnackbarMessageAndState} />}></Route>
                     <Route path={"/playlist"} element={<PlaylistOverview/>}></Route>
 
                 </Routes>

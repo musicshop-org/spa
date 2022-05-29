@@ -99,11 +99,14 @@ class CartOverview extends Component<ICartOverviewProbs, { cartReady: boolean, c
 
                             this.setState({cartLineItemDTOs: cartLineItemDTOs});
 
-                            // open toaster
+                            this.props.changeSnackbarMessageAndState("Product removed from cart", "success");
+                            this.props.openSnackbar();
                         }
                     },
                     error => {
                         console.log(error);
+                        this.props.changeSnackbarMessageAndState(error.response.data, "error");
+                        this.props.openSnackbar();
                     }
                 );
         }
