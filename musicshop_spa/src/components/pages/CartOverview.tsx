@@ -4,29 +4,20 @@ import CartLineItem from "../CartLineItem";
 import {Button, Grid, Typography} from "@mui/material";
 import ShoppingCartHelper from "../../ShoppingCartHelper";
 import Loader from "../Loader";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import TextField from "@mui/material/TextField";
-import DialogActions from "@mui/material/DialogActions";
+import ICartOverviewProbs from "../apis/ICartOverviewProbs";
 
-class CartOverview extends Component<{}, {openLogin: boolean, cartReady: boolean, cartLineItemDTOs: Set<CartLineItemDTO> }> {
+class CartOverview extends Component<ICartOverviewProbs, { cartReady: boolean, cartLineItemDTOs: Set<CartLineItemDTO> }> {
 
     private defaultApi: DefaultApi;
     private totalPrice: number;
 
-
-    constructor(props: any, handleLoginOpen: Function) {
+    constructor(props: any) {
         super(props);
-
-
 
         this.defaultApi = new DefaultApi();
         this.totalPrice = 0;
 
         this.state = {
-            openLogin: false,
             cartReady: false,
             cartLineItemDTOs: new Set(),
         }
@@ -45,15 +36,16 @@ class CartOverview extends Component<{}, {openLogin: boolean, cartReady: boolean
             this.getShoppingCart(cartUUID);
         }
     }
-    buyProducts(cartLineItems: Set<CartLineItemDTO>){
+
+    buyProducts(cartLineItems: Set<CartLineItemDTO>) {
         let jwt = window.localStorage.getItem("jwt");
         let cartUUID = window.localStorage.getItem("cartUUID");
         let cartLineItemsArray = Array.from(cartLineItems);
 
-        if(jwt != null && cartUUID != null) {
+        if (jwt != null && cartUUID != null) {
             //show login dialog
-            this.defaultApi.buyProductsWeb(jwt , cartUUID ,cartLineItemsArray).then((success) => {
-                if(success.status === 200) {
+            this.defaultApi.buyProductsWeb(jwt, cartUUID, cartLineItemsArray).then((success) => {
+                if (success.status === 200) {
                     console.log(success.data)
                     window.location.assign("/playlist");
                 }
@@ -61,7 +53,7 @@ class CartOverview extends Component<{}, {openLogin: boolean, cartReady: boolean
                 console.log(error.response.data);
             });
         } else {
-            alert("Please login first");
+            this.props.openLogin()
         }
     }
 
@@ -139,7 +131,9 @@ class CartOverview extends Component<{}, {openLogin: boolean, cartReady: boolean
 
                                         <Grid container alignItems={"flex-end"}
                                               justifyContent={"flex-end"}>
-                                            <Button onClick={() => {this.buyProducts(cartLineItemDTOs)}} sx={{mt: 2}} variant={"contained"}>
+                                            <Button onClick={() => {
+                                                this.buyProducts(cartLineItemDTOs)
+                                            }} sx={{mt: 2}} variant={"contained"}>
                                                 Checkout
                                             </Button>
                                         </Grid>
@@ -147,7 +141,15 @@ class CartOverview extends Component<{}, {openLogin: boolean, cartReady: boolean
 
                                     </div>
 
-                                ) : (<div></div>)
+                                ) : (
+                                    <div>
+                                        <Typography variant={"h6"}>
+                                        Your Shopping Cart is Empty...
+                                        </Typography>
+                                        <Typography variant={"body2"}>
+                                            Add some products to your cart by visiting the <a href={"/"}>Music Search page</a>.
+                                            </Typography>
+                                    </div>)
                             }
                         </React.Fragment>
                     )

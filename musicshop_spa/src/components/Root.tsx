@@ -1,33 +1,32 @@
 import React from "react";
 import CssBaseline from '@mui/material/CssBaseline';
 import {ThemeProvider, StyledEngineProvider, createTheme} from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import Theme from "../inc/theme";
-
 import App from "./App";
 
+
 function Root() {
-    const prefersDarkMode = useMediaQuery('(prefers-color-scheme: light)');
 
-    let palette = Theme.palette;
-
-    if (prefersDarkMode) {
-        palette.mode = "dark";
-    }
+    const [mode, setMode] = React.useState(window.localStorage.getItem('mode') || 'dark');
 
     const theme = React.useMemo(
         () =>
             createTheme({
-                palette: prefersDarkMode ? {mode: "dark"} : Theme.palette,
-            }),
-        [prefersDarkMode],
+                            palette: mode==="dark" ? {mode: "dark"} : Theme.palette,
+                        }),
+        [mode]
     );
+
+    const toggleColorMode = () => {
+        window.localStorage.setItem("mode", mode === "light" ? "dark" : "light");
+        setMode(mode === "light" ? "dark" : "light")
+    }
 
     return (
         <ThemeProvider theme={theme}>
             <StyledEngineProvider>
                 <CssBaseline/>
-                <App/>
+                <App toggleColorMode={toggleColorMode}/>
             </StyledEngineProvider>
         </ThemeProvider>
     );
