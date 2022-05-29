@@ -5,7 +5,7 @@ import Loader from "../Loader";
 import SongList from "../SongList";
 import Playlist from '../Playlist';
 
-class PlaylistOverview extends Component<{}, { playlistReady: boolean}> {
+class PlaylistOverview extends Component<{}, { playlistReady: boolean, errorOccurred: boolean}> {
 
     private playlistMicroservice_url: string = 'http://localhost:9001/'
 
@@ -15,7 +15,8 @@ class PlaylistOverview extends Component<{}, { playlistReady: boolean}> {
         super(props);
 
         this.state = {
-            playlistReady: false
+            playlistReady: false,
+            errorOccurred: false
         }
     }
 
@@ -30,7 +31,8 @@ class PlaylistOverview extends Component<{}, { playlistReady: boolean}> {
                 this.setState({playlistReady: true});
             },
             error => {
-                console.log(error);
+                this.setState({playlistReady: true, errorOccurred: true});
+                console.log(error.message);
             }
         );
     }
@@ -40,7 +42,7 @@ class PlaylistOverview extends Component<{}, { playlistReady: boolean}> {
     }
 
     render() {
-        const {playlistReady} = this.state;
+        const {playlistReady, errorOccurred} = this.state;
 
         return (
             <React.Fragment>
@@ -48,9 +50,14 @@ class PlaylistOverview extends Component<{}, { playlistReady: boolean}> {
                     !playlistReady ? (
                         <Loader/>
                     ) :
-                    <div style={{marginTop: 40}}>
-                        <Playlist songDTOs={this.songs} />
-                    </div>
+                    (
+                        (!errorOccurred ? (
+                            <div style={{marginTop: 40}}>
+                                <Playlist songDTOs={this.songs} />
+                            </div>) :
+                            (<div>{"Playlist is empty"}</div>)
+                        )
+                    )
                 }
             </React.Fragment>
         );
