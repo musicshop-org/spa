@@ -265,6 +265,7 @@ function Playlist(songDTOs: any) {
         let artistConcat: string = ""
 
         for (let j = 0; j < songDTOs.songDTOs[i].artists.length; j++) {
+
             if (artistConcat !== "")
                 artistConcat = artistConcat.concat(", ")
 
