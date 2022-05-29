@@ -10,12 +10,14 @@ class CartOverview extends Component<ICartOverviewProbs, { cartReady: boolean, c
 
     private defaultApi: DefaultApi;
     private totalPrice: number;
+    private readonly cartUUID: string | null;
 
     constructor(props: any) {
         super(props);
 
         this.defaultApi = new DefaultApi();
         this.totalPrice = 0;
+        this.cartUUID = ShoppingCartHelper.getCartUUID();
 
         this.state = {
             cartReady: false,
@@ -24,27 +26,18 @@ class CartOverview extends Component<ICartOverviewProbs, { cartReady: boolean, c
     }
 
     componentDidMount() {
-        let cartUUID: string | null;
-        if (window.localStorage.getItem("cartUUID") == null) {
-            cartUUID = ShoppingCartHelper.generateUUID();
-            window.localStorage.setItem('cartUUID', cartUUID);
-        } else {
-            cartUUID = window.localStorage.getItem("cartUUID");
-        }
-
-        if (cartUUID != null) {
-            this.getShoppingCart(cartUUID);
+        if (this.cartUUID != null) {
+            this.getShoppingCart(this.cartUUID);
         }
     }
 
     buyProducts(cartLineItems: Set<CartLineItemDTO>) {
         let jwt = window.localStorage.getItem("jwt");
-        let cartUUID = window.localStorage.getItem("cartUUID");
         let cartLineItemsArray = Array.from(cartLineItems);
 
-        if (jwt != null && cartUUID != null) {
+        if (jwt != null && this.cartUUID != null) {
             //show login dialog
-            this.defaultApi.buyProductsWeb(jwt, cartUUID, cartLineItemsArray).then((success) => {
+            this.defaultApi.buyProductsWeb(jwt, this.cartUUID, cartLineItemsArray).then((success) => {
                 if (success.status === 200) {
                     console.log(success.data)
                     window.location.assign("/playlist");
@@ -83,13 +76,40 @@ class CartOverview extends Component<ICartOverviewProbs, { cartReady: boolean, c
                     }
                 }
 
-                this.setState({cartReady: true});
-                this.setState({cartLineItemDTOs: cartLineItemDTOs});
+                this.setState({cartReady: true , cartLineItemDTOs: cartLineItemDTOs});
             },
             error => {
                 console.log(error);
             }
         );
+    }
+
+    removeLineItem(cartLineItemDTO: CartLineItemDTO): void {
+        if (this.cartUUID != null) {
+            this.defaultApi.removeLineItemFromCart(this.cartUUID, cartLineItemDTO)
+                .then(
+                    success => {
+                        if (success.status === 200) {
+                            let cartLineItemDTOs = new Set(this.state.cartLineItemDTOs);
+                            cartLineItemDTOs.forEach(cartLineItem => {
+                                if (cartLineItem.productId === cartLineItemDTO.productId) {
+                                    cartLineItemDTOs.delete(cartLineItem);
+                                }
+                            });
+
+                            this.setState({cartLineItemDTOs: cartLineItemDTOs});
+
+                            this.props.changeSnackbarMessageAndState("Product removed from cart", "success");
+                            this.props.openSnackbar();
+                        }
+                    },
+                    error => {
+                        console.log(error);
+                        this.props.changeSnackbarMessageAndState(error.response.data, "error");
+                        this.props.openSnackbar();
+                    }
+                );
+        }
     }
 
     render() {
@@ -113,6 +133,7 @@ class CartOverview extends Component<ICartOverviewProbs, { cartReady: boolean, c
                                         >
                                             <CartLineItem
                                                 cartLineItemDTO={cartLineItemDTO}
+                                                removeLineItem={(cartLineItemDTO) => this.removeLineItem(cartLineItemDTO)}
                                             />
                                         </Grid>
                                     )
