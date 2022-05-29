@@ -35,7 +35,7 @@ import MusicSearch from "./pages/MusicSearch";
 import ProductDetails from "./pages/ProductDetails";
 import CartOverview from "./pages/CartOverview";
 import PlaylistOverview from "./pages/PlaylistOverview";
-import IAppProbs from "./apis/IAppProbs";
+import IAppProps from "./apis/IAppProps";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import {useContext} from "react";
@@ -114,14 +114,13 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
 );
 
 
-
 function logout() {
     localStorage.removeItem('jwt');
     localStorage.removeItem('user');
     window.location.assign('/');
 }
 
-export default function MiniDrawer(props: IAppProbs) {
+export default function MiniDrawer(props: IAppProps) {
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
     const [openLogin, setOpenLogin] = React.useState(false);
@@ -129,7 +128,7 @@ export default function MiniDrawer(props: IAppProbs) {
     const [password, setPassword] = React.useState("");
     const [snackbarState, setSnackbarState] = React.useState("");
     const [snackbarMessage, setSnackbarMessage] = React.useState("");
-    const [snackbarOpen, setSnackbarOpen] = React.useState(true);
+    const [snackbarOpen, setSnackbarOpen] = React.useState(false);
 
     const handleColorChange = () => {
         props.toggleColorMode();
@@ -189,7 +188,7 @@ export default function MiniDrawer(props: IAppProbs) {
         setOpen(false);
     };
 
-    // let cartOverviewProbs : ICartOverviewProbs = {
+    // let cartOverviewProbs : ICartOverviewProps = {
     //     openLogin: handleLoginOpen,
     //     closeLogin: handleLoginClose,
     // }
@@ -266,12 +265,12 @@ export default function MiniDrawer(props: IAppProbs) {
                         <ListItemText primary={"Shopping Cart"} sx={{opacity: open ? 1 : 0}}/>
                     </ListItemButton>
                     {localStorage.getItem("jwt") ? <ListItemButton component={Link} to={"/playlist"}
-                                    key={"playlist"}
-                                    sx={{
-                                        minHeight: 48,
-                                        justifyContent: open ? 'initial' : 'center',
-                                        px: 2.5,
-                                    }}
+                                                                   key={"playlist"}
+                                                                   sx={{
+                                                                       minHeight: 48,
+                                                                       justifyContent: open ? 'initial' : 'center',
+                                                                       px: 2.5,
+                                                                   }}
                     >
                         <ListItemIcon
                             sx={{
@@ -407,10 +406,27 @@ export default function MiniDrawer(props: IAppProbs) {
                 </Snackbar> : null}
                 <Routes>
 
-                    <Route path={"/"} element={<MusicSearch/>}></Route>
-                    <Route path={"/product-detail"} element={<ProductDetails/>}></Route>
-                    <Route path={"/shopping-cart"} element={<CartOverview openLogin={handleLoginOpen} closeLogin={handleLoginClose} openSnackbar={openSnackbar} changeSnackbarMessageAndState={changeSnackbarMessageAndState} />}></Route>
-                    <Route path={"/playlist"} element={<PlaylistOverview/>}></Route>
+                    <Route path={"/"} element={
+                        <MusicSearch
+                            openSnackbar={openSnackbar}
+                            changeSnackbarMessageAndState={changeSnackbarMessageAndState}
+                        />}/>
+
+                    <Route path={"/product-detail"} element={
+                        <ProductDetails
+                            openSnackbar={openSnackbar}
+                            changeSnackbarMessageAndState={changeSnackbarMessageAndState}
+                        />}/>
+
+                    <Route path={"/shopping-cart"} element={
+                        <CartOverview
+                            openLogin={handleLoginOpen}
+                            closeLogin={handleLoginClose}
+                            openSnackbar={openSnackbar}
+                            changeSnackbarMessageAndState={changeSnackbarMessageAndState}
+                        />}/>
+
+                    <Route path={"/playlist"} element={<PlaylistOverview/>}/>
 
                 </Routes>
             </Box>

@@ -2,9 +2,9 @@ import React, {Component} from 'react';
 import {BrowserRouter} from 'react-router-dom';
 
 import SideNavbar from "./SideNavbar";
-import IAppProbs from "./apis/IAppProbs";
+import IAppProps from "./apis/IAppProps";
 
-class App extends Component<IAppProbs>{
+class App extends Component<IAppProps>{
 
     render() {
         return (
