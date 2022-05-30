@@ -6,14 +6,47 @@ import PlayerControls from './PlayerControls';
 function Player(props: any) {
 
     const downloadMicroservice_url: string = 'http://localhost:9000/'
-
     const audioElement = useRef(null);
     const length = props.songDTOs.length;
+
     const [currentSongIndex, setCurrentSongIndex] = useState(0);
     const [nextSongIndex, setNextSongIndex] = useState(length > 1 ? currentSongIndex + 1 : currentSongIndex);
     const [isPlaying, setIsPlaying] = useState(false);
 
     useEffect(() => {
+        handlePlayingAudio();
+    }, [isPlaying]);
+
+    useEffect(() => {
+        setSongInPlayer(props.songDTOs[currentSongIndex].longId);
+        setNextSongIndex(currentSongIndex < length -1 ? currentSongIndex + 1 : 0);
+    }, [currentSongIndex]);
+
+    const setSongInPlayer = (songId: number) => {
+        let token: string | null = localStorage.getItem('jwt')
+        let action = "download/" + songId
+
+        fetch(`${downloadMicroservice_url}${action}`, {
+            method: 'GET',
+            headers: new Headers({
+                "Authorization": token != null ? token: ""
+            })
+        })
+            .then(response => response.blob())
+            .then(blob => {
+                let currentSong = URL.createObjectURL(blob);
+                // @ts-ignore
+                audioElement.current.src = currentSong;
+
+                if (isPlaying)
+                { // @ts-ignore
+                    audioElement.current.play();
+                }
+            })
+            .catch(error => {console.log(error.message)})
+    }
+
+    const handlePlayingAudio = () => {
         if (isPlaying) {
             // @ts-ignore
             audioElement.current.play();
@@ -21,12 +54,7 @@ function Player(props: any) {
             // @ts-ignore
             audioElement.current.pause();
         }
-    }, [isPlaying]);
-
-    useEffect(() => {
-        fetchCurrentSong(props.songDTOs[currentSongIndex].longId);
-        setNextSongIndex(currentSongIndex < length -1 ? currentSongIndex + 1 : 0);
-    }, [currentSongIndex]);
+    }
 
     const nextSong = () => {
         setCurrentSongIndex(() => {
@@ -54,35 +82,8 @@ function Player(props: any) {
         });
     }
 
-    const fetchCurrentSong = (songId: number) => {
-        let token: string | null = localStorage.getItem('jwt')
-
-        let action = "download/" + songId
-
-        fetch(`${downloadMicroservice_url}${action}`, {
-            method: 'GET',
-            headers: new Headers({
-                "Authorization": token != null ? token: ""
-            })
-        })
-        .then(response => response.blob())
-        .then(blob => {
-            let url = URL.createObjectURL(blob);
-            // @ts-ignore
-            audioElement.current.src = url;
-
-            if (isPlaying)
-            { // @ts-ignore
-                audioElement.current.play();
-            }
-        })
-        .catch(error => {console.log(error.message)})
-    }
-
-
     return (
-        <div style={{textAlign: "center"}}>
-            {/*<audio src={`http://localhost:9000/download/${props.songDTOs[currentSongIndex].longId}`} ref={audioElement}></audio>*/}
+        <React.Fragment>
             <audio ref={audioElement}></audio>
             <PlayerDetails
                 song={props.songDTOs[currentSongIndex]}
@@ -95,11 +96,12 @@ function Player(props: any) {
                 previousSong={previousSong}
             />
             {length > 1 ?
-            <div>
-                <strong>Next up: </strong> {props.songDTOs[nextSongIndex].title}
-            </div> :
-            null}
-        </div>
+                <div className="player-next">
+                    <strong>Next up:</strong>{props.songDTOs[nextSongIndex].title}
+                </div> :
+                null
+            }
+        </React.Fragment>
     )
 }
 

@@ -3,9 +3,13 @@ import * as React from 'react';
 function PlayerDetails(props: any) {
 
     return (
-        <div>
-            <p style={{margin: 4}}><strong>Now Playing</strong></p>
-            {props.song.title} by {props.artist}
+        <div className="player--details">
+            <div className="details-title">
+                {props.song.title}
+            </div>
+            <div className="details-artist">
+                {props.artist}
+            </div>
         </div>
     )
 }

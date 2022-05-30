@@ -8,17 +8,17 @@ import SkipNextIcon from '@mui/icons-material/SkipNext';
 function PlayerControls(props: any) {
 
     return (
-        <div style={{padding: 6}}>
-            <IconButton color="primary" onClick={() => props.previousSong()}>
-                <SkipPreviousIcon fontSize="large" />
+        <div className="player--controls">
+            <IconButton className="skip-btn" color="primary" onClick={() => props.previousSong()}>
+                <SkipPreviousIcon className="skip-icon"/>
             </IconButton>
 
-            <IconButton color="primary" onClick={() => props.setIsPlaying(!props.isPlaying)}>
-                {!props.isPlaying ? <PlayIcon fontSize="large"  />: <PauseIcon fontSize="large" />}
+            <IconButton className="play-btn" color="primary" onClick={() => props.setIsPlaying(!props.isPlaying)}>
+                {!props.isPlaying ? <PlayIcon className="play-icon"/>: <PauseIcon className="play-icon" />}
             </IconButton>
 
-            <IconButton color="primary" onClick={() => props.nextSong()}>
-                <SkipNextIcon fontSize="large" />
+            <IconButton className="skip-btn" color="primary" onClick={() => props.nextSong()}>
+                <SkipNextIcon className="skip-icon"/>
             </IconButton>
         </div>
     )

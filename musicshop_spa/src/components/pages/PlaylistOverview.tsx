@@ -52,7 +52,7 @@ class PlaylistOverview extends Component<{}, { playlistReady: boolean, errorOccu
                 ) :
                 (
                     (!errorOccurred ? (
-                        <div style={{marginTop: 40}}>
+                        <div>
                             <Playlist songDTOs={this.songs} />
                             <Player songDTOs={this.songs} />
                         </div>) :
