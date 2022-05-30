@@ -1,10 +1,12 @@
 import * as React from 'react';
 import {useState, useRef, useEffect} from 'react';
-import PlayerDetails from './pages/PlayerDetails';
+import PlayerDetails from './PlayerDetails';
 import PlayerControls from './PlayerControls';
 
 function Player(props: any) {
-    
+
+    const downloadMicroservice_url: string = 'http://localhost:9000/'
+
     const audioElement = useRef(null);
     const length = props.songDTOs.length;
     const [currentSongIndex, setCurrentSongIndex] = useState(0);
@@ -19,9 +21,10 @@ function Player(props: any) {
             // @ts-ignore
             audioElement.current.pause();
         }
-    });
+    }, [isPlaying]);
 
     useEffect(() => {
+        fetchCurrentSong(props.songDTOs[currentSongIndex].longId);
         setNextSongIndex(currentSongIndex < length -1 ? currentSongIndex + 1 : 0);
     }, [currentSongIndex]);
 
@@ -51,10 +54,36 @@ function Player(props: any) {
         });
     }
 
+    const fetchCurrentSong = (songId: number) => {
+        let token: string | null = localStorage.getItem('jwt')
+
+        let action = "download/" + songId
+
+        fetch(`${downloadMicroservice_url}${action}`, {
+            method: 'GET',
+            headers: new Headers({
+                "Authorization": token != null ? token: ""
+            })
+        })
+        .then(response => response.blob())
+        .then(blob => {
+            let url = URL.createObjectURL(blob);
+            // @ts-ignore
+            audioElement.current.src = url;
+
+            if (isPlaying)
+            { // @ts-ignore
+                audioElement.current.play();
+            }
+        })
+        .catch(error => {console.log(error.message)})
+    }
+
 
     return (
         <div style={{textAlign: "center"}}>
-            <audio src={`http://localhost:9000/download/${props.songDTOs[currentSongIndex].longId}`} ref={audioElement}></audio>
+            {/*<audio src={`http://localhost:9000/download/${props.songDTOs[currentSongIndex].longId}`} ref={audioElement}></audio>*/}
+            <audio ref={audioElement}></audio>
             <PlayerDetails
                 song={props.songDTOs[currentSongIndex]}
                 artist={props.songDTOs[currentSongIndex].artists[0].name}
