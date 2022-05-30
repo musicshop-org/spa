@@ -59,6 +59,26 @@ function Player(props: any) {
         }
     }
 
+    const getPreviousIndex = () => {
+        let temp = currentSongIndex;
+        temp --;
+
+        if (temp < 0)
+            temp = length - 1;
+
+        return temp;
+    }
+
+    const getNextIndex = () => {
+        let temp = currentSongIndex;
+        temp ++;
+
+        if (temp > length - 1)
+            temp = 0;
+
+        return temp;
+    }
+
     const getRandomIndex = () => {
         let randomIndex = Math.floor(Math.random() * length);
 
@@ -71,33 +91,19 @@ function Player(props: any) {
 
     const nextSong = () => {
         setCurrentSongIndex(() => {
-
-            let temp = currentSongIndex;
-
-            if (isShuffled) {
-                temp = getRandomIndex();
-            } else {
-                temp++;
-
-                if (temp > length - 1) {
-                    temp = 0;
-                }
-            }
-
-            return temp;
+            if (isShuffled)
+                return getRandomIndex();
+            else
+                return getNextIndex()
         });
     }
 
     const previousSong = () => {
         setCurrentSongIndex(() => {
-            let temp = currentSongIndex;
-            temp--;
-
-            if (temp < 0) {
-                temp = length - 1;
-            }
-
-            return temp;
+            if (isShuffled)
+                return getRandomIndex();
+            else
+                return getPreviousIndex()
         });
     }
 
@@ -115,7 +121,7 @@ function Player(props: any) {
                 previousSong={previousSong}
             />
 
-            {length > 1 ?
+            {length > 2 ?
                 <PlayerAdditionalControls
                     isShuffled={isShuffled}
                     setIsShuffled={setIsShuffled}

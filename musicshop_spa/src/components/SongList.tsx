@@ -420,7 +420,7 @@ function SongList(songDTOs: any) {
                             <Button variant={"text"} endIcon={<ShoppingCartIcon/>} onClick={() => {
                                 ShoppingCartHelper.addSongsToCart(getSelectedSongDTOS(songDTOs, selected));
                             }}>
-                                Add {selected.length} Songs to cart
+                                Add {selected.length} {(selected.length === 1) ? 'Song' : 'Songs'} to cart
                             </Button>
                         </Grid>
                     </>) : (<div></div>)}
