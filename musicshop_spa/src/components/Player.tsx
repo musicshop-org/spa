@@ -4,13 +4,12 @@ import PlayerDetails from './pages/PlayerDetails';
 import PlayerControls from './PlayerControls';
 
 function Player(props: any) {
-
+    
     const audioElement = useRef(null);
-    const [isPlaying, setIsPlaying] = useState(false);
-
-    let length = props.songDTOs.length;
+    const length = props.songDTOs.length;
     const [currentSongIndex, setCurrentSongIndex] = useState(0);
     const [nextSongIndex, setNextSongIndex] = useState(length > 1 ? currentSongIndex + 1 : currentSongIndex);
+    const [isPlaying, setIsPlaying] = useState(false);
 
     useEffect(() => {
         if (isPlaying) {
