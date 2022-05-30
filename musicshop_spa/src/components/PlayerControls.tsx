@@ -4,6 +4,7 @@ import PlayIcon from '@mui/icons-material/PlayCircleOutline';
 import PauseIcon from '@mui/icons-material/PauseCircle';
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
+import ShuffleIcon from '@mui/icons-material/Shuffle';
 
 function PlayerControls(props: any) {
 

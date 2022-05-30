@@ -1,7 +1,9 @@
 import * as React from 'react';
 import {useState, useRef, useEffect} from 'react';
+import { IconButton } from '@mui/material';
 import PlayerDetails from './PlayerDetails';
 import PlayerControls from './PlayerControls';
+import PlayerAdditionalControls from './PlayerAdditionalControls';
 
 function Player(props: any) {
 
@@ -12,7 +14,8 @@ function Player(props: any) {
     const [currentSongIndex, setCurrentSongIndex] = useState(0);
     const [nextSongIndex, setNextSongIndex] = useState(length > 1 ? currentSongIndex + 1 : currentSongIndex);
     const [isPlaying, setIsPlaying] = useState(false);
-
+    const [isShuffled, setIsShuffled] = useState(false);
+    
     useEffect(() => {
         handlePlayingAudio();
     }, [isPlaying]);
@@ -56,13 +59,29 @@ function Player(props: any) {
         }
     }
 
+    const getRandomIndex = () => {
+        let randomIndex = Math.floor(Math.random() * length);
+
+        while (randomIndex === currentSongIndex) {
+            randomIndex = Math.floor(Math.random() * length);
+        }
+
+        return randomIndex;
+    }
+
     const nextSong = () => {
         setCurrentSongIndex(() => {
-            let temp = currentSongIndex;
-            temp++;
 
-            if (temp > length - 1) {
-                temp = 0;
+            let temp = currentSongIndex;
+
+            if (isShuffled) {
+                temp = getRandomIndex();
+            } else {
+                temp++;
+
+                if (temp > length - 1) {
+                    temp = 0;
+                }
             }
 
             return temp;
@@ -75,7 +94,7 @@ function Player(props: any) {
             temp--;
 
             if (temp < 0) {
-                temp = length-1;
+                temp = length - 1;
             }
 
             return temp;
@@ -95,7 +114,12 @@ function Player(props: any) {
                 nextSong={nextSong}
                 previousSong={previousSong}
             />
-            {length > 1 ?
+            <PlayerAdditionalControls 
+                isShuffled={isShuffled}
+                setIsShuffled={setIsShuffled}
+            />
+
+            {length > 1 && !isShuffled ?
                 <div className="player-next">
                     <strong>Next up:</strong>{props.songDTOs[nextSongIndex].title}
                 </div> :
