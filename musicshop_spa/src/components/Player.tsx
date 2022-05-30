@@ -8,10 +8,9 @@ function Player(props: any) {
     const audioElement = useRef(null);
     const [isPlaying, setIsPlaying] = useState(false);
 
-    const [currentSongIndex, setCurrentSongIndex] = useState(0);
-    const [nextSongIndex, setNextSongIndex] = useState(currentSongIndex + 1);
-
     let length = props.songDTOs.length;
+    const [currentSongIndex, setCurrentSongIndex] = useState(0);
+    const [nextSongIndex, setNextSongIndex] = useState(length > 1 ? currentSongIndex + 1 : currentSongIndex);
 
     useEffect(() => {
         if (isPlaying) {
@@ -22,6 +21,10 @@ function Player(props: any) {
             audioElement.current.pause();
         }
     });
+
+    useEffect(() => {
+        setNextSongIndex(currentSongIndex < length -1 ? currentSongIndex + 1 : 0);
+    }, [currentSongIndex]);
 
     const nextSong = () => {
         setCurrentSongIndex(() => {
@@ -51,9 +54,8 @@ function Player(props: any) {
 
 
     return (
-        <div>
+        <div style={{textAlign: "center"}}>
             <audio src={`http://localhost:9000/download/${props.songDTOs[currentSongIndex].longId}`} ref={audioElement}></audio>
-            <h4>Playing now</h4>
             <PlayerDetails
                 song={props.songDTOs[currentSongIndex]}
                 artist={props.songDTOs[currentSongIndex].artists[0].name}
@@ -64,7 +66,11 @@ function Player(props: any) {
                 nextSong={nextSong}
                 previousSong={previousSong}
             />
-            <p><strong>Next up: </strong> {props.songDTOs[nextSongIndex].title} by {props.songDTOs[nextSongIndex].artists[0].name}</p>
+            {length > 1 ?
+            <div>
+                <strong>Next up: </strong> {props.songDTOs[nextSongIndex].title}
+            </div> :
+            null}
         </div>
     )
 }

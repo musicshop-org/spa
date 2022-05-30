@@ -4,9 +4,8 @@ function PlayerDetails(props: any) {
 
     return (
         <div>
-            <h5>{props.song.longId}</h5>
-            <h5>{props.song.title}</h5>
-            <h5>{props.artist}</h5>
+            <p style={{margin: 4}}><strong>Now Playing</strong></p>
+            {props.song.title} by {props.artist}
         </div>
     )
 }
