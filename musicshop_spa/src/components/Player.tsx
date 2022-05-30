@@ -114,10 +114,14 @@ function Player(props: any) {
                 nextSong={nextSong}
                 previousSong={previousSong}
             />
-            <PlayerAdditionalControls 
-                isShuffled={isShuffled}
-                setIsShuffled={setIsShuffled}
-            />
+
+            {length > 1 ?
+                <PlayerAdditionalControls
+                    isShuffled={isShuffled}
+                    setIsShuffled={setIsShuffled}
+                /> :
+                null
+            }
 
             {length > 1 && !isShuffled ?
                 <div className="player-next">
