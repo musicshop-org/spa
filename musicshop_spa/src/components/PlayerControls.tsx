@@ -5,13 +5,21 @@ import PauseIcon from '@mui/icons-material/PauseCircle';
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 
-function PlayerControls() {
+function PlayerControls(props: any) {
 
     return (
         <div>
-            <IconButton color="primary"> <SkipPreviousIcon /> </IconButton>
-            <IconButton color="primary"> <PlayIcon /> </IconButton>
-            <IconButton color="primary"> <SkipNextIcon /> </IconButton>
+            <IconButton color="primary" onClick={() => props.previousSong()}>
+                <SkipPreviousIcon />
+            </IconButton>
+
+            <IconButton color="primary" onClick={() => props.setIsPlaying(!props.isPlaying)}>
+                {!props.isPlaying ? <PlayIcon />: <PauseIcon />}
+            </IconButton>
+
+            <IconButton color="primary" onClick={() => props.nextSong()}>
+                <SkipNextIcon />
+            </IconButton>
         </div>
     )
 }
