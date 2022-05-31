@@ -2,7 +2,7 @@ import {ButtonBase, Divider, Grid, IconButton, Typography} from "@mui/material";
 import * as React from "react";
 import {styled} from "@mui/material/styles";
 import ClearIcon from '@mui/icons-material/Clear';
-import ICartLineItemProbs from "./apis/ICartLineItemProbs";
+import ICartLineItemProps from "./apis/ICartLineItemProps";
 import {CartLineItemDTO} from "../openAPI";
 
 const Img = styled('img')({
@@ -12,7 +12,7 @@ const Img = styled('img')({
     maxHeight: '100%',
 });
 
-export default function CartLineItem(props: ICartLineItemProbs) {
+export default function CartLineItem(props: ICartLineItemProps) {
 
     let cartLineItemDTO: CartLineItemDTO = props.cartLineItemDTO;
     if (cartLineItemDTO == null) {

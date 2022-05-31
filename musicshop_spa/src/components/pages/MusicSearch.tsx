@@ -6,8 +6,9 @@ import {DefaultApi} from "../../openAPI";
 import ProductCard from "../ProductCard";
 import {AlbumDTO} from "../../openAPI";
 import Loader from "../Loader";
+import IMusicSearchProps from "../apis/IMusicSearchProps";
 
-class MusicSearch extends Component<{}, { searchFinished: boolean, albumDTOs: Set<AlbumDTO> }> {
+class MusicSearch extends Component<IMusicSearchProps, { searchFinished: boolean, albumDTOs: Set<AlbumDTO> }> {
 
     private searchString: string;
     private defaultApi: DefaultApi;
@@ -115,6 +116,9 @@ class MusicSearch extends Component<{}, { searchFinished: boolean, albumDTOs: Se
                                         >
                                             <ProductCard
                                                 albumDTO={albumDTO}
+                                                openSnackbar={() => this.props.openSnackbar()}
+                                                changeSnackbarMessageAndState={(message, state) => this.props.changeSnackbarMessageAndState(message, state)}
+
                                             />
 
                                         </Grid>
