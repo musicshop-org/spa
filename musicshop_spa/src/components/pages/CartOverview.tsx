@@ -4,9 +4,9 @@ import CartLineItem from "../CartLineItem";
 import {Button, Grid, Typography} from "@mui/material";
 import ShoppingCartHelper from "../../ShoppingCartHelper";
 import Loader from "../Loader";
-import ICartOverviewProbs from "../apis/ICartOverviewProbs";
+import ICartOverviewProps from "../apis/ICartOverviewProps";
 
-class CartOverview extends Component<ICartOverviewProbs, { cartReady: boolean, cartLineItemDTOs: Set<CartLineItemDTO> }> {
+class CartOverview extends Component<ICartOverviewProps, { cartReady: boolean, cartLineItemDTOs: Set<CartLineItemDTO> }> {
 
     private defaultApi: DefaultApi;
     private totalPrice: number;
@@ -97,6 +97,10 @@ class CartOverview extends Component<ICartOverviewProbs, { cartReady: boolean, c
                                 }
                             });
 
+                            if (cartLineItemDTO.price != undefined) {
+                                this.totalPrice = this.totalPrice - cartLineItemDTO.price;
+                            }
+
                             this.setState({cartLineItemDTOs: cartLineItemDTOs});
 
                             this.props.changeSnackbarMessageAndState("Product removed from cart", "success");
@@ -121,7 +125,7 @@ class CartOverview extends Component<ICartOverviewProbs, { cartReady: boolean, c
             <div>
                 {
                     !cartReady ? (
-                        <Loader/>
+                        <Loader />
                     ) : (
                         <React.Fragment>
                             {

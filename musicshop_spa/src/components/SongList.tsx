@@ -19,9 +19,11 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import {visuallyHidden} from '@mui/utils';
 import {SongDTO} from "../openAPI";
-import {Button, Grid} from "@mui/material";
+import {Grid} from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import ShoppingCartHelper from "../ShoppingCartHelper";
+import ISongListProps from "./apis/ISongListProps";
+import {LoadingButton} from "@mui/lab";
 
 interface Data {
     index: number;
@@ -240,18 +242,22 @@ function getTotalPrice(songDTOs: Array<SongDTO>): number {
     return totalPrice;
 }
 
-function SongList(songDTOs: any) {
+function SongList(props: ISongListProps) {
     const [order, setOrder] = React.useState<Order>('asc');
     const [orderBy, setOrderBy] = React.useState<keyof Data>('index');
     const [selected, setSelected] = React.useState<readonly string[]>([]);
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(100);
+    const [isLoading, setIsLoading] = React.useState(false);
 
     let rows: Data[] = [];
-    if (songDTOs != null && songDTOs.songDTOs != null) {
-        for (let i = 0; i < songDTOs.songDTOs.length; i++) {
-            rows.push(createData(i + 1, songDTOs.songDTOs[i].title, songDTOs.songDTOs[i].price))
+    if (props != null && props.songDTOs != null) {
+
+        let songArray = Array.from(props.songDTOs)
+
+        for (let i = 0; i < songArray.length; i++) {
+            rows.push(createData(i + 1, (songArray[i].title || ""), (songArray[i].price || 0)));
         }
     }
 
@@ -413,15 +419,27 @@ function SongList(songDTOs: any) {
                         <Grid item>
                             <Typography align={"right"} variant={"h6"}>
 
-                                Total: {(Math.round(getTotalPrice(getSelectedSongDTOS(songDTOs, selected)) * 100) / 100).toFixed(2)} €
+                                Total: {(Math.round(getTotalPrice(getSelectedSongDTOS(props, selected)) * 100) / 100).toFixed(2)} €
 
                             </Typography>
 
-                            <Button variant={"text"} endIcon={<ShoppingCartIcon/>} onClick={() => {
-                                ShoppingCartHelper.addSongsToCart(getSelectedSongDTOS(songDTOs, selected));
-                            }}>
-                                Add {selected.length} {(selected.length === 1) ? 'Song' : 'Songs'} to cart
-                            </Button>
+                            <LoadingButton variant={"text"} loading={isLoading} endIcon={<ShoppingCartIcon/>}
+                                           onClick={() => {
+                                               setIsLoading(true);
+                                               ShoppingCartHelper.addSongsToCart(getSelectedSongDTOS(props, selected))
+                                                   .then(success => {
+                                                       props.changeSnackbarMessageAndState("Songs added to cart", "success");
+                                                       props.openSnackbar();
+                                                   }, error => {
+                                                       props.changeSnackbarMessageAndState(error.message.data, "error");
+                                                       props.openSnackbar();
+                                                   })
+                                                   .finally(() => {
+                                                       setIsLoading(false);
+                                                   });
+                                           }}>
+                                Add {selected.length} Songs to cart
+                            </LoadingButton>
                         </Grid>
                     </>) : (<div></div>)}
 

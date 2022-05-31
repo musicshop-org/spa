@@ -1,8 +1,8 @@
 import {CartLineItemDTO} from "../../openAPI";
 
-interface ICartLineItemProbs {
+interface ICartLineItemProps {
     cartLineItemDTO: CartLineItemDTO;
     removeLineItem: (cartLineItemDTO: CartLineItemDTO) => void;
 }
 
-export default ICartLineItemProbs;
+export default ICartLineItemProps;
