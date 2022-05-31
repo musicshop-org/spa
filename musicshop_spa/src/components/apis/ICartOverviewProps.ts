@@ -1,4 +1,4 @@
-interface ICartOverviewProbs {
+interface ICartOverviewProps {
     openLogin: () => void;
     closeLogin: () => void;
 
@@ -6,4 +6,4 @@ interface ICartOverviewProbs {
     changeSnackbarMessageAndState: (message: string, state: string) => void;
 }
 
-export default ICartOverviewProbs;
+export default ICartOverviewProps;
