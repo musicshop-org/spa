@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {SongDTO} from "../../openAPI";
 import Loader from "../Loader";
 import Playlist from '../Playlist';
+import Player from '../Player';
 
 class PlaylistOverview extends Component<{}, { playlistReady: boolean, errorOccurred: boolean}> {
 
@@ -43,21 +44,20 @@ class PlaylistOverview extends Component<{}, { playlistReady: boolean, errorOccu
         const {playlistReady, errorOccurred} = this.state;
 
         return (
-            <React.Fragment>
-                {
-                    !playlistReady ? (
-                        <Loader />
-                    ) :
-                    (
-                        (!errorOccurred ? (
-                            <div style={{marginTop: 40}}>
-                                <Playlist songDTOs={this.songs} />
-                            </div>) :
-                            (<div>{"Playlist is empty"}</div>)
-                        )
+            <div>
+                {!playlistReady ? (
+                    <Loader/>
+                ) :
+                (
+                    (!errorOccurred ? (
+                        <div>
+                            <Playlist songDTOs={this.songs} />
+                            <Player songDTOs={this.songs} />
+                        </div>) :
+                        (<div>{"Playlist is empty"}</div>)
                     )
-                }
-            </React.Fragment>
+                )}
+            </div>
         );
     }
 }
