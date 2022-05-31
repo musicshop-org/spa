@@ -13,18 +13,12 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
-import DeleteIcon from '@mui/icons-material/Delete';
-import FilterListIcon from '@mui/icons-material/FilterList';
 import {visuallyHidden} from '@mui/utils';
 import {SongDTO} from "../openAPI";
 import {Button, Grid} from "@mui/material";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import ShoppingCartHelper from "../ShoppingCartHelper";
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 
-    interface Data {
+interface Data {
     index: number;
     title: string;
     artist: string;

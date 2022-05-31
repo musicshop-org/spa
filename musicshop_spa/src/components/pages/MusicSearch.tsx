@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
 
-import {TextField, Button, Grid, Divider} from '@mui/material';
+import {Button, Divider, Grid, TextField} from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import {DefaultApi} from "../../openAPI";
+import {AlbumDTO, DefaultApi} from "../../openAPI";
 import ProductCard from "../ProductCard";
-import {AlbumDTO} from "../../openAPI";
 import Loader from "../Loader";
 import IMusicSearchProps from "../apis/IMusicSearchProps";
 

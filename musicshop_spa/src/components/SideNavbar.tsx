@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {styled, useTheme, Theme, CSSObject} from '@mui/material/styles';
+import {CSSObject, styled, Theme, useTheme} from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar, {AppBarProps as MuiAppBarProps} from '@mui/material/AppBar';
@@ -38,8 +38,6 @@ import PlaylistOverview from "./pages/PlaylistOverview";
 import IAppProps from "./apis/IAppProps";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
-import {useContext} from "react";
-import Root from "./Root";
 
 
 const drawerWidth = 240;
