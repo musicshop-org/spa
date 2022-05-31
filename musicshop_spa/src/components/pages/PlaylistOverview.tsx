@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
-import {SongDTO, DefaultApi} from "../../openAPI";
-import ProductDetailHeader from "../ProductDetailHeader";
+import {SongDTO} from "../../openAPI";
 import Loader from "../Loader";
-import SongList from "../SongList";
 import Playlist from '../Playlist';
 
 class PlaylistOverview extends Component<{}, { playlistReady: boolean, errorOccurred: boolean}> {
@@ -48,7 +46,7 @@ class PlaylistOverview extends Component<{}, { playlistReady: boolean, errorOccu
             <React.Fragment>
                 {
                     !playlistReady ? (
-                        <Loader/>
+                        <Loader />
                     ) :
                     (
                         (!errorOccurred ? (

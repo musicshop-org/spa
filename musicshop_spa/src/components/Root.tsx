@@ -1,6 +1,6 @@
 import React from "react";
 import CssBaseline from '@mui/material/CssBaseline';
-import {ThemeProvider, StyledEngineProvider, createTheme} from '@mui/material/styles';
+import {createTheme, StyledEngineProvider, ThemeProvider} from '@mui/material/styles';
 import Theme from "../inc/theme";
 import App from "./App";
 

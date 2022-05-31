@@ -1,9 +1,11 @@
 import {ButtonBase, Divider, Grid, IconButton, Typography} from "@mui/material";
 import * as React from "react";
+import {useState} from "react";
 import {styled} from "@mui/material/styles";
 import ClearIcon from '@mui/icons-material/Clear';
 import ICartLineItemProps from "./apis/ICartLineItemProps";
 import {CartLineItemDTO} from "../openAPI";
+import Oval from "react-loading-icons/dist/esm/components/oval";
 
 const Img = styled('img')({
     margin: 'auto',
@@ -13,6 +15,8 @@ const Img = styled('img')({
 });
 
 export default function CartLineItem(props: ICartLineItemProps) {
+
+    const [buttonReady, setButtonReady] = useState(true);
 
     let cartLineItemDTO: CartLineItemDTO = props.cartLineItemDTO;
     if (cartLineItemDTO == null) {
@@ -56,13 +60,20 @@ export default function CartLineItem(props: ICartLineItemProps) {
                     <Grid item>
                         <Grid item>
                             <Typography variant="subtitle1" component="div" align={"right"}>
-                                <IconButton aria-label="remove item" onClick={() => {
-                                    // change button state to loading
-                                    props.removeLineItem(cartLineItemDTO);
-                                    // change button state to finish
-                                }}>
-                                    <ClearIcon />
-                                </IconButton>
+                                {
+                                    buttonReady ? (
+                                        <IconButton aria-label="remove item" onClick={() => {
+                                            setButtonReady(false);
+                                            props.removeLineItem(cartLineItemDTO);
+                                        }}>
+                                            <ClearIcon/>
+                                        </IconButton>
+                                    ) : (
+                                        <IconButton aria-label="removing item">
+                                            <Oval height={24} width={24} speed={.75}/>
+                                        </IconButton>
+                                    )
+                                }
                             </Typography>
                         </Grid>
                         <Typography sx={{mt: 2}} variant="subtitle1" component="div" align={"right"}>

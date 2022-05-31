@@ -55,7 +55,7 @@ class ProductDetails extends Component<IProductDetailsProps, { albumReady: boole
             <div>
                 {
                     !albumReady ? (
-                        <Loader/>
+                        <Loader />
                     ) : (
                         <React.Fragment>
                             <div style={{margin: 20}}>

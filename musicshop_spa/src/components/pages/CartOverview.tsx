@@ -97,6 +97,10 @@ class CartOverview extends Component<ICartOverviewProps, { cartReady: boolean, c
                                 }
                             });
 
+                            if (cartLineItemDTO.price != undefined) {
+                                this.totalPrice = this.totalPrice - cartLineItemDTO.price;
+                            }
+
                             this.setState({cartLineItemDTOs: cartLineItemDTOs});
 
                             this.props.changeSnackbarMessageAndState("Product removed from cart", "success");
@@ -121,7 +125,7 @@ class CartOverview extends Component<ICartOverviewProps, { cartReady: boolean, c
             <div>
                 {
                     !cartReady ? (
-                        <Loader/>
+                        <Loader />
                     ) : (
                         <React.Fragment>
                             {
