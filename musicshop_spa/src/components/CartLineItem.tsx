@@ -5,6 +5,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import ICartLineItemProbs from "./apis/ICartLineItemProbs";
 import {CartLineItemDTO} from "../openAPI";
 import Oval from "react-loading-icons/dist/esm/components/oval";
+import {useState} from "react";
 
 const Img = styled('img')({
     margin: 'auto',
@@ -15,7 +16,7 @@ const Img = styled('img')({
 
 export default function CartLineItem(props: ICartLineItemProbs) {
 
-    let buttonReady = true;
+    const [buttonReady, setButtonReady] = useState(true);
 
     let cartLineItemDTO: CartLineItemDTO = props.cartLineItemDTO;
     if (cartLineItemDTO == null) {
@@ -59,18 +60,21 @@ export default function CartLineItem(props: ICartLineItemProbs) {
                     <Grid item>
                         <Grid item>
                             <Typography variant="subtitle1" component="div" align={"right"}>
-                                <IconButton aria-label="remove item" onClick={() => {
-                                    buttonReady = false;
-                                    // props.removeLineItem(cartLineItemDTO);
-                                }}>
-                                    {
-                                        buttonReady ? (
-                                            <ClearIcon />
-                                        ) : (
-                                            <Oval height={30} speed={.75}/>
-                                        )
-                                    }
-                                </IconButton>
+                                {
+                                    buttonReady ? (
+                                        <IconButton aria-label="remove item" onClick={() => {
+                                            setButtonReady(false);
+                                            // props.removeLineItem(cartLineItemDTO);
+                                            // setButtonReady(true);
+                                        }}>
+                                            <ClearIcon/>
+                                        </IconButton>
+                                    ) : (
+                                        <IconButton>
+                                            <Oval height={25} speed={.75}/>
+                                        </IconButton>
+                                    )
+                                }
                             </Typography>
                         </Grid>
                         <Typography sx={{mt: 2}} variant="subtitle1" component="div" align={"right"}>
