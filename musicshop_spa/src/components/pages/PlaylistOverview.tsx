@@ -48,7 +48,7 @@ class PlaylistOverview extends Component<{}, { playlistReady: boolean, errorOccu
             <React.Fragment>
                 {
                     !playlistReady ? (
-                        <Loader/>
+                        <Loader />
                     ) :
                     (
                         (!errorOccurred ? (

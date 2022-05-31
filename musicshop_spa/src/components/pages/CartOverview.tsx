@@ -125,7 +125,7 @@ class CartOverview extends Component<ICartOverviewProps, { cartReady: boolean, c
             <div>
                 {
                     !cartReady ? (
-                        <Loader/>
+                        <Loader />
                     ) : (
                         <React.Fragment>
                             {

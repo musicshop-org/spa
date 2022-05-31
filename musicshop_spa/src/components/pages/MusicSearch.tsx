@@ -96,9 +96,7 @@ class MusicSearch extends Component<IMusicSearchProps, { searchFinished: boolean
 
                 {
                     !searchFinished ? (
-                        <div style={{margin: 20}}>
-                            <Loader/>
-                        </div>
+                        <Loader />
                     ) : (
                         <Grid
                             sx={{mt: 1}}
