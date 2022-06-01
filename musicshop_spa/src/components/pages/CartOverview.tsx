@@ -98,23 +98,17 @@ class CartOverview extends Component<ICartOverviewProps, { cartReady: boolean, c
                                     }
                                 });
 
+                                // update total price
                                 if (cartLineItemDTO.price != undefined) {
                                     this.totalPrice = this.totalPrice - cartLineItemDTO.price;
                                 }
 
                                 this.setState({cartLineItemDTOs: cartLineItemDTOs});
 
-                                this.props.changeSnackbarMessageAndState("Product removed from cart", "success");
-                                this.props.openSnackbar();
-
                                 resolve(response);
                             }
                         },
                         (error) => {
-                            console.log(error);
-                            this.props.changeSnackbarMessageAndState(error.response.data, "error");
-                            this.props.openSnackbar();
-
                             reject(error);
                         }
                     );
@@ -145,6 +139,8 @@ class CartOverview extends Component<ICartOverviewProps, { cartReady: boolean, c
                                             <CartLineItem
                                                 cartLineItemDTO={cartLineItemDTO}
                                                 removeLineItem={(cartLineItemDTO) => this.removeLineItem(cartLineItemDTO)}
+                                                openSnackbar={() => this.props.openSnackbar()}
+                                                changeSnackbarMessageAndState={(message, state) => this.props.changeSnackbarMessageAndState(message, state)}
                                             />
                                         </Grid>
                                     )

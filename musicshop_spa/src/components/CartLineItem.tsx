@@ -16,7 +16,7 @@ const Img = styled('img')({
 
 export default function CartLineItem(props: ICartLineItemProps) {
 
-    const [buttonReady, setButtonReady] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
 
     let cartLineItemDTO: CartLineItemDTO = props.cartLineItemDTO;
     if (cartLineItemDTO == null) {
@@ -61,13 +61,20 @@ export default function CartLineItem(props: ICartLineItemProps) {
                         <Grid item>
                             <Typography variant="subtitle1" component="div" align={"right"}>
                                 {
-                                    buttonReady ? (
+                                    isLoading ? (
                                         <IconButton aria-label="remove item" onClick={() => {
-                                            setButtonReady(false);
+                                            setIsLoading(false);
                                             // @ts-ignore
                                             props.removeLineItem(cartLineItemDTO)
+                                                .then(success => {
+                                                    props.changeSnackbarMessageAndState("Product removed from cart", "success");
+                                                    props.openSnackbar();
+                                                }, error => {
+                                                    props.changeSnackbarMessageAndState(error.message.data, "error");
+                                                    props.openSnackbar();
+                                                })
                                                 .finally(() => {
-                                                    setButtonReady(true)
+                                                    setIsLoading(true)
                                                 });
                                         }}>
                                             <ClearIcon/>
