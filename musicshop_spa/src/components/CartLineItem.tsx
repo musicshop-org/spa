@@ -64,7 +64,11 @@ export default function CartLineItem(props: ICartLineItemProps) {
                                     buttonReady ? (
                                         <IconButton aria-label="remove item" onClick={() => {
                                             setButtonReady(false);
-                                            props.removeLineItem(cartLineItemDTO);
+                                            // @ts-ignore
+                                            props.removeLineItem(cartLineItemDTO)
+                                                .finally(() => {
+                                                    setButtonReady(true)
+                                                });
                                         }}>
                                             <ClearIcon/>
                                         </IconButton>
