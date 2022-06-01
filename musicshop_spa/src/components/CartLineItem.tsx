@@ -1,11 +1,10 @@
-import {ButtonBase, Divider, Grid, IconButton, Typography} from "@mui/material";
+import {ButtonBase, CircularProgress, Divider, Grid, IconButton, Typography} from "@mui/material";
 import * as React from "react";
 import {useState} from "react";
 import {styled} from "@mui/material/styles";
 import ClearIcon from '@mui/icons-material/Clear';
 import ICartLineItemProps from "./apis/ICartLineItemProps";
 import {CartLineItemDTO} from "../openAPI";
-import Oval from "react-loading-icons/dist/esm/components/oval";
 
 const Img = styled('img')({
     margin: 'auto',
@@ -80,9 +79,7 @@ export default function CartLineItem(props: ICartLineItemProps) {
                                             <ClearIcon/>
                                         </IconButton>
                                     ) : (
-                                        <IconButton aria-label="removing item">
-                                            <Oval height={24} width={24} speed={.75}/>
-                                        </IconButton>
+                                        <CircularProgress size={31}/>
                                     )
                                 }
                             </Typography>
