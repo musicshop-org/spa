@@ -84,35 +84,36 @@ class CartOverview extends Component<ICartOverviewProps, { cartReady: boolean, c
         );
     }
 
-    removeLineItem(cartLineItemDTO: CartLineItemDTO): void {
+    removeLineItem(cartLineItemDTO: CartLineItemDTO) {
         if (this.cartUUID != null) {
-            this.defaultApi.removeLineItemFromCart(this.cartUUID, cartLineItemDTO)
-                .then(
-                    success => {
-                        if (success.status === 200) {
-                            let cartLineItemDTOs = new Set(this.state.cartLineItemDTOs);
-                            cartLineItemDTOs.forEach(cartLineItem => {
-                                if (cartLineItem.productId === cartLineItemDTO.productId) {
-                                    cartLineItemDTOs.delete(cartLineItem);
+            return new Promise((resolve, reject) => {
+                if (this.cartUUID != null) {
+                    this.defaultApi.removeLineItemFromCart(this.cartUUID, cartLineItemDTO).then(
+                        (response) => {
+                            if (response.status === 200) {
+                                let cartLineItemDTOs = new Set(this.state.cartLineItemDTOs);
+                                cartLineItemDTOs.forEach(cartLineItem => {
+                                    if (cartLineItem.productId === cartLineItemDTO.productId) {
+                                        cartLineItemDTOs.delete(cartLineItem);
+                                    }
+                                });
+
+                                // update total price
+                                if (cartLineItemDTO.price != undefined) {
+                                    this.totalPrice = this.totalPrice - cartLineItemDTO.price;
                                 }
-                            });
 
-                            if (cartLineItemDTO.price != undefined) {
-                                this.totalPrice = this.totalPrice - cartLineItemDTO.price;
+                                this.setState({cartLineItemDTOs: cartLineItemDTOs});
+
+                                resolve(response);
                             }
-
-                            this.setState({cartLineItemDTOs: cartLineItemDTOs});
-
-                            this.props.changeSnackbarMessageAndState("Product removed from cart", "success");
-                            this.props.openSnackbar();
+                        },
+                        (error) => {
+                            reject(error);
                         }
-                    },
-                    error => {
-                        console.log(error);
-                        this.props.changeSnackbarMessageAndState(error.response.data, "error");
-                        this.props.openSnackbar();
-                    }
-                );
+                    );
+                }
+            });
         }
     }
 
@@ -138,6 +139,8 @@ class CartOverview extends Component<ICartOverviewProps, { cartReady: boolean, c
                                             <CartLineItem
                                                 cartLineItemDTO={cartLineItemDTO}
                                                 removeLineItem={(cartLineItemDTO) => this.removeLineItem(cartLineItemDTO)}
+                                                openSnackbar={() => this.props.openSnackbar()}
+                                                changeSnackbarMessageAndState={(message, state) => this.props.changeSnackbarMessageAndState(message, state)}
                                             />
                                         </Grid>
                                     )

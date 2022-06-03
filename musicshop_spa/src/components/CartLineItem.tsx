@@ -1,11 +1,10 @@
-import {ButtonBase, Divider, Grid, IconButton, Typography} from "@mui/material";
+import {ButtonBase, CircularProgress, Divider, Grid, IconButton, Typography} from "@mui/material";
 import * as React from "react";
 import {useState} from "react";
 import {styled} from "@mui/material/styles";
 import ClearIcon from '@mui/icons-material/Clear';
 import ICartLineItemProps from "./apis/ICartLineItemProps";
 import {CartLineItemDTO} from "../openAPI";
-import Oval from "react-loading-icons/dist/esm/components/oval";
 
 const Img = styled('img')({
     margin: 'auto',
@@ -16,7 +15,7 @@ const Img = styled('img')({
 
 export default function CartLineItem(props: ICartLineItemProps) {
 
-    const [buttonReady, setButtonReady] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
 
     let cartLineItemDTO: CartLineItemDTO = props.cartLineItemDTO;
     if (cartLineItemDTO == null) {
@@ -61,17 +60,26 @@ export default function CartLineItem(props: ICartLineItemProps) {
                         <Grid item>
                             <Typography variant="subtitle1" component="div" align={"right"}>
                                 {
-                                    buttonReady ? (
+                                    isLoading ? (
                                         <IconButton aria-label="remove item" onClick={() => {
-                                            setButtonReady(false);
-                                            props.removeLineItem(cartLineItemDTO);
+                                            setIsLoading(false);
+                                            // @ts-ignore
+                                            props.removeLineItem(cartLineItemDTO)
+                                                .then(success => {
+                                                    props.changeSnackbarMessageAndState("Product removed from cart", "success");
+                                                    props.openSnackbar();
+                                                }, error => {
+                                                    props.changeSnackbarMessageAndState(error.message.data, "error");
+                                                    props.openSnackbar();
+                                                })
+                                                .finally(() => {
+                                                    setIsLoading(true)
+                                                });
                                         }}>
                                             <ClearIcon/>
                                         </IconButton>
                                     ) : (
-                                        <IconButton aria-label="removing item">
-                                            <Oval height={24} width={24} speed={.75}/>
-                                        </IconButton>
+                                        <CircularProgress size={31}/>
                                     )
                                 }
                             </Typography>
