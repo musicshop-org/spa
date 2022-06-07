@@ -41,7 +41,7 @@ function Player(props: any) {
             .then(blob => {
                 let currentSong = URL.createObjectURL(blob);
                 // @ts-ignore
-                audioElement.current.srcObject = currentSong;
+                audioElement.current.src = currentSong;
 
                 if (isPlaying)
                 { // @ts-ignore
