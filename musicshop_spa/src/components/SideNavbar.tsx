@@ -115,7 +115,7 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
 function logout() {
     localStorage.removeItem('jwt');
     localStorage.removeItem('user');
-    window.location.assign('/');
+    window.location.assign((process.env.REACT_APP_ROUTER_BASE || ""));
 }
 
 export default function MiniDrawer(props: IAppProps) {

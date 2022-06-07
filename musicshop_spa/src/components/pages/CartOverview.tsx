@@ -40,7 +40,7 @@ class CartOverview extends Component<ICartOverviewProps, { cartReady: boolean, c
             this.defaultApi.buyProductsWeb(jwt, this.cartUUID, cartLineItemsArray).then((success) => {
                 if (success.status === 200) {
                     console.log(success.data)
-                    window.location.assign("/playlist");
+                    window.location.assign((process.env.REACT_APP_ROUTER_BASE || "") + "/playlist");
                 }
             }, (error) => {
                 console.log(error.response.data);
@@ -52,7 +52,6 @@ class CartOverview extends Component<ICartOverviewProps, { cartReady: boolean, c
 
     private getShoppingCart(cartUUID: string): void {
 
-        //TODO: ask marco why promise is resolved twice
         this.defaultApi.displayShoppingCart(cartUUID).then(
             success => {
                 this.totalPrice = 0;
@@ -63,7 +62,7 @@ class CartOverview extends Component<ICartOverviewProps, { cartReady: boolean, c
 
                 let cartLineItemDTOs = new Set<CartLineItemDTO>();
 
-                if (success.data.cartLineItems != undefined) {
+                if (success.data.cartLineItems != null) {
                     let price: number | undefined;
 
                     for (let i = 0; i < success.data.cartLineItems.length; i++) {
@@ -76,7 +75,7 @@ class CartOverview extends Component<ICartOverviewProps, { cartReady: boolean, c
                     }
                 }
 
-                this.setState({cartReady: true , cartLineItemDTOs: cartLineItemDTOs});
+                this.setState({cartReady: true, cartLineItemDTOs: cartLineItemDTOs});
             },
             error => {
                 console.log(error);
@@ -99,7 +98,7 @@ class CartOverview extends Component<ICartOverviewProps, { cartReady: boolean, c
                                 });
 
                                 // update total price
-                                if (cartLineItemDTO.price != undefined) {
+                                if (cartLineItemDTO.price != null) {
                                     this.totalPrice = this.totalPrice - cartLineItemDTO.price;
                                 }
 
@@ -126,7 +125,7 @@ class CartOverview extends Component<ICartOverviewProps, { cartReady: boolean, c
             <div>
                 {
                     !cartReady ? (
-                        <Loader />
+                        <Loader/>
                     ) : (
                         <React.Fragment>
                             {
@@ -172,11 +171,12 @@ class CartOverview extends Component<ICartOverviewProps, { cartReady: boolean, c
                                 ) : (
                                     <div>
                                         <Typography variant={"h6"}>
-                                        Your Shopping Cart is Empty...
+                                            Your Shopping Cart is Empty...
                                         </Typography>
                                         <Typography variant={"body2"}>
-                                            Add some products to your cart by visiting the <a href={"/"}>Music Search page</a>.
-                                            </Typography>
+                                            Add some products to your cart by visiting the <a
+                                            href={(process.env.REACT_APP_ROUTER_BASE || '') + "/"}>Music Search page</a>.
+                                        </Typography>
                                     </div>)
                             }
                         </React.Fragment>

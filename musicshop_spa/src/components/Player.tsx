@@ -8,6 +8,8 @@ import PlayerAdditionalControls from './PlayerAdditionalControls';
 function Player(props: any) {
 
     const downloadMicroservice_url: string = 'http://localhost:9000/'
+    // const downloadMicroservice_url: string = 'http://3.93.167.93/'
+
     const audioElement = useRef(null);
     const length = props.songDTOs.length;
 
@@ -39,7 +41,7 @@ function Player(props: any) {
             .then(blob => {
                 let currentSong = URL.createObjectURL(blob);
                 // @ts-ignore
-                audioElement.current.src = currentSong;
+                audioElement.current.srcObject = currentSong;
 
                 if (isPlaying)
                 { // @ts-ignore
