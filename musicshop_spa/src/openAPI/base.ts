@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * OpenAPIDefinition
+ * Swagger Music Shop
  * Music shop REST API
  *
  * The version of the OpenAPI document: 1.0.0
@@ -19,6 +19,7 @@ import { Configuration } from "./configuration";
 import globalAxios, { AxiosPromise, AxiosInstance, AxiosRequestConfig } from 'axios';
 
 export const BASE_PATH = "http://localhost:8080/musicshop-1.0".replace(/\/+$/, "");
+// export const BASE_PATH = "http://10.0.40.162:8080/musicshop-1.0".replace(/\/+$/, "");
 
 /**
  *

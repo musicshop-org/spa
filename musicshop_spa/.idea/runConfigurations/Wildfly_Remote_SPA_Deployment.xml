@@ -1,0 +1,49 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Wildfly Remote SPA Deployment" type="JBossConfiguration" factoryName="Remote" APPLICATION_SERVER_NAME="JBoss/WildFly 26.1.0.Final" ALTERNATIVE_JRE_ENABLED="false">
+    <option name="LOCAL" value="false" />
+    <option name="OPEN_IN_BROWSER_URL" value="http://localhost:8080/musicshop-spa" />
+    <option name="UPDATING_POLICY" value="hot-swap-classes" />
+    <deployment>
+      <artifact name="musicshop-spa:war">
+        <settings DEPLOYMENT_METHOD="Staging" />
+      </artifact>
+    </deployment>
+    <server-settings>
+      <data>
+        <option name="credentialAlias" value="60f56def-1235-4cf0-b44b-2a9574eab6a1" />
+        <option name="managementPort" value="9990" />
+        <option name="serverGroup" value="" />
+        <option name="stagingRemotePath" value="" />
+        <option name="transportStagingTarget">
+          <TransportTarget>
+            <option name="id" value="852fcb27-2ccf-47ae-9d73-53eeb423c98d" />
+            <id>852fcb27-2ccf-47ae-9d73-53eeb423c98d</id>
+          </TransportTarget>
+        </option>
+        <option name="username" value="admin" />
+        <username>admin</username>
+        <credential-alias>60f56def-1235-4cf0-b44b-2a9574eab6a1</credential-alias>
+        <management-port>9990</management-port>
+        <server-group />
+        <transport-target>
+          <TransportTarget>
+            <option name="id" value="852fcb27-2ccf-47ae-9d73-53eeb423c98d" />
+            <id>852fcb27-2ccf-47ae-9d73-53eeb423c98d</id>
+          </TransportTarget>
+        </transport-target>
+        <staging-path />
+      </data>
+    </server-settings>
+    <predefined_log_file enabled="true" id="JBoss" />
+    <RunnerSettings RunnerId="Debug">
+      <option name="DEBUG_PORT" value="53396" />
+      <option name="LOCAL" value="false" />
+    </RunnerSettings>
+    <method v="2">
+      <option name="Make" enabled="true" />
+      <option name="BuildArtifacts" enabled="true">
+        <artifact name="musicshop-spa:war" />
+      </option>
+    </method>
+  </configuration>
+</component>
