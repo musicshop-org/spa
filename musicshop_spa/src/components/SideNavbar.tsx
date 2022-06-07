@@ -17,7 +17,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import SearchIcon from '@mui/icons-material/Search';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import {Link, Route, Routes} from "react-router-dom";
+import {BrowserRouter, Link, Route, Routes} from "react-router-dom";
 import LoginIcon from '@mui/icons-material/Login';
 import Login from './Login';
 import DialogTitle from "@mui/material/DialogTitle";
@@ -402,8 +402,8 @@ export default function MiniDrawer(props: IAppProps) {
                         {snackbarMessage}
                     </Alert>
                 </Snackbar> : null}
-                <Routes>
 
+                <Routes>
                     <Route path={"/"} element={
                         <MusicSearch
                             openSnackbar={openSnackbar}
@@ -425,10 +425,8 @@ export default function MiniDrawer(props: IAppProps) {
                         />}/>
 
                     <Route path={"/playlist"} element={<PlaylistOverview/>}/>
-
                 </Routes>
             </Box>
-
         </Box>
     );
 }

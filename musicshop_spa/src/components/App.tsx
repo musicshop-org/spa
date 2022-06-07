@@ -8,7 +8,7 @@ class App extends Component<IAppProps>{
 
     render() {
         return (
-            <BrowserRouter>
+            <BrowserRouter basename={process.env.REACT_APP_ROUTER_BASE || ''}>
                 <SideNavbar toggleColorMode={this.props.toggleColorMode}/>
             </BrowserRouter>
         );
