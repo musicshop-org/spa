@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * OpenAPIDefinition
+ * Swagger Music Shop
  * Music shop REST API
  *
  * The version of the OpenAPI document: 1.0.0
