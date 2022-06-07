@@ -5,7 +5,7 @@
     https://gist.github.com/phillipgreenii/7c954e3c3911e5c32bd0
     -->
     <modelVersion>4.0.0</modelVersion>
-    <groupId>it.megadix</groupId>
+    <groupId>fhv.musicshop.spa</groupId>
     <artifactId>musicshop-spa</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>war</packaging>
