@@ -7,8 +7,9 @@ import PlayerAdditionalControls from './PlayerAdditionalControls';
 
 function Player(props: any) {
 
-    // const downloadMicroservice_url: string = 'http://localhost:9000/'
-    const downloadMicroservice_url: string = 'http://3.93.167.93/'
+    // const downloadMicroservice_url: string = 'http://localhost:9000/';
+    const downloadMicroservice_url: string = 'http://10.0.40.162:9000/';
+    // const downloadMicroservice_url: string = 'http://3.93.167.93/';
 
     const audioElement = useRef(null);
     const length = props.songDTOs.length;

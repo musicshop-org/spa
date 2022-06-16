@@ -6,8 +6,9 @@ import Player from '../Player';
 
 class PlaylistOverview extends Component<{}, { playlistReady: boolean, errorOccurred: boolean}> {
 
-    // private playlistMicroservice_url: string = 'http://localhost:9001/'
-    private playlistMicroservice_url: string = 'http://34.234.78.108/'
+    // private playlistMicroservice_url: string = 'http://localhost:9001/';
+    private playlistMicroservice_url: string = 'http://10.0.40.162:9001/';
+    // private playlistMicroservice_url: string = 'http://34.234.78.108/';
 
     private songs: SongDTO | undefined;
 
