@@ -1,12 +1,18 @@
 import React, {Component} from "react";
-import {CartLineItemDTO, DefaultApi} from "../../openAPI";
-import CartLineItem from "../CartLineItem";
-import {Button, Grid, Typography} from "@mui/material";
+
+import {LoadingButton} from "@mui/lab";
+import {
+    Grid,
+    Typography
+} from "@mui/material";
+
 import ShoppingCartHelper from "../../ShoppingCartHelper";
 import Loader from "../Loader";
 import ICartOverviewProps from "../apis/ICartOverviewProps";
+import {CartLineItemDTO, DefaultApi} from "../../openAPI";
+import CartLineItem from "../CartLineItem";
 
-class CartOverview extends Component<ICartOverviewProps, { cartReady: boolean, cartLineItemDTOs: Set<CartLineItemDTO> }> {
+class CartOverview extends Component<ICartOverviewProps, { isLoading: boolean, cartReady: boolean, cartLineItemDTOs: Set<CartLineItemDTO> }> {
 
     private defaultApi: DefaultApi;
     private totalPrice: number;
@@ -20,6 +26,7 @@ class CartOverview extends Component<ICartOverviewProps, { cartReady: boolean, c
         this.cartUUID = ShoppingCartHelper.getCartUUID();
 
         this.state = {
+            isLoading: false,
             cartReady: false,
             cartLineItemDTOs: new Set(),
         }
@@ -32,29 +39,31 @@ class CartOverview extends Component<ICartOverviewProps, { cartReady: boolean, c
     }
 
     buyProducts(cartLineItems: Set<CartLineItemDTO>) {
-        let jwt = window.localStorage.getItem("jwt");
-        let cartLineItemsArray = Array.from(cartLineItems);
+        return new Promise((resolve, reject) => {
+            let jwt = window.localStorage.getItem("jwt");
+            let cartLineItemsArray = Array.from(cartLineItems);
 
-        if (jwt != null && this.cartUUID != null) {
-            //show login dialog
-            this.defaultApi.buyProductsWeb(jwt, this.cartUUID, cartLineItemsArray).then(
-                (success) => {
-                    if (success.status === 200) {
-                        window.location.assign((process.env.REACT_APP_ROUTER_BASE || "") + "/playlist");
-                    }
-                },
-                (error) => {
+            if (jwt != null && this.cartUUID != null) {
+                //show login dialog
+                this.defaultApi.buyProductsWeb(jwt, this.cartUUID, cartLineItemsArray).then(
+                    (success) => {
+                        resolve(success);
 
-                    this.props.changeSnackbarMessageAndState(error.response.data, "error");
-                    this.props.openSnackbar();
+                        if (success.status === 200) {
+                            window.location.assign((process.env.REACT_APP_ROUTER_BASE || "") + "/playlist");
+                        }
+                    },
+                    (error) => {
+                        reject(error);
 
-                    if (error.response.status === 401) {
-                        this.props.openLogin();
-                    }
-                });
-        } else {
-            this.props.openLogin();
-        }
+                        if (error.response.status === 401) {
+                            this.props.openLogin();
+                        }
+                    });
+            } else {
+                this.props.openLogin();
+            }
+        });
     }
 
     private getShoppingCart(cartUUID: string): void {
@@ -126,8 +135,7 @@ class CartOverview extends Component<ICartOverviewProps, { cartReady: boolean, c
 
     render() {
 
-        const {cartReady} = this.state;
-        const {cartLineItemDTOs} = this.state;
+        const {isLoading, cartReady, cartLineItemDTOs} = this.state;
 
         return (
             <div>
@@ -158,33 +166,45 @@ class CartOverview extends Component<ICartOverviewProps, { cartReady: boolean, c
                                 (cartLineItemDTOs.size > 0) ? (
                                     <div>
                                         <Grid container alignItems={"flex-end"}
-                                              justifyContent={"flex-end"}>
+                                              justifyContent={"flex-end"}
+                                        >
                                             <Typography variant={"h6"}>
                                                 Total: {(Math.round(this.totalPrice * 100) / 100).toFixed(2)} €
                                             </Typography>
                                         </Grid>
 
                                         <Grid container alignItems={"flex-end"}
-                                              justifyContent={"flex-end"}>
-                                            <Button onClick={() => {
+                                              justifyContent={"flex-end"}
+                                        >
+                                            <LoadingButton sx={{mt: 2}} variant={"contained"} loading={isLoading} onClick={() => {
+                                                this.setState({isLoading: true});
+
                                                 this.buyProducts(cartLineItemDTOs)
-                                            }} sx={{mt: 2}} variant={"contained"}>
+                                                    .then(success => {
+                                                        this.props.changeSnackbarMessageAndState("Items bought successfully", "success");
+                                                        this.props.openSnackbar();
+                                                    }, error => {
+                                                        this.props.changeSnackbarMessageAndState(error.response.data, "error");
+                                                        this.props.openSnackbar();
+                                                    })
+                                                    .finally(() => {
+                                                        this.setState({isLoading: false});
+                                                    });
+                                            }}>
                                                 Checkout
-                                            </Button>
+                                            </LoadingButton>
                                         </Grid>
-
-
                                     </div>
-
                                 ) : (
                                     <div>
                                         <Typography variant={"h6"}>
                                             Your Shopping Cart is Empty...
                                         </Typography>
                                         <Typography variant={"body2"}>
-                                            Add some products to your cart by visiting the
-                                            <a href={(process.env.REACT_APP_ROUTER_BASE || '') + "/"}>Music Search
-                                                page</a>.
+                                            {"Add some products to your cart by visiting the "}
+                                            <a href={(process.env.REACT_APP_ROUTER_BASE || '') + "/"}>
+                                                Music Search page
+                                            </a>.
                                         </Typography>
                                     </div>)
                             }

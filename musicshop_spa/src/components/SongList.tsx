@@ -429,7 +429,7 @@ function SongList(props: ISongListProps) {
                                                        props.changeSnackbarMessageAndState("Songs added to cart", "success");
                                                        props.openSnackbar();
                                                    }, error => {
-                                                       props.changeSnackbarMessageAndState(error.message.data, "error");
+                                                       props.changeSnackbarMessageAndState(error.response.data, "error");
                                                        props.openSnackbar();
                                                    })
                                                    .finally(() => {

@@ -77,7 +77,7 @@ export default function CartLineItem(props: ICartLineItemProps) {
                                                     props.changeSnackbarMessageAndState("Product removed from cart", "success");
                                                     props.openSnackbar();
                                                 }, error => {
-                                                    props.changeSnackbarMessageAndState(error.message.data, "error");
+                                                    props.changeSnackbarMessageAndState(error.response.data, "error");
                                                     props.openSnackbar();
                                                 })
                                                 .finally(() => {

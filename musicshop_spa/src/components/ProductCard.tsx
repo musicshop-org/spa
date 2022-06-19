@@ -74,7 +74,7 @@ export default function ProductCard(props: IProductCardProps) {
                                             props.changeSnackbarMessageAndState("Album added to cart", "success");
                                             props.openSnackbar();
                                         }, error => {
-                                            props.changeSnackbarMessageAndState(error.message.data, "error");
+                                            props.changeSnackbarMessageAndState(error.response.data, "error");
                                             props.openSnackbar();
                                         })
                                         .finally(() => {

@@ -72,7 +72,7 @@ function ProductDetailHeader(props: IProductDetailHeaderProps) {
                             props.changeSnackbarMessageAndState("Album added to cart", "success");
                             props.openSnackbar();
                         }, error => {
-                            props.changeSnackbarMessageAndState(error.message.data, "error");
+                            props.changeSnackbarMessageAndState(error.response.data, "error");
                             props.openSnackbar();
                         })
                         .finally(() => {
