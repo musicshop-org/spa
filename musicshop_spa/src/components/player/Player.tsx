@@ -126,19 +126,20 @@ function Player(props: any) {
                 previousSong={previousSong}
             />
 
-            {length > 2 ?
-                <PlayerAdditionalControls
-                    isShuffled={isShuffled}
-                    setIsShuffled={setIsShuffled}
-                /> :
-                null
+            {
+                length > 2 ? (
+                    <PlayerAdditionalControls
+                        isShuffled={isShuffled}
+                        setIsShuffled={setIsShuffled}
+                    />
+                ) : ("")
             }
-
-            {length > 1 && !isShuffled ?
-                <div className="player-next">
-                    <strong>Next up:</strong>{props.songDTOs[nextSongIndex].title}
-                </div> :
-                null
+            {
+                length > 1 && !isShuffled ? (
+                    <div className="player-next">
+                        <strong>Next up:</strong>{props.songDTOs[nextSongIndex].title}
+                    </div>
+                ) : ("")
             }
         </React.Fragment>
     )

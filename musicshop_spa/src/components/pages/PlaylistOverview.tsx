@@ -1,10 +1,13 @@
 import React, {Component} from 'react';
+
+import {Grid} from "@mui/material";
+
 import {SongDTO} from "../../openAPI";
 import Loader from "../Loader";
 import Playlist from '../Playlist';
 import Player from '../player/Player';
 
-class PlaylistOverview extends Component<{}, { playlistReady: boolean, errorOccurred: boolean}> {
+class PlaylistOverview extends Component<{}, { playlistReady: boolean, errorOccurred: boolean }> {
 
     private playlistMicroservice_url: string = 'http://localhost:9001/'
     // private playlistMicroservice_url: string = 'http://34.234.78.108/'
@@ -27,14 +30,14 @@ class PlaylistOverview extends Component<{}, { playlistReady: boolean, errorOccu
         fetch(`${this.playlistMicroservice_url}${action}`)
             .then(response => response.json())
             .then(response => {
-                this.songs = response.songs;
-                this.setState({playlistReady: true});
-            },
-            error => {
-                this.setState({playlistReady: true, errorOccurred: true});
-                console.log(error.message);
-            }
-        );
+                    this.songs = response.songs;
+                    this.setState({playlistReady: true});
+                },
+                error => {
+                    this.setState({playlistReady: true, errorOccurred: true});
+                    console.log(error.message);
+                }
+            );
     }
 
     componentDidMount() {
@@ -48,16 +51,41 @@ class PlaylistOverview extends Component<{}, { playlistReady: boolean, errorOccu
             <div>
                 {!playlistReady ? (
                     <Loader/>
-                ) :
-                (
-                    (!errorOccurred ? (
+                ) : (
+                    !errorOccurred ? (
                         <div>
-                            <Playlist songDTOs={this.songs} />
-                            <Player songDTOs={this.songs} />
-                        </div>) :
-                        (<div>{"Playlist is empty"}</div>)
+                            <Playlist songDTOs={this.songs}/>
+                            <Player songDTOs={this.songs}/>
+                        </div>
+                    ) : (
+                        <div>
+                            {"Playlist is empty"}
+                        </div>
                     )
                 )}
+
+                {/*<Grid*/}
+                {/*    container*/}
+                {/*    direction="column"*/}
+                {/*>*/}
+                {/*    <Grid*/}
+                {/*        item*/}
+                {/*        style={{height: "70vh", overflow: "hidden", overflowY: "auto"}}*/}
+                {/*    >*/}
+                {/*        <Playlist songDTOs={this.songs}/>*/}
+                {/*    </Grid>*/}
+                {/*    <Grid*/}
+                {/*        item*/}
+                {/*        style={{height: "30vh", marginTop: "3vh"}}*/}
+                {/*    >*/}
+                {/*        <Player songDTOs={this.songs}/>*/}
+                {/*    </Grid>*/}
+                {/*</Grid>*/}
+                {/*) : (*/}
+                {/*<div>*/}
+                {/*    {"Playlist is empty"}*/}
+                {/*</div>*/}
+                {/*)*/}
             </div>
         );
     }
