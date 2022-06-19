@@ -4,7 +4,6 @@ import {createTheme, StyledEngineProvider, ThemeProvider} from '@mui/material/st
 import Theme from "../inc/theme";
 import App from "./App";
 
-
 function Root() {
 
     const [mode, setMode] = React.useState(window.localStorage.getItem('mode') || 'dark');
@@ -12,8 +11,8 @@ function Root() {
     const theme = React.useMemo(
         () =>
             createTheme({
-                            palette: mode==="dark" ? {mode: "dark"} : Theme.palette,
-                        }),
+                palette: mode === "dark" ? {mode: "dark"} : Theme.palette,
+            }),
         [mode]
     );
 

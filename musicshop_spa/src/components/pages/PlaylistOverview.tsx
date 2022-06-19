@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {SongDTO} from "../../openAPI";
 import Loader from "../Loader";
 import Playlist from '../Playlist';
-import Player from '../Player';
+import Player from '../player/Player';
 
 class PlaylistOverview extends Component<{}, { playlistReady: boolean, errorOccurred: boolean}> {
 

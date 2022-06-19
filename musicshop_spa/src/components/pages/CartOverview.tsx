@@ -37,16 +37,23 @@ class CartOverview extends Component<ICartOverviewProps, { cartReady: boolean, c
 
         if (jwt != null && this.cartUUID != null) {
             //show login dialog
-            this.defaultApi.buyProductsWeb(jwt, this.cartUUID, cartLineItemsArray).then((success) => {
-                if (success.status === 200) {
-                    console.log(success.data)
-                    window.location.assign((process.env.REACT_APP_ROUTER_BASE || "") + "/playlist");
-                }
-            }, (error) => {
-                console.log(error.response.data);
-            });
+            this.defaultApi.buyProductsWeb(jwt, this.cartUUID, cartLineItemsArray).then(
+                (success) => {
+                    if (success.status === 200) {
+                        window.location.assign((process.env.REACT_APP_ROUTER_BASE || "") + "/playlist");
+                    }
+                },
+                (error) => {
+
+                    this.props.changeSnackbarMessageAndState(error.response.data, "error");
+                    this.props.openSnackbar();
+
+                    if (error.response.status === 401) {
+                        this.props.openLogin();
+                    }
+                });
         } else {
-            this.props.openLogin()
+            this.props.openLogin();
         }
     }
 
@@ -69,7 +76,7 @@ class CartOverview extends Component<ICartOverviewProps, { cartReady: boolean, c
                         cartLineItemDTOs.add(success.data.cartLineItems[i]);
                         price = success.data.cartLineItems[i].price;
 
-                        if (price != undefined) {
+                        if (price != null) {
                             this.totalPrice = this.totalPrice + (price);
                         }
                     }
@@ -78,7 +85,8 @@ class CartOverview extends Component<ICartOverviewProps, { cartReady: boolean, c
                 this.setState({cartReady: true, cartLineItemDTOs: cartLineItemDTOs});
             },
             error => {
-                console.log(error);
+                this.props.changeSnackbarMessageAndState(error.response.data, "error");
+                this.props.openSnackbar();
             }
         );
     }
@@ -174,8 +182,9 @@ class CartOverview extends Component<ICartOverviewProps, { cartReady: boolean, c
                                             Your Shopping Cart is Empty...
                                         </Typography>
                                         <Typography variant={"body2"}>
-                                            Add some products to your cart by visiting the <a
-                                            href={(process.env.REACT_APP_ROUTER_BASE || '') + "/"}>Music Search page</a>.
+                                            Add some products to your cart by visiting the
+                                            <a href={(process.env.REACT_APP_ROUTER_BASE || '') + "/"}>Music Search
+                                                page</a>.
                                         </Typography>
                                     </div>)
                             }

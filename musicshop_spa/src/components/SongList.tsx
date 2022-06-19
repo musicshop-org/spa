@@ -1,29 +1,33 @@
 import * as React from 'react';
+
+import {LoadingButton} from "@mui/lab";
 import {alpha} from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
-import TableSortLabel from '@mui/material/TableSortLabel';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
+import {visuallyHidden} from '@mui/utils';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
-import {visuallyHidden} from '@mui/utils';
-import {SongDTO} from "../openAPI";
-import {Grid} from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import {
+    Box,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TablePagination,
+    TableRow,
+    TableSortLabel,
+    Toolbar,
+    Typography,
+    Paper,
+    Checkbox,
+    IconButton,
+    Tooltip,
+    Grid
+} from '@mui/material';
+
+import {SongDTO} from "../openAPI";
 import ShoppingCartHelper from "../ShoppingCartHelper";
 import ISongListProps from "./apis/ISongListProps";
-import {LoadingButton} from "@mui/lab";
 
 interface Data {
     index: number;
@@ -247,7 +251,6 @@ function SongList(props: ISongListProps) {
     const [orderBy, setOrderBy] = React.useState<keyof Data>('index');
     const [selected, setSelected] = React.useState<readonly string[]>([]);
     const [page, setPage] = React.useState(0);
-    const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(100);
     const [isLoading, setIsLoading] = React.useState(false);
 
@@ -308,15 +311,10 @@ function SongList(props: ISongListProps) {
         setPage(0);
     };
 
-    // const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
-    //     setDense(event.target.checked);
-    // };
-
     const isSelected = (name: string) => selected.indexOf(name) !== -1;
 
     // Avoid a layout jump when reaching the last page with empty rows.
-    const emptyRows =
-        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
     return (
         <Box sx={{width: '100%'}}>
@@ -326,7 +324,7 @@ function SongList(props: ISongListProps) {
                     <Table
                         sx={{minWidth: 750}}
                         aria-labelledby="tableTitle"
-                        size={dense ? 'small' : 'medium'}
+                        size={'medium'}
                     >
                         <EnhancedTableHead
                             numSelected={selected.length}
@@ -388,7 +386,7 @@ function SongList(props: ISongListProps) {
                             {emptyRows > 0 && (
                                 <TableRow
                                     style={{
-                                        height: (dense ? 33 : 53) * emptyRows,
+                                        height: 53 * emptyRows,
                                     }}
                                 >
                                     <TableCell colSpan={6}/>
@@ -407,12 +405,12 @@ function SongList(props: ISongListProps) {
                     onRowsPerPageChange={handleChangeRowsPerPage}
                 />
             </Paper>
-            {/*<FormControlLabel*/}
-            {/*    control={<Switch checked={dense} onChange={handleChangeDense}/>}*/}
-            {/*    label="Dense padding"*/}
-            {/*/>*/}
-            <Grid container alignItems={"flex-end"}
-                  justifyContent={"flex-end"}>
+
+            <Grid
+                container
+                alignItems={"flex-end"}
+                justifyContent={"flex-end"}
+            >
 
                 {(selected.length > 0) ? (
                     <>
@@ -441,7 +439,10 @@ function SongList(props: ISongListProps) {
                                 Add {selected.length} Songs to cart
                             </LoadingButton>
                         </Grid>
-                    </>) : (<div></div>)}
+                    </>
+                ) : (
+                    <div></div>
+                )}
 
             </Grid>
         </Box>
