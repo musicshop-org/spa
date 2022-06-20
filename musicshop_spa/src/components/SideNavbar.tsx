@@ -351,7 +351,7 @@ export default function MiniDrawer(props: ISideNavbarProps) {
             </Drawer>
 
             {/*SideNavbar Content*/}
-            <Box component="main" sx={{flexGrow: 1, p: 3}}>
+            <Box component="main" sx={{flexGrow: 1, pt: 3, pr: 3, pb: 0, pl: 3}}>
                 <DrawerHeader/>
 
                 {/*Login*/}

@@ -53,39 +53,29 @@ class PlaylistOverview extends Component<{}, { playlistReady: boolean, errorOccu
                     <Loader/>
                 ) : (
                     !errorOccurred ? (
-                        <div>
-                            <Playlist songDTOs={this.songs}/>
-                            <Player songDTOs={this.songs}/>
-                        </div>
+                        <Grid
+                            container
+                            direction="column"
+                            style={{width: "100%"}}
+                        >
+                            <Grid
+                                item
+                            >
+                                <Playlist songDTOs={this.songs}/>
+                            </Grid>
+                            <Grid
+                                item
+                                className={"player-container"}
+                            >
+                                <Player songDTOs={this.songs}/>
+                            </Grid>
+                        </Grid>
                     ) : (
                         <div>
                             {"Playlist is empty"}
                         </div>
                     )
                 )}
-
-                {/*<Grid*/}
-                {/*    container*/}
-                {/*    direction="column"*/}
-                {/*>*/}
-                {/*    <Grid*/}
-                {/*        item*/}
-                {/*        style={{height: "70vh", overflow: "hidden", overflowY: "auto"}}*/}
-                {/*    >*/}
-                {/*        <Playlist songDTOs={this.songs}/>*/}
-                {/*    </Grid>*/}
-                {/*    <Grid*/}
-                {/*        item*/}
-                {/*        style={{height: "30vh", marginTop: "3vh"}}*/}
-                {/*    >*/}
-                {/*        <Player songDTOs={this.songs}/>*/}
-                {/*    </Grid>*/}
-                {/*</Grid>*/}
-                {/*) : (*/}
-                {/*<div>*/}
-                {/*    {"Playlist is empty"}*/}
-                {/*</div>*/}
-                {/*)*/}
             </div>
         );
     }
