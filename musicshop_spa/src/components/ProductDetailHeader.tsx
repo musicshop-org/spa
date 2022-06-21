@@ -65,20 +65,25 @@ function ProductDetailHeader(props: IProductDetailHeaderProps) {
                     </span>
                 </Typography>
 
-                <LoadingButton variant={"text"} loading={isLoading} endIcon={<ShoppingCartIcon/>} onClick={() => {
-                    setIsLoading(true);
-                    ShoppingCartHelper.addAlbumsToCart(props.albumDTO)
-                        .then(success => {
-                            props.changeSnackbarMessageAndState("Album added to cart", "success");
-                            props.openSnackbar();
-                        }, error => {
-                            props.changeSnackbarMessageAndState(error.response.data, "error");
-                            props.openSnackbar();
-                        })
-                        .finally(() => {
-                            setIsLoading(false);
-                        })
-                }}>
+                <LoadingButton
+                    variant={"text"}
+                    loading={isLoading}
+                    endIcon={<ShoppingCartIcon/>}
+                    onClick={() => {
+                        setIsLoading(true);
+                        ShoppingCartHelper.addAlbumsToCart(props.albumDTO)
+                            .then(success => {
+                                props.changeSnackbarMessageAndState("Album added to cart", "success");
+                                props.openSnackbar();
+                            }, error => {
+                                props.changeSnackbarMessageAndState(error.response.data, "error");
+                                props.openSnackbar();
+                            })
+                            .finally(() => {
+                                setIsLoading(false);
+                            })
+                    }}
+                >
                     Add Album to cart
                 </LoadingButton>
 

@@ -87,7 +87,7 @@ class MusicSearch extends Component<IMusicSearchProps, { searchFinished: boolean
 
                 {
                     !searchFinished ? (
-                        <Loader />
+                        <Loader/>
                     ) : (
                         <Grid
                             sx={{mt: 1}}

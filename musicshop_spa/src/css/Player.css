@@ -62,7 +62,15 @@
 .player-container {
     position: sticky;
     bottom: 0;
-    background: #121212;
     padding: 22px;
+}
+
+.player-container.dark {
+    background: #121212;
     box-shadow: 0 0 3px 3px #121212;
+}
+
+.player-container.light {
+    background: #f7f7f7;
+    box-shadow: 0 0 3px 3px #f7f7f7;
 }
