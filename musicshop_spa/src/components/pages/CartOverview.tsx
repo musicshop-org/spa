@@ -61,6 +61,7 @@ class CartOverview extends Component<ICartOverviewProps, { isLoading: boolean, c
                         }
                     });
             } else {
+                reject();
                 this.props.openLogin();
             }
         });
@@ -188,8 +189,10 @@ class CartOverview extends Component<ICartOverviewProps, { isLoading: boolean, c
                                                             this.props.changeSnackbarMessageAndState("Items bought successfully", "success");
                                                             this.props.openSnackbar();
                                                         }, error => {
-                                                            this.props.changeSnackbarMessageAndState(error.response.data, "error");
-                                                            this.props.openSnackbar();
+                                                            if (error != null) {
+                                                                this.props.changeSnackbarMessageAndState(error.response.data, "error");
+                                                                this.props.openSnackbar();
+                                                            }
                                                         })
                                                         .finally(() => {
                                                             this.setState({isLoading: false});
