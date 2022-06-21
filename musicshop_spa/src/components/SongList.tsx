@@ -421,21 +421,25 @@ function SongList(props: ISongListProps) {
 
                             </Typography>
 
-                            <LoadingButton variant={"text"} loading={isLoading} endIcon={<ShoppingCartIcon/>}
-                                           onClick={() => {
-                                               setIsLoading(true);
-                                               ShoppingCartHelper.addSongsToCart(getSelectedSongDTOS(props, selected))
-                                                   .then(success => {
-                                                       props.changeSnackbarMessageAndState("Songs added to cart", "success");
-                                                       props.openSnackbar();
-                                                   }, error => {
-                                                       props.changeSnackbarMessageAndState(error.response.data, "error");
-                                                       props.openSnackbar();
-                                                   })
-                                                   .finally(() => {
-                                                       setIsLoading(false);
-                                                   });
-                                           }}>
+                            <LoadingButton
+                                variant={"text"}
+                                loading={isLoading}
+                                endIcon={<ShoppingCartIcon/>}
+                                onClick={() => {
+                                    setIsLoading(true);
+                                    ShoppingCartHelper.addSongsToCart(getSelectedSongDTOS(props, selected))
+                                        .then(success => {
+                                            props.changeSnackbarMessageAndState("Songs added to cart", "success");
+                                            props.openSnackbar();
+                                        }, error => {
+                                            props.changeSnackbarMessageAndState(error.response.data, "error");
+                                            props.openSnackbar();
+                                        })
+                                        .finally(() => {
+                                            setIsLoading(false);
+                                        });
+                                }}
+                            >
                                 Add {selected.length} Songs to cart
                             </LoadingButton>
                         </Grid>

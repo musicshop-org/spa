@@ -176,21 +176,26 @@ class CartOverview extends Component<ICartOverviewProps, { isLoading: boolean, c
                                         <Grid container alignItems={"flex-end"}
                                               justifyContent={"flex-end"}
                                         >
-                                            <LoadingButton sx={{mt: 2}} variant={"contained"} loading={isLoading} onClick={() => {
-                                                this.setState({isLoading: true});
+                                            <LoadingButton
+                                                sx={{mt: 2}}
+                                                variant={"contained"}
+                                                loading={isLoading}
+                                                onClick={() => {
+                                                    this.setState({isLoading: true});
 
-                                                this.buyProducts(cartLineItemDTOs)
-                                                    .then(success => {
-                                                        this.props.changeSnackbarMessageAndState("Items bought successfully", "success");
-                                                        this.props.openSnackbar();
-                                                    }, error => {
-                                                        this.props.changeSnackbarMessageAndState(error.response.data, "error");
-                                                        this.props.openSnackbar();
-                                                    })
-                                                    .finally(() => {
-                                                        this.setState({isLoading: false});
-                                                    });
-                                            }}>
+                                                    this.buyProducts(cartLineItemDTOs)
+                                                        .then(success => {
+                                                            this.props.changeSnackbarMessageAndState("Items bought successfully", "success");
+                                                            this.props.openSnackbar();
+                                                        }, error => {
+                                                            this.props.changeSnackbarMessageAndState(error.response.data, "error");
+                                                            this.props.openSnackbar();
+                                                        })
+                                                        .finally(() => {
+                                                            this.setState({isLoading: false});
+                                                        });
+                                                }}
+                                            >
                                                 Checkout
                                             </LoadingButton>
                                         </Grid>

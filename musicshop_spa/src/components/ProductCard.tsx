@@ -67,21 +67,24 @@ export default function ProductCard(props: IProductCardProps) {
                         </Typography>
                         <Box sx={{pt: 8}} display="flex" justifyContent="flex-end">
                             <Typography sx={{cursor: 'pointer'}} variant="body2">
-                                <LoadingButton variant={"text"} loading={isLoading} onClick={() => {
-                                    setIsLoading(true);
-                                    ShoppingCartHelper.addAlbumsToCart(props.albumDTO)
-                                        .then(success => {
-                                            props.changeSnackbarMessageAndState("Album added to cart", "success");
-                                            props.openSnackbar();
-                                        }, error => {
-                                            props.changeSnackbarMessageAndState(error.response.data, "error");
-                                            props.openSnackbar();
-                                        })
-                                        .finally(() => {
-                                            setIsLoading(false);
-                                        });
-
-                                }}>
+                                <LoadingButton
+                                    variant={"text"}
+                                    loading={isLoading}
+                                    onClick={() => {
+                                        setIsLoading(true);
+                                        ShoppingCartHelper.addAlbumsToCart(props.albumDTO)
+                                            .then(success => {
+                                                props.changeSnackbarMessageAndState("Album added to cart", "success");
+                                                props.openSnackbar();
+                                            }, error => {
+                                                props.changeSnackbarMessageAndState(error.response.data, "error");
+                                                props.openSnackbar();
+                                            })
+                                            .finally(() => {
+                                                setIsLoading(false);
+                                            });
+                                    }}
+                                >
                                     Add to cart
                                 </LoadingButton>
                                 <Link to={"/product-detail?albumId=" + props.albumDTO?.albumId?.albumId}>

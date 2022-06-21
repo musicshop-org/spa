@@ -14,7 +14,13 @@ function PlayerControls(props: any) {
             </IconButton>
 
             <IconButton className="play-btn" color="primary" onClick={() => props.setIsPlaying(!props.isPlaying)}>
-                {!props.isPlaying ? <PlayIcon className="play-icon"/>: <PauseIcon className="play-icon" />}
+                {
+                    !props.isPlaying ? (
+                        <PlayIcon className="play-icon"/>
+                    ) : (
+                        <PauseIcon className="play-icon"/>
+                    )
+                }
             </IconButton>
 
             <IconButton className="skip-btn" color="primary" onClick={() => props.nextSong()}>

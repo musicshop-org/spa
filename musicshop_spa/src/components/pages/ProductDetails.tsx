@@ -55,20 +55,20 @@ class ProductDetails extends Component<IProductDetailsProps, { albumReady: boole
             <div>
                 {
                     !albumReady ? (
-                        <Loader />
+                        <Loader/>
                     ) : (
                         <React.Fragment>
                             <div style={{margin: 20}}>
                                 <ProductDetailHeader
                                     albumDTO={this.albumDTO}
-                                    openSnackbar={()=> this.props.openSnackbar()}
+                                    openSnackbar={() => this.props.openSnackbar()}
                                     changeSnackbarMessageAndState={(message, state) => this.props.changeSnackbarMessageAndState(message, state)}
                                 />
                             </div>
                             <div style={{marginTop: 40}}>
                                 <SongList
                                     songDTOs={this.albumDTO?.songs}
-                                    openSnackbar={()=> this.props.openSnackbar()}
+                                    openSnackbar={() => this.props.openSnackbar()}
                                     changeSnackbarMessageAndState={(message, state) => this.props.changeSnackbarMessageAndState(message, state)}
                                 />
                             </div>
