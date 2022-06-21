@@ -47,6 +47,8 @@ class PlaylistOverview extends Component<{}, { playlistReady: boolean, errorOccu
     render() {
         const {playlistReady, errorOccurred} = this.state;
 
+        const mode = window.localStorage.getItem('mode') || 'dark';
+
         return (
             <div>
                 {!playlistReady ? (
@@ -65,7 +67,7 @@ class PlaylistOverview extends Component<{}, { playlistReady: boolean, errorOccu
                             </Grid>
                             <Grid
                                 item
-                                className={"player-container"}
+                                className={"player-container " + mode}
                             >
                                 <Player songDTOs={this.songs}/>
                             </Grid>
