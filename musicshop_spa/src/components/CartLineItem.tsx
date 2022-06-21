@@ -1,8 +1,16 @@
-import {ButtonBase, CircularProgress, Divider, Grid, IconButton, Typography} from "@mui/material";
 import * as React from "react";
 import {useState} from "react";
+
 import {styled} from "@mui/material/styles";
 import ClearIcon from '@mui/icons-material/Clear';
+import {ButtonBase,
+    CircularProgress,
+    Divider,
+    Grid,
+    IconButton,
+    Typography
+} from "@mui/material";
+
 import ICartLineItemProps from "./apis/ICartLineItemProps";
 import {CartLineItemDTO} from "../openAPI";
 
@@ -69,7 +77,7 @@ export default function CartLineItem(props: ICartLineItemProps) {
                                                     props.changeSnackbarMessageAndState("Product removed from cart", "success");
                                                     props.openSnackbar();
                                                 }, error => {
-                                                    props.changeSnackbarMessageAndState(error.message.data, "error");
+                                                    props.changeSnackbarMessageAndState(error.response.data, "error");
                                                     props.openSnackbar();
                                                 })
                                                 .finally(() => {

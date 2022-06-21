@@ -1,22 +1,27 @@
 import * as React from 'react';
+
 import {alpha} from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
-import TableSortLabel from '@mui/material/TableSortLabel';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
 import {visuallyHidden} from '@mui/utils';
-import {SongDTO} from "../openAPI";
-import {Button, Grid} from "@mui/material";
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import {
+    Button,
+    Grid,
+    Box,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TablePagination,
+    TableRow,
+    TableSortLabel,
+    Toolbar,
+    Typography,
+    Paper,
+    Checkbox
+} from '@mui/material';
+
+import {SongDTO} from "../openAPI";
 
 interface Data {
     index: number;
@@ -234,7 +239,6 @@ function Playlist(songDTOs: any) {
     const [orderBy, setOrderBy] = React.useState<keyof Data>('index');
     const [selected, setSelected] = React.useState<readonly string[]>([]);
     const [page, setPage] = React.useState(0);
-    const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(100);
 
     const downloadMicroservice_url: string = 'http://localhost:9000/'
@@ -247,16 +251,16 @@ function Playlist(songDTOs: any) {
             let artistConcat: string = concatArtist(songDTOs, i)
 
             rows.push(createData(
-                          i + 1,
-                                songDTOs.songDTOs[i].title,
-                                artistConcat,
-                                songDTOs.songDTOs[i].genre,
-                                songDTOs.songDTOs[i].releaseDate,
+                i + 1,
+                songDTOs.songDTOs[i].title,
+                artistConcat,
+                songDTOs.songDTOs[i].genre,
+                songDTOs.songDTOs[i].releaseDate,
             ))
         }
     }
 
-    function concatArtist (songDTOs: any, i: number) {
+    function concatArtist(songDTOs: any, i: number) {
         let artistConcat: string = ""
 
         for (let j = 0; j < songDTOs.songDTOs[i].artists.length; j++) {
@@ -317,10 +321,6 @@ function Playlist(songDTOs: any) {
         setPage(0);
     };
 
-    // const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
-    //     setDense(event.target.checked);
-    // };
-
     const isSelected = (name: string) => selected.indexOf(name) !== -1;
 
     // Avoid a layout jump when reaching the last page with empty rows.
@@ -335,7 +335,7 @@ function Playlist(songDTOs: any) {
                     <Table
                         sx={{minWidth: 750}}
                         aria-labelledby="tableTitle"
-                        size={dense ? 'small' : 'medium'}
+                        size={'medium'}
                     >
                         <EnhancedTableHead
                             numSelected={selected.length}
@@ -400,7 +400,7 @@ function Playlist(songDTOs: any) {
                             {emptyRows > 0 && (
                                 <TableRow
                                     style={{
-                                        height: (dense ? 33 : 53) * emptyRows,
+                                        height: 53 * emptyRows,
                                     }}
                                 >
                                     <TableCell colSpan={6}/>
@@ -420,8 +420,11 @@ function Playlist(songDTOs: any) {
                 />
             </Paper>
 
-            <Grid container alignItems={"flex-end"}
-                  justifyContent={"flex-end"}>
+            <Grid
+                container
+                alignItems={"flex-end"}
+                justifyContent={"flex-end"}
+            >
 
                 {(selected.length > 0) ? (
                     <>
@@ -435,7 +438,10 @@ function Playlist(songDTOs: any) {
                                 Download {selected.length} {(selected.length === 1) ? 'Song' : 'Songs'}
                             </Button>
                         </Grid>
-                    </>) : (<div></div>)}
+                    </>
+                ) : (
+                    <div></div>
+                )}
 
             </Grid>
         </Box>
@@ -446,8 +452,6 @@ function Playlist(songDTOs: any) {
         let i = 0
 
         while (i < songs.length) {
-
-            let songId: number = songs[i].id
             let songTitle: string = songs[i].title
             let ok: boolean = false
 
@@ -460,15 +464,15 @@ function Playlist(songDTOs: any) {
                 })
             })
                 .then(response => {
-                    response.status === 200 ? ok = true : ok = false
-                    return response
+                    ok = response.status === 200;
+                    return response;
                 })
                 .then(response => response.blob())
                 .then(blob => {
 
                     if (ok) {
-                        var url = window.URL.createObjectURL(blob);
-                        var a = document.createElement('a');
+                        let url = window.URL.createObjectURL(blob);
+                        let a = document.createElement('a');
                         a.href = url;
                         a.download = songTitle + ".mp3";
                         document.body.appendChild(a); // append the element to the dom
@@ -476,7 +480,8 @@ function Playlist(songDTOs: any) {
                         a.remove();  // remove the element again
                     }
                 });
-            i++
+
+            i++;
         }
     }
 }

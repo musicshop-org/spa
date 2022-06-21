@@ -1,10 +1,16 @@
 import * as React from 'react';
+
 import {styled} from '@mui/material/styles';
-import {ButtonBase, Grid, Typography} from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import {LoadingButton} from "@mui/lab";
+import {
+    ButtonBase,
+    Grid,
+    Typography
+} from '@mui/material';
+
 import ShoppingCartHelper from "../ShoppingCartHelper";
 import IProductDetailHeaderProps from "./apis/IProductDetailHeaderProps";
-import {LoadingButton} from "@mui/lab";
 
 const Img = styled('img')({
     margin: 'auto',
@@ -66,7 +72,7 @@ function ProductDetailHeader(props: IProductDetailHeaderProps) {
                             props.changeSnackbarMessageAndState("Album added to cart", "success");
                             props.openSnackbar();
                         }, error => {
-                            props.changeSnackbarMessageAndState(error.message.data, "error");
+                            props.changeSnackbarMessageAndState(error.response.data, "error");
                             props.openSnackbar();
                         })
                         .finally(() => {

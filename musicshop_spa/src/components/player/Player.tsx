@@ -1,6 +1,6 @@
 import * as React from 'react';
-import {useState, useRef, useEffect} from 'react';
-import { IconButton } from '@mui/material';
+import {useEffect, useRef, useState} from 'react';
+
 import PlayerDetails from './PlayerDetails';
 import PlayerControls from './PlayerControls';
 import PlayerAdditionalControls from './PlayerAdditionalControls';
@@ -17,14 +17,16 @@ function Player(props: any) {
     const [nextSongIndex, setNextSongIndex] = useState(length > 1 ? currentSongIndex + 1 : currentSongIndex);
     const [isPlaying, setIsPlaying] = useState(false);
     const [isShuffled, setIsShuffled] = useState(false);
-    
+
     useEffect(() => {
         handlePlayingAudio();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isPlaying]);
 
     useEffect(() => {
         setSongInPlayer(props.songDTOs[currentSongIndex].longId);
-        setNextSongIndex(currentSongIndex < length -1 ? currentSongIndex + 1 : 0);
+        setNextSongIndex(currentSongIndex < length - 1 ? currentSongIndex + 1 : 0);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentSongIndex]);
 
     const setSongInPlayer = (songId: number) => {
@@ -34,21 +36,21 @@ function Player(props: any) {
         fetch(`${downloadMicroservice_url}${action}`, {
             method: 'GET',
             headers: new Headers({
-                "Authorization": token != null ? token: ""
+                "Authorization": token != null ? token : ""
             })
         })
             .then(response => response.blob())
             .then(blob => {
-                let currentSong = URL.createObjectURL(blob);
                 // @ts-ignore
-                audioElement.current.src = currentSong;
+                audioElement.current.src = URL.createObjectURL(blob);
 
-                if (isPlaying)
-                { // @ts-ignore
+                if (isPlaying) { // @ts-ignore
                     audioElement.current.play();
                 }
             })
-            .catch(error => {console.log(error.message)})
+            .catch(error => {
+                console.log(error.message)
+            })
     }
 
     const handlePlayingAudio = () => {
@@ -63,7 +65,7 @@ function Player(props: any) {
 
     const getPreviousIndex = () => {
         let temp = currentSongIndex;
-        temp --;
+        temp--;
 
         if (temp < 0)
             temp = length - 1;
@@ -73,7 +75,7 @@ function Player(props: any) {
 
     const getNextIndex = () => {
         let temp = currentSongIndex;
-        temp ++;
+        temp++;
 
         if (temp > length - 1)
             temp = 0;
@@ -112,6 +114,7 @@ function Player(props: any) {
     return (
         <React.Fragment>
             <audio ref={audioElement}></audio>
+
             <PlayerDetails
                 song={props.songDTOs[currentSongIndex]}
                 artist={props.songDTOs[currentSongIndex].artists[0].name}
@@ -123,19 +126,20 @@ function Player(props: any) {
                 previousSong={previousSong}
             />
 
-            {length > 2 ?
-                <PlayerAdditionalControls
-                    isShuffled={isShuffled}
-                    setIsShuffled={setIsShuffled}
-                /> :
-                null
+            {
+                length > 2 ? (
+                    <PlayerAdditionalControls
+                        isShuffled={isShuffled}
+                        setIsShuffled={setIsShuffled}
+                    />
+                ) : ("")
             }
-
-            {length > 1 && !isShuffled ?
-                <div className="player-next">
-                    <strong>Next up:</strong>{props.songDTOs[nextSongIndex].title}
-                </div> :
-                null
+            {
+                length > 1 && !isShuffled ? (
+                    <div className="player-next">
+                        <strong>Next up:</strong>{props.songDTOs[nextSongIndex].title}
+                    </div>
+                ) : ("")
             }
         </React.Fragment>
     )

@@ -4,7 +4,7 @@ import {LinearProgress} from "@mui/material";
 class Loader extends PureComponent {
     render() {
         return (
-            <LinearProgress />
+            <LinearProgress style={{margin: "35vh 40vh", height: "3px"}}/>
         );
     }
 }

@@ -1,6 +1,7 @@
-interface IMusicSearchProps {
+interface ISideNavbarProps {
+    toggleColorMode: () => void;
     openSnackbar: () => void;
     changeSnackbarMessageAndState: (message: string, state: string) => void;
 }
 
-export default IMusicSearchProps;
+export default ISideNavbarProps;
