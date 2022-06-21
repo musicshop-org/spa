@@ -29,11 +29,6 @@ class MusicSearch extends Component<IMusicSearchProps, { searchFinished: boolean
 
         this.defaultApi.findAlbumsBySongTitle(this.searchString).then(
             (response) => {
-                if (response == null || response.data == null) {
-                    console.log("Request Error");
-                    return;
-                }
-
                 let albumDTOs = new Set<AlbumDTO>();
 
                 for (let i = 0; i < response.data.length; i++) {
@@ -44,12 +39,10 @@ class MusicSearch extends Component<IMusicSearchProps, { searchFinished: boolean
                 this.setState({albumDTOs: albumDTOs});
             },
             (error) => {
-                if (error == null || error.response == null) {
-                    console.log("Request Error");
-                    return;
-                }
+                this.props.changeSnackbarMessageAndState(error.response.data, "error");
+                this.props.openSnackbar();
 
-                console.log(error.response.data);
+                this.setState({searchFinished: true});
             }
         );
     }
@@ -69,7 +62,6 @@ class MusicSearch extends Component<IMusicSearchProps, { searchFinished: boolean
                 />
 
                 <Button
-
                     sx={{ml: 3, mt: 1, mb: 1}} variant={"contained"}
                     onClick={() => {
                         this.searchMusic();
@@ -115,9 +107,7 @@ class MusicSearch extends Component<IMusicSearchProps, { searchFinished: boolean
                                                 albumDTO={albumDTO}
                                                 openSnackbar={() => this.props.openSnackbar()}
                                                 changeSnackbarMessageAndState={(message, state) => this.props.changeSnackbarMessageAndState(message, state)}
-
                                             />
-
                                         </Grid>
                                     )
                                 })

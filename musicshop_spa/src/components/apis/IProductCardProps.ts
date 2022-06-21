@@ -5,4 +5,5 @@ interface IProductCardProps {
     openSnackbar: () => void;
     changeSnackbarMessageAndState: (message: string, state: string) => void;
 }
+
 export default IProductCardProps;
