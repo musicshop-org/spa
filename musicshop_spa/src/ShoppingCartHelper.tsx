@@ -35,22 +35,40 @@ class ShoppingCartHelper {
         return cartUUID;
     }
 
-    static addAlbumsToCart(albumDTO: AlbumDTO) {
-        let defaultApi = new DefaultApi();
-        let cartUUID = this.getCartUUID();
+    static addAlbumsToCart(albumDTO: AlbumDTO | undefined) {
+        return new Promise((resolve, reject) => {
+            let defaultApi = new DefaultApi();
+            let cartUUID = this.getCartUUID();
 
-        if (cartUUID != null) {
-            defaultApi.addAlbumsToCart(cartUUID, albumDTO);
-        }
+            if (cartUUID != null) {
+                defaultApi.addAlbumsToCart(cartUUID, albumDTO).then(
+                    (response) => {
+                        resolve(response);
+                    },
+                    (error) => {
+                        reject(error);
+                    }
+                );
+            }
+        });
     }
 
     static addSongsToCart(songDTOs: Array<SongDTO>) {
-        let defaultApi = new DefaultApi();
-        let cartUUID = this.getCartUUID();
+        return new Promise ((resolve, reject) => {
+            let defaultApi = new DefaultApi();
+            let cartUUID = this.getCartUUID();
 
-        if (cartUUID != null) {
-            defaultApi.addSongsToCart(cartUUID, songDTOs);
-        }
+            if (cartUUID != null) {
+                defaultApi.addSongsToCart(cartUUID, songDTOs).then(
+                    (response) => {
+                        resolve(response);
+                    },
+                    (error) => {
+                        reject(error);
+                    }
+                );
+            }
+        });
     }
 
     static removeLineItemFromCart(cartLineItemDTO: CartLineItemDTO) {

@@ -3,8 +3,9 @@ import {AlbumDTO, DefaultApi} from "../../openAPI";
 import ProductDetailHeader from "../ProductDetailHeader";
 import Loader from "../Loader";
 import SongList from "../SongList";
+import IProductDetailsProps from "../apis/IProductDetailsProps";
 
-class ProductDetails extends Component<{}, { albumReady: boolean }> {
+class ProductDetails extends Component<IProductDetailsProps, { albumReady: boolean }> {
 
     private defaultApi: DefaultApi;
     private albumDTO: AlbumDTO | undefined;
@@ -60,11 +61,15 @@ class ProductDetails extends Component<{}, { albumReady: boolean }> {
                             <div style={{margin: 20}}>
                                 <ProductDetailHeader
                                     albumDTO={this.albumDTO}
+                                    openSnackbar={() => this.props.openSnackbar()}
+                                    changeSnackbarMessageAndState={(message, state) => this.props.changeSnackbarMessageAndState(message, state)}
                                 />
                             </div>
                             <div style={{marginTop: 40}}>
                                 <SongList
                                     songDTOs={this.albumDTO?.songs}
+                                    openSnackbar={() => this.props.openSnackbar()}
+                                    changeSnackbarMessageAndState={(message, state) => this.props.changeSnackbarMessageAndState(message, state)}
                                 />
                             </div>
                         </React.Fragment>

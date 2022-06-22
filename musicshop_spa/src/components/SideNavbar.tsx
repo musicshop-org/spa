@@ -1,43 +1,51 @@
 import * as React from 'react';
-import {styled, useTheme, Theme, CSSObject} from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import MuiDrawer from '@mui/material/Drawer';
-import MuiAppBar, {AppBarProps as MuiAppBarProps} from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
-import CssBaseline from '@mui/material/CssBaseline';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
+import {Link, Route, Routes} from "react-router-dom";
+
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
-import routes from "../config/routes";
 import SearchIcon from '@mui/icons-material/Search';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import {Link, Route, Routes} from "react-router-dom";
 import LoginIcon from '@mui/icons-material/Login';
-import Login from './Login';
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import TextField from "@mui/material/TextField";
-import DialogActions from "@mui/material/DialogActions";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
 import LogoutIcon from '@mui/icons-material/Logout';
-import {DefaultApi, UserDataDTO} from "../openAPI";
-import CustomSnackbar from './CustomSnackbar';
-import {Alert, Snackbar} from "@mui/material";
 import PlaylistIcon from '@mui/icons-material/LibraryMusic';
-import { Navigate } from 'react-router-dom';
-import CartOverview from './pages/CartOverview';
+import Brightness7Icon from "@mui/icons-material/Brightness7";
+import Brightness4Icon from "@mui/icons-material/Brightness4";
 
+import MuiDrawer from '@mui/material/Drawer';
+import MuiAppBar, {AppBarProps as MuiAppBarProps} from '@mui/material/AppBar';
+import {
+    CSSObject,
+    styled,
+    Theme,
+    useTheme
+} from '@mui/material/styles';
+import {
+    CssBaseline,
+    Button,
+    Box,
+    Toolbar,
+    List,
+    Typography,
+    Divider,
+    IconButton,
+    ListItemButton,
+    ListItemIcon,
+    ListItemText,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogContentText,
+    TextField,
+    DialogActions,
+} from '@mui/material';
+
+import {DefaultApi, UserDataDTO} from "../openAPI";
+import MusicSearch from "./pages/MusicSearch";
+import ProductDetails from "./pages/ProductDetails";
+import CartOverview from "./pages/CartOverview";
+import PlaylistOverview from "./pages/PlaylistOverview";
+import ISideNavbarProps from "./apis/ISideNavbarProps";
 
 const drawerWidth = 240;
 
@@ -111,22 +119,23 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
 );
 
 
-
 function logout() {
     localStorage.removeItem('jwt');
     localStorage.removeItem('user');
-    window.location.assign('/');
+    window.location.assign((process.env.REACT_APP_ROUTER_BASE || ""));
 }
 
-export default function MiniDrawer() {
+export default function MiniDrawer(props: ISideNavbarProps) {
     const theme = useTheme();
+
     const [open, setOpen] = React.useState(false);
     const [openLogin, setOpenLogin] = React.useState(false);
     const [emailAddress, setEmailAddress] = React.useState("");
     const [password, setPassword] = React.useState("");
-    const [loginState, setLoginState] = React.useState("");
-    const [loginMessage, setLoginMessage] = React.useState("");
-    const [snackbarOpen, setSnackbarOpen] = React.useState(true);
+
+    const handleColorChange = () => {
+        props.toggleColorMode();
+    }
 
     const login = () => {
         let defaultApi = new DefaultApi();
@@ -134,36 +143,21 @@ export default function MiniDrawer() {
             emailAddress: emailAddress,
             password: password,
         }
+
         defaultApi.loginWeb(userDataDTO).then(response => {
             if (response.status === 200) {
                 localStorage.setItem('jwt', response.data);
                 localStorage.setItem('user', emailAddress);
-                setLoginMessageAndState('Login successful', 'success');
 
-                //window.location.reload();
+                props.changeSnackbarMessageAndState('Login successful', 'success');
+
                 handleLoginClose();
             }
         }, error => {
 
-            setLoginMessageAndState(error.response.data, 'error');
-            openSnackbar();
+            props.changeSnackbarMessageAndState(error.response.data, 'error');
+            props.openSnackbar();
         });
-
-    }
-
-    const openSnackbar = () => {
-        setSnackbarOpen(true);
-    }
-    const closeSnackbar = (event?: React.SyntheticEvent | Event, reason?: string) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-        setSnackbarOpen(false);
-    }
-
-    const setLoginMessageAndState = (message: string, state: string) => {
-        setLoginMessage(message);
-        setLoginState(state);
     }
 
     const handleLoginOpen = () => {
@@ -185,6 +179,7 @@ export default function MiniDrawer() {
     return (
         <Box sx={{display: 'flex'}}>
             <CssBaseline/>
+
             <AppBar position="fixed" open={open}>
                 <Toolbar>
                     <IconButton
@@ -204,24 +199,26 @@ export default function MiniDrawer() {
                     </Typography>
                 </Toolbar>
             </AppBar>
+
             <Drawer variant="permanent" open={open}>
                 <DrawerHeader>
                     <IconButton onClick={handleDrawerClose}>
                         {theme.direction === 'rtl' ? <ChevronRightIcon/> : <ChevronLeftIcon/>}
                     </IconButton>
                 </DrawerHeader>
+
                 <Divider/>
+
                 <List>
-
-                    <ListItemButton component={Link} to={"/"}
-                                    key={"musicSearch"}
-                                    sx={{
-                                        minHeight: 48,
-                                        justifyContent: open ? 'initial' : 'center',
-                                        px: 2.5,
-                                    }}
+                    <ListItemButton
+                        component={Link} to={"/"}
+                        key={"musicSearch"}
+                        sx={{
+                            minHeight: 48,
+                            justifyContent: open ? 'initial' : 'center',
+                            px: 2.5,
+                        }}
                     >
-
                         <ListItemIcon
                             sx={{
                                 minWidth: 0,
@@ -234,13 +231,14 @@ export default function MiniDrawer() {
                         <ListItemText primary={"Music Search"} sx={{opacity: open ? 1 : 0}}/>
                     </ListItemButton>
 
-                    <ListItemButton component={Link} to={"/shopping-cart"}
-                                    key={"shoppingCart"}
-                                    sx={{
-                                        minHeight: 48,
-                                        justifyContent: open ? 'initial' : 'center',
-                                        px: 2.5,
-                                    }}
+                    <ListItemButton
+                        component={Link} to={"/shopping-cart"}
+                        key={"shoppingCart"}
+                        sx={{
+                            minHeight: 48,
+                            justifyContent: open ? 'initial' : 'center',
+                            px: 2.5,
+                        }}
                     >
                         <ListItemIcon
                             sx={{
@@ -254,13 +252,39 @@ export default function MiniDrawer() {
                         <ListItemText primary={"Shopping Cart"} sx={{opacity: open ? 1 : 0}}/>
                     </ListItemButton>
 
-                    {localStorage.getItem("jwt") ? <ListItemButton component={Link} to={"/playlist"}
-                                    key={"playlist"}
+                    {
+                        localStorage.getItem("jwt") ? (
+                            <ListItemButton
+                                component={Link} to={"/playlist"}
+                                key={"playlist"}
+                                sx={{
+                                    minHeight: 48,
+                                    justifyContent: open ? 'initial' : 'center',
+                                    px: 2.5,
+                                }}
+                            >
+                                <ListItemIcon
                                     sx={{
-                                        minHeight: 48,
-                                        justifyContent: open ? 'initial' : 'center',
-                                        px: 2.5,
+                                        minWidth: 0,
+                                        mr: open ? 3 : 'auto',
+                                        justifyContent: 'center',
                                     }}
+                                >
+                                    <PlaylistIcon/>
+                                </ListItemIcon>
+                                <ListItemText primary={"Playlist"} sx={{opacity: open ? 1 : 0}}/>
+                            </ListItemButton>
+                        ) : ("")
+                    }
+
+                    <ListItemButton
+                        onClick={handleColorChange}
+                        key={"toggleColorMode"}
+                        sx={{
+                            minHeight: 48,
+                            justifyContent: open ? 'initial' : 'center',
+                            px: 2.5,
+                        }}
                     >
                         <ListItemIcon
                             sx={{
@@ -269,59 +293,68 @@ export default function MiniDrawer() {
                                 justifyContent: 'center',
                             }}
                         >
-                            <PlaylistIcon/>
+                            {theme.palette.mode === 'dark' ? <Brightness7Icon/> : <Brightness4Icon/>}
                         </ListItemIcon>
-                        <ListItemText primary={"Playlist"} sx={{opacity: open ? 1 : 0}}/>
-                    </ListItemButton> : null}
+                        <ListItemText primary={"Switch Color Mode"} sx={{opacity: open ? 1 : 0}}/>
+                    </ListItemButton>
                 </List>
+
                 <Divider/>
+
                 <List>
-                    {localStorage.getItem("jwt") == null ?
-                        <ListItemButton onClick={handleLoginOpen}
-                                        key={"Login"}
-                                        sx={{
-                                            minHeight: 48,
-                                            justifyContent: open ? 'initial' : 'center',
-                                            px: 2.5,
-                                        }}
-                        >
-                            <ListItemIcon
+                    {
+                        localStorage.getItem("jwt") == null ? (
+                            <ListItemButton
+                                onClick={handleLoginOpen}
+                                key={"Login"}
                                 sx={{
-                                    minWidth: 0,
-                                    mr: open ? 3 : 'auto',
-                                    justifyContent: 'center',
+                                    minHeight: 48,
+                                    justifyContent: open ? 'initial' : 'center',
+                                    px: 2.5,
                                 }}
                             >
-                                <LoginIcon/>
-                            </ListItemIcon>
-                            <ListItemText primary={"Login"} sx={{opacity: open ? 1 : 0}}/>
-                        </ListItemButton> :
-                        <ListItemButton onClick={logout}
-                                        key={"Logout"}
-                                        sx={{
-                                            minHeight: 48,
-                                            justifyContent: open ? 'initial' : 'center',
-                                            px: 2.5,
-                                        }}
-                        >
-                            <ListItemIcon
+                                <ListItemIcon
+                                    sx={{
+                                        minWidth: 0,
+                                        mr: open ? 3 : 'auto',
+                                        justifyContent: 'center',
+                                    }}
+                                >
+                                    <LoginIcon/>
+                                </ListItemIcon>
+                                <ListItemText primary={"Login"} sx={{opacity: open ? 1 : 0}}/>
+                            </ListItemButton>
+                        ) : (
+                            <ListItemButton
+                                onClick={logout}
+                                key={"Logout"}
                                 sx={{
-                                    minWidth: 0,
-                                    mr: open ? 3 : 'auto',
-                                    justifyContent: 'center',
+                                    minHeight: 48,
+                                    justifyContent: open ? 'initial' : 'center',
+                                    px: 2.5,
                                 }}
                             >
-                                <LogoutIcon/>
-                            </ListItemIcon>
-                            <ListItemText primary={"Logout"} sx={{opacity: open ? 1 : 0}}/>
-                        </ListItemButton>}
+                                <ListItemIcon
+                                    sx={{
+                                        minWidth: 0,
+                                        mr: open ? 3 : 'auto',
+                                        justifyContent: 'center',
+                                    }}
+                                >
+                                    <LogoutIcon/>
+                                </ListItemIcon>
+                                <ListItemText primary={"Logout"} sx={{opacity: open ? 1 : 0}}/>
+                            </ListItemButton>
+                        )
+                    }
                 </List>
             </Drawer>
 
-
-            <Box component="main" sx={{flexGrow: 1, p: 3}}>
+            {/*SideNavbar Content*/}
+            <Box component="main" sx={{flexGrow: 1, pt: 3, pr: 3, pb: 0, pl: 3}}>
                 <DrawerHeader/>
 
+                {/*Login*/}
                 <Dialog open={openLogin}>
                     <DialogTitle>Login</DialogTitle>
                     <DialogContent>
@@ -357,42 +390,32 @@ export default function MiniDrawer() {
                             login();
                         }}>Login</Button>
                     </DialogActions>
-
                 </Dialog>
-                {/*TODO: move snackbar to App.tsx and open with callback*/}
-                {loginState ? <Snackbar
-                    open={snackbarOpen}
-                    autoHideDuration={6000}
-                    onClose={closeSnackbar}
-                    message={loginMessage}
 
-                    // action={action}
-                >
-                    <Alert
-                        severity={loginMessage.includes("success") ? "success" : "error"}
-                        sx={{width: '100%'}}
-                        onClose={closeSnackbar}>
-                        {loginMessage}
-                    </Alert>
-                </Snackbar> : null}
                 <Routes>
-                    {
-                        routes.map((route, index) => {
-                            return (
-                                <Route
-                                    key={index}
-                                    path={route.path}
-                                    element={<route.element/>}
-                                />
-                            )
-                        })
+                    <Route path={"/"} element={
+                        <MusicSearch
+                            openSnackbar={props.openSnackbar}
+                            changeSnackbarMessageAndState={props.changeSnackbarMessageAndState}
+                        />}/>
 
+                    <Route path={"/product-detail"} element={
+                        <ProductDetails
+                            openSnackbar={props.openSnackbar}
+                            changeSnackbarMessageAndState={props.changeSnackbarMessageAndState}
+                        />}/>
 
-                    }
+                    <Route path={"/shopping-cart"} element={
+                        <CartOverview
+                            openLogin={handleLoginOpen}
+                            closeLogin={handleLoginClose}
+                            openSnackbar={props.openSnackbar}
+                            changeSnackbarMessageAndState={props.changeSnackbarMessageAndState}
+                        />}/>
 
+                    <Route path={"/playlist"} element={<PlaylistOverview/>}/>
                 </Routes>
             </Box>
-
         </Box>
     );
 }

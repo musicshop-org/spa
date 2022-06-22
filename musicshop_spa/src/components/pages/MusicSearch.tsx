@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
 
-import {TextField, Button, Grid, Divider} from '@mui/material';
+import {Button, Divider, Grid, TextField} from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import {DefaultApi} from "../../openAPI";
+import {AlbumDTO, DefaultApi} from "../../openAPI";
 import ProductCard from "../ProductCard";
-import {AlbumDTO} from "../../openAPI";
 import Loader from "../Loader";
+import IMusicSearchProps from "../apis/IMusicSearchProps";
 
-class MusicSearch extends Component<{}, { searchFinished: boolean, albumDTOs: Set<AlbumDTO> }> {
+class MusicSearch extends Component<IMusicSearchProps, { searchFinished: boolean, albumDTOs: Set<AlbumDTO> }> {
 
     private searchString: string;
     private defaultApi: DefaultApi;
@@ -29,11 +29,6 @@ class MusicSearch extends Component<{}, { searchFinished: boolean, albumDTOs: Se
 
         this.defaultApi.findAlbumsBySongTitle(this.searchString).then(
             (response) => {
-                if (response == null || response.data == null) {
-                    console.log("Request Error");
-                    return;
-                }
-
                 let albumDTOs = new Set<AlbumDTO>();
 
                 for (let i = 0; i < response.data.length; i++) {
@@ -44,12 +39,10 @@ class MusicSearch extends Component<{}, { searchFinished: boolean, albumDTOs: Se
                 this.setState({albumDTOs: albumDTOs});
             },
             (error) => {
-                if (error == null || error.response == null) {
-                    console.log("Request Error");
-                    return;
-                }
+                this.props.changeSnackbarMessageAndState(error.response.data, "error");
+                this.props.openSnackbar();
 
-                console.log(error.response.data);
+                this.setState({searchFinished: true});
             }
         );
     }
@@ -69,7 +62,6 @@ class MusicSearch extends Component<{}, { searchFinished: boolean, albumDTOs: Se
                 />
 
                 <Button
-
                     sx={{ml: 3, mt: 1, mb: 1}} variant={"contained"}
                     onClick={() => {
                         this.searchMusic();
@@ -95,9 +87,7 @@ class MusicSearch extends Component<{}, { searchFinished: boolean, albumDTOs: Se
 
                 {
                     !searchFinished ? (
-                        <div style={{margin: 20}}>
-                            <Loader/>
-                        </div>
+                        <Loader/>
                     ) : (
                         <Grid
                             sx={{mt: 1}}
@@ -115,8 +105,9 @@ class MusicSearch extends Component<{}, { searchFinished: boolean, albumDTOs: Se
                                         >
                                             <ProductCard
                                                 albumDTO={albumDTO}
+                                                openSnackbar={() => this.props.openSnackbar()}
+                                                changeSnackbarMessageAndState={(message, state) => this.props.changeSnackbarMessageAndState(message, state)}
                                             />
-
                                         </Grid>
                                     )
                                 })
